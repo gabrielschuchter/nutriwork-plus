@@ -3,20 +3,21 @@ export const navItems = [
   { label: 'sobre', href: '#sobre' },
   { label: 'benefícios', href: '#beneficios' },
   { label: 'planos', href: '#planos' },
+  { label: 'dúvidas', href: '#duvidas' },
   { label: 'contatos', href: '#contatos' }
 ];
 
 export const promises = [
   { icon: 'brain', title: 'Formação de pensamento crítico nos estudos' },
-  { icon: 'student', title: 'Aprendizado prático e estruturado' },
+  { icon: 'structure', title: 'Aprendizado prático e estruturado' },
   { icon: 'evidence', title: 'Conteúdo fundamentado em evidências científicas' }
 ];
 
 export const courses = [
   { image: '/assets/course-intro.jpg', title: 'Introdução à Nutrição', description: 'Um curso introdutório, abordando os principais aspectos da Nutrição.' },
   { image: '/assets/course-biochemistry.jpg', title: 'Bioquímica da Nutrição', description: 'Tudo sobre carboidratos, proteínas, assim como outros nutrientes!' },
-  { image: '/assets/course-evidence.jpg', title: 'Nutrição baseada em Evidências', description: 'Busca, interpretação e implementação de artigos científicos na prática clínica.' },
-  { image: '/assets/course-sports.jpg', title: 'Nutrição Esportiva', description: 'Veja como a Nutrição pode auxiliar na performance esportiva com materiais baseados em evidência.' },
+  { image: '/assets/course-evidence.jpg', title: 'Nutrição Baseada em Evidências', description: 'Busca, interpretação e implementação de artigos científicos na prática clínica.' },
+  { image: '/assets/course-sports.jpg', title: 'Nutrição Esportiva', description: 'Veja como a Nutrição pode auxiliar na performance esportiva com materiais baseados em evidências.' },
   { image: '/assets/course-behavior.jpg', title: 'Nutrição Comportamental', description: 'Compreenda como o comportamento alimentar é crucial para a prática clínica baseada em evidências.' },
   { image: '/assets/course-physiology.jpg', title: 'Fisiologia Humana', description: 'Compreenda fundamentos da fisiologia humana relacionando o corpo aos mecanismos metabólicos e hormonais.' },
   { image: '/assets/course-clinical.jpg', title: 'Nutrição Clínica', description: 'Aprenda sobre as principais condições clínicas, se especializando no cuidado de cada uma.' },
@@ -25,10 +26,10 @@ export const courses = [
 ];
 
 export const extras = [
-  { image: '/assets/extra-podcast.jpg', title: 'NW Cast', label: 'conteúdo em áudio' },
-  { image: '/assets/extra-classes.jpg', title: 'Aulas gravadas', label: 'aprenda no seu ritmo' },
-  { image: '/assets/extra-analysis.jpg', title: 'Análise de artigos', label: 'prática baseada em evidências' },
-  { image: '/assets/extra-comfort.jpg', title: 'Comfort Place', label: 'espaço de acolhimento' }
+  { icon: 'podcast', title: 'NW Cast', label: 'Conteúdo em áudio para acompanhar onde estiver.' },
+  { icon: 'play', title: 'Aulas gravadas', label: 'Aprenda no seu ritmo e revise quando precisar.' },
+  { icon: 'analysis', title: 'Análise de artigos', label: 'Leitura crítica aplicada à prática baseada em evidências.' },
+  { icon: 'heart', title: 'Comfort Place', label: 'Um espaço de acolhimento dentro da comunidade.' }
 ];
 
 export const comparison = [
@@ -56,7 +57,7 @@ export const testimonials = [
     image: '/assets/testimonial-marcella.jpg',
     name: 'Marcella Naves',
     role: 'Estudante de Nutrição, Redatora e Revisora do Nutriwork',
-    quote: 'O Nutriwork nasceu e se perdura até hoje com um intuito muito genuíno de ocupar um buraco que encontramos na divulgação de conhecimento acessível para estudantes de Nutrição. Tenho muito orgulho em ser Nutriwork!' 
+    quote: 'O Nutriwork nasceu e permanece até hoje com um intuito muito genuíno de ocupar um espaço que encontramos na divulgação de conhecimento acessível para estudantes de Nutrição. Tenho muito orgulho em ser Nutriwork!'
   },
   {
     image: '/assets/testimonial-gabriel.jpg',
@@ -68,7 +69,7 @@ export const testimonials = [
 
 export const estudeAudience = [
   'Quer transformar esforço em rendimento.',
-  'Busca direção nos estudos ao longo da graduação e fora dela.',
+  'Busca mais direção nos estudos ao longo da graduação e fora dela.',
   'Procura mais clareza e menos sobrecarga.',
   'Quer uma rotina de estudos produtiva e mais eficiente.'
 ];
@@ -104,4 +105,35 @@ export const platformBenefits = [
   'Conteúdos organizados por área e atualizações contínuas',
   'Acesso via computador e celular',
   'Comunidade Nutriwork'
+];
+
+export const faqItems = [
+  {
+    question: 'Para quem é o Nutriwork Plus?',
+    answer: 'Para estudantes e profissionais de Nutrição que buscam conteúdos organizados, pensamento crítico e uma formação alinhada às evidências científicas.'
+  },
+  {
+    question: 'O que encontro dentro da plataforma?',
+    answer: 'Cursos por áreas da Nutrição, aulas gravadas, análises de artigos, conteúdos em áudio e acesso à comunidade Nutriwork.'
+  },
+  {
+    question: 'Posso acessar pelo celular?',
+    answer: 'Sim. A plataforma pode ser acessada pelo computador e pelo celular, permitindo estudar de acordo com a sua rotina.'
+  },
+  {
+    question: 'Qual é o período de acesso?',
+    answer: 'O período acompanha o plano escolhido: mensal, trimestral, semestral ou anual. O plano completo mantém o acesso à plataforma durante um ano.'
+  },
+  {
+    question: 'O guia Estude está incluído em todos os planos?',
+    answer: 'O guia pode ser adquirido separadamente e também faz parte da oferta anual completa indicada nesta página.'
+  },
+  {
+    question: 'Como funciona o pagamento?',
+    answer: 'Ao escolher um plano, você é direcionado para o checkout seguro da Kiwify, onde confere as condições e conclui a compra.'
+  },
+  {
+    question: 'Ainda tenho uma dúvida. Como falo com a equipe?',
+    answer: 'Você pode entrar em contato pelo telefone (12) 99750-5188 ou pelo e-mail equipenutriwork@gmail.com.'
+  }
 ];

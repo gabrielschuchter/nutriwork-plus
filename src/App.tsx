@@ -7,6 +7,7 @@ import {
   estudeObjections,
   evidenceLearning,
   extras,
+  faqItems,
   navItems,
   platformBenefits,
   platformPlans,
@@ -51,15 +52,40 @@ function useScrollReveal() {
   }, []);
 }
 
+function useMobileCtaVisibility() {
+  useEffect(() => {
+    const cta = document.querySelector<HTMLElement>('.mobile-cta');
+    const protectedSections = document.querySelectorAll('.mentor-section, .pricing-section, .faq-section, .footer');
+    if (!cta || !protectedSections.length) return;
+
+    const visibleSections = new Set<Element>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => entry.isIntersecting ? visibleSections.add(entry.target) : visibleSections.delete(entry.target));
+        cta.classList.toggle('mobile-cta--hidden', visibleSections.size > 0);
+      },
+      { threshold: 0.04 }
+    );
+
+    protectedSections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+}
+
 function Icon({ name }: { name: string }) {
   const paths: Record<string, ReactNode> = {
     brain: <><path d="M9 5.2a3.2 3.2 0 0 0-5.2 2.5 3.1 3.1 0 0 0 .8 5.9A3.3 3.3 0 0 0 9 18.5V5.2Z"/><path d="M15 5.2a3.2 3.2 0 0 1 5.2 2.5 3.1 3.1 0 0 1-.8 5.9 3.3 3.3 0 0 1-4.4 4.9V5.2Z"/><path d="M9 9H7.2M15 9h1.8M9 14H7m8 0h2"/></>,
     student: <><circle cx="12" cy="7" r="3"/><path d="M5 20v-2.4A5.6 5.6 0 0 1 10.6 12h2.8a5.6 5.6 0 0 1 5.6 5.6V20M3 6l9-4 9 4-9 4-9-4Z"/></>,
+    structure: <><rect x="4" y="3" width="16" height="5" rx="1.5"/><rect x="4" y="16" width="7" height="5" rx="1.5"/><rect x="13" y="16" width="7" height="5" rx="1.5"/><path d="M12 8v4M7.5 12h9M7.5 12v4M16.5 12v4"/></>,
     evidence: <><rect x="4" y="3" width="12" height="16" rx="2"/><path d="M8 7h4M8 11h5M8 15h3"/><circle cx="17" cy="16" r="3"/><path d="m19.3 18.3 2.2 2.2"/></>,
     trend: <path d="m3 17 6-6 4 4 8-9M16 6h5v5"/>,
     cap: <><path d="m2 9 10-5 10 5-10 5L2 9Z"/><path d="M6 11.5V16c3.5 2.5 8.5 2.5 12 0v-4.5M22 9v7"/></>,
     light: <><path d="M9 18h6M10 22h4"/><path d="M8.2 14.5A7 7 0 1 1 15.8 14.5 5 5 0 0 0 14 18h-4a5 5 0 0 0-1.8-3.5Z"/></>,
     book: <><path d="M4 5.5A3.5 3.5 0 0 1 7.5 2H12v18H7.5A3.5 3.5 0 0 0 4 23V5.5ZM20 5.5A3.5 3.5 0 0 0 16.5 2H12v18h4.5A3.5 3.5 0 0 1 20 23V5.5Z"/></>,
+    podcast: <><circle cx="12" cy="11" r="3"/><path d="M7.2 15.8a6.8 6.8 0 1 1 9.6 0M4.5 18.5a10.5 10.5 0 1 1 15 0M12 14v8M9 22h6"/></>,
+    play: <><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3V9Z"/></>,
+    analysis: <><path d="M5 3h10l4 4v14H5V3Z"/><path d="M15 3v5h5M8 12h7M8 16h4"/><circle cx="16.5" cy="16.5" r="2.5"/></>,
+    heart: <path d="M20.8 5.7a5.4 5.4 0 0 0-7.6 0L12 6.9l-1.2-1.2a5.4 5.4 0 1 0-7.6 7.6L12 22l8.8-8.7a5.4 5.4 0 0 0 0-7.6Z"/>,
     check: <path d="m4 12 5 5L20 6"/>,
     instagram: <><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></>,
     phone: <><path d="M8 3h8l1 3-2 2a15 15 0 0 0 3 3l2-2 3 1v8c0 1.1-.9 2-2 2C11.1 20 4 12.9 4 4a2 2 0 0 1 2-2l2 1Z"/></>,
@@ -130,18 +156,23 @@ function Platform() {
 function Courses() {
   return (
     <section className="section courses-section">
-      <div className="page-width page-width--narrow">
+      <div className="page-width">
         <Reveal><SectionHeading>Veja no que você vai se especializar</SectionHeading></Reveal>
-        <div className="courses-grid">
-          {courses.map((course) => (
-            <Reveal key={course.title}>
-              <article className="course-card">
-                <img src={course.image} alt={`Capa do curso ${course.title}`} width="536" height="800" />
-                <div className="course-card__overlay"><p>{course.description}</p></div>
-              </article>
-            </Reveal>
-          ))}
-        </div>
+        <Reveal className="courses-carousel">
+          <div className="sr-only" id="courses-help">Carrossel automático de especializações. Passe o mouse ou use o foco para pausar.</div>
+          <div className="courses-track" role="list" aria-describedby="courses-help" tabIndex={0}>
+            {[0, 1].map((group) => (
+              <div className="courses-group" aria-hidden={group === 1} key={group}>
+                {courses.map((course) => (
+                  <article className="course-card" role="listitem" key={`${group}-${course.title}`}>
+                    <img src={course.image} alt={group === 0 ? `Capa do curso ${course.title}` : ''} width="536" height="800" />
+                    <div className="course-card__overlay"><h3>{course.title}</h3><p>{course.description}</p></div>
+                  </article>
+                ))}
+              </div>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -151,12 +182,10 @@ function Extras() {
   return (
     <section id="beneficios" className="section extras-section">
       <div className="page-width">
-        <Reveal><SectionHeading>Extras que tornam a experiência<br/>completa pra você</SectionHeading></Reveal>
-        <Reveal className="dashboard-shell dashboard-shell--wide">
-          <img src="/assets/platform-dashboard.jpg" alt="Área de conteúdos extras e podcasts da plataforma" width="1600" height="899" />
-        </Reveal>
+        <Reveal><SectionHeading>Extras que tornam a experiência<br/>completa para você</SectionHeading></Reveal>
+        <Reveal><p className="extras-lead">Recursos complementares para aprofundar o conteúdo, revisar com autonomia e continuar próximo da comunidade.</p></Reveal>
         <div className="extras-grid">
-          {extras.map((extra) => <Reveal key={extra.title}><article className="extra-card"><img src={extra.image} alt={extra.title}/><div><h3>{extra.title}</h3><p>{extra.label}</p></div></article></Reveal>)}
+          {extras.map((extra) => <Reveal key={extra.title}><article className="extra-card"><Icon name={extra.icon}/><div><h3>{extra.title}</h3><p>{extra.label}</p></div></article></Reveal>)}
         </div>
         <Reveal className="path-intro"><p>Veja como esse projeto se integra à sua<br/>jornada acadêmica e profissional.</p><h2>Dois caminhos.</h2><span>resultados diferentes.</span></Reveal>
         <Reveal><Comparison /></Reveal>
@@ -223,8 +252,9 @@ function Evidence() {
   return (
     <section className="section evidence-section">
       <div className="evidence-glow" aria-hidden="true" />
+      <img className="evidence-shape" src="/assets/evidence-shape.webp" alt="" aria-hidden="true" />
       <div className="page-width page-width--narrow">
-        <Reveal><h2>estude nosso módulo de<br/><em>Nutrição Baseada em Evidências</em><br/>e aprenda</h2></Reveal>
+        <Reveal><h2><span>Conheça nosso</span><span>módulo especial de</span><em>Nutrição Baseada em Evidências</em><span>e aprenda a:</span></h2></Reveal>
         <div className="evidence-list">{evidenceLearning.map((item) => <Reveal key={item}><p>{item}</p></Reveal>)}</div>
       </div>
     </section>
@@ -236,7 +266,10 @@ function Mentor() {
     <section className="section mentor-section">
       <div className="page-width page-width--narrow">
         <Reveal><p className="mentor-kicker">Com acompanhamento especial e <strong>direto</strong> de</p></Reveal>
-        <Reveal className="mentor-card"><div><h2>Gabriel Schuchter</h2><h3>Fundador e professor do Nutriwork</h3><p>Bacharel em Nutrição pela Universidade Federal de Uberlândia (UFU), pesquisador e consultor de pesquisa, com atuação concentrada em revisões sistemáticas e meta-análises.</p><p>Fundador do Nutriwork, um dos maiores grupos de Nutrição Baseada em Evidências do Brasil, prepara estudantes e profissionais para uma prática mais crítica, tecnicamente segura e alinhada com a ciência de alta qualidade aplicada à saúde.</p></div><div className="mentor-photo"><img src="/assets/mentor-gabriel.webp" alt="Gabriel Schuchter, fundador e professor do Nutriwork"/></div></Reveal>
+        <Reveal className="mentor-card">
+          <div className="mentor-copy"><h2>Gabriel Schuchter</h2><h3>Fundador e professor do Nutriwork</h3><p>Bacharel em Nutrição formado pela Universidade Federal de Uberlândia (UFU), pesquisador e consultor de pesquisa, com atuação concentrada em revisões sistemáticas e meta-análises. É analista do Reviews, plataforma que oferece análises críticas e interpretações técnicas de artigos científicos para profissionais da saúde.</p><p>É fundador do Nutriwork, o maior grupo de Nutrição Baseada em Evidências do Brasil, e atua como professor de Prática Baseada em Evidências, já tendo ministrado aulas e formações para cursos de Psicologia, Medicina, Nutrição, Fisioterapia e Enfermagem.</p><p>Além da atuação acadêmica, Gabriel é mentor em Prática Baseada em Evidências e pesquisa científica, orientando alunos e profissionais no desenvolvimento de leitura crítica, projetos científicos e tomada de decisão baseada em evidências. Seu trabalho é voltado a formar profissionais mais críticos, tecnicamente seguros e alinhados com a ciência de alta qualidade aplicada à prática em saúde.</p></div>
+          <figure className="mentor-photo"><img src="/assets/mentor-gabriel.webp" alt="Gabriel Schuchter, fundador e professor do Nutriwork" width="1070" height="1600" /></figure>
+        </Reveal>
       </div>
     </section>
   );
@@ -261,6 +294,20 @@ function Pricing() {
   );
 }
 
+function FAQ() {
+  return (
+    <section id="duvidas" className="section faq-section">
+      <div className="page-width page-width--narrow">
+        <Reveal><SectionHeading>Dúvidas frequentes</SectionHeading><p className="faq-intro">Informações diretas para você escolher com segurança e começar seus estudos.</p></Reveal>
+        <div className="faq-list">
+          {faqItems.map((item) => <Reveal key={item.question}><details><summary>{item.question}<span aria-hidden="true">+</span></summary><p>{item.answer}</p></details></Reveal>)}
+        </div>
+        <Reveal className="faq-cta"><p>Pronto para fazer parte?</p><Button href="#planos">Conhecer os planos</Button></Reveal>
+      </div>
+    </section>
+  );
+}
+
 function Footer() {
   return (
     <footer id="contatos" className="footer">
@@ -279,5 +326,6 @@ function Footer() {
 
 export default function App() {
   useScrollReveal();
-  return <><Header/><main><Hero/><Platform/><Courses/><Extras/><Testimonials/><Estude/><StudyBenefits/><Evidence/><Mentor/><Pricing/></main><Footer/><Button href="#planos" className="mobile-cta">Ver planos</Button></>;
+  useMobileCtaVisibility();
+  return <><Header/><main><Hero/><Platform/><Courses/><Extras/><Testimonials/><Estude/><StudyBenefits/><Evidence/><Mentor/><Pricing/><FAQ/></main><Footer/><Button href="#planos" className="mobile-cta">Ver planos</Button></>;
 }
