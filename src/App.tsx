@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import {
   comparison,
   courses,
@@ -154,19 +154,123 @@ function Platform() {
 }
 
 function Courses() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const firstGroupRef = useRef<HTMLDivElement>(null);
+  const offsetRef = useRef(0);
+  const groupWidthRef = useRef(0);
+  const draggingRef = useRef(false);
+  const hoverPausedRef = useRef(false);
+  const focusPausedRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragStartOffsetRef = useRef(0);
+  const lastPointerXRef = useRef(0);
+  const lastPointerTimeRef = useRef(0);
+  const momentumRef = useRef(0);
+
+  const applyOffset = (nextOffset: number) => {
+    const width = groupWidthRef.current;
+    if (width > 0) {
+      while (nextOffset <= -width) nextOffset += width;
+      while (nextOffset > 0) nextOffset -= width;
+    }
+    offsetRef.current = nextOffset;
+    if (trackRef.current) trackRef.current.style.transform = `translate3d(${nextOffset}px, 0, 0)`;
+  };
+
+  useEffect(() => {
+    const track = trackRef.current;
+    const firstGroup = firstGroupRef.current;
+    if (!track || !firstGroup) return;
+
+    const measure = () => {
+      groupWidthRef.current = firstGroup.offsetWidth;
+      applyOffset(offsetRef.current);
+    };
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(firstGroup);
+    measure();
+
+    let frame = 0;
+    let previousTime = performance.now();
+    const animate = (time: number) => {
+      const elapsed = Math.min((time - previousTime) / 1000, 0.05);
+      previousTime = time;
+      const paused = draggingRef.current || hoverPausedRef.current || focusPausedRef.current;
+
+      if (!paused && groupWidthRef.current > 0) {
+        const cycleDuration = window.innerWidth <= 720 ? 44 : 54;
+        const autoSpeed = groupWidthRef.current / cycleDuration;
+        applyOffset(offsetRef.current + momentumRef.current * elapsed - autoSpeed * elapsed);
+        momentumRef.current *= Math.exp(-5 * elapsed);
+        if (Math.abs(momentumRef.current) < 2) momentumRef.current = 0;
+      }
+
+      frame = requestAnimationFrame(animate);
+    };
+    frame = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    draggingRef.current = true;
+    focusPausedRef.current = false;
+    momentumRef.current = 0;
+    dragStartXRef.current = event.clientX;
+    dragStartOffsetRef.current = offsetRef.current;
+    lastPointerXRef.current = event.clientX;
+    lastPointerTimeRef.current = event.timeStamp;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    event.currentTarget.classList.add('is-dragging');
+  };
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!draggingRef.current) return;
+    const elapsed = Math.max(event.timeStamp - lastPointerTimeRef.current, 1);
+    const delta = event.clientX - lastPointerXRef.current;
+    momentumRef.current = Math.max(-700, Math.min(700, (delta / elapsed) * 1000));
+    lastPointerXRef.current = event.clientX;
+    lastPointerTimeRef.current = event.timeStamp;
+    applyOffset(dragStartOffsetRef.current + event.clientX - dragStartXRef.current);
+  };
+
+  const stopDragging = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+    event.currentTarget.classList.remove('is-dragging');
+    if (event.pointerType === 'touch') event.currentTarget.blur();
+  };
+
   return (
     <section className="section courses-section">
       <div className="page-width">
         <Reveal><SectionHeading>Veja no que você vai se especializar</SectionHeading></Reveal>
         <Reveal>
           <div className="courses-carousel" role="region" aria-roledescription="carrossel" aria-label="Especializações Nutriwork" aria-describedby="courses-help">
-            <p className="sr-only" id="courses-help">Carrossel automático com nove especializações. Passe o mouse ou mantenha o foco no carrossel para pausar.</p>
-            <div className="courses-track" tabIndex={0}>
+            <p className="sr-only" id="courses-help">Carrossel automático com nove especializações. Arraste para navegar. Passe o mouse ou mantenha o foco no carrossel para pausar.</p>
+            <div
+              className="courses-track"
+              ref={trackRef}
+              tabIndex={0}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={stopDragging}
+              onPointerCancel={stopDragging}
+              onPointerEnter={(event) => { if (event.pointerType === 'mouse') hoverPausedRef.current = true; }}
+              onPointerLeave={(event) => { if (event.pointerType === 'mouse') hoverPausedRef.current = false; }}
+              onFocus={(event) => { focusPausedRef.current = event.currentTarget.matches(':focus-visible'); }}
+              onBlur={() => { focusPausedRef.current = false; }}
+            >
               {[0, 1].map((group) => (
-                <div className="courses-group" role={group === 0 ? 'list' : undefined} aria-hidden={group === 1} key={group}>
+                <div className="courses-group" ref={group === 0 ? firstGroupRef : undefined} role={group === 0 ? 'list' : undefined} aria-hidden={group === 1} key={group}>
                   {courses.map((course, index) => (
                     <article className="course-card" role={group === 0 ? 'listitem' : undefined} key={`${group}-${course.title}`}>
-                      <img src={course.image} alt={group === 0 ? `Capa do curso ${course.title}` : ''} width="536" height="800" loading="lazy" decoding="async" />
+                      <img src={course.image} alt={group === 0 ? `Capa do curso ${course.title}` : ''} width="536" height="800" loading="lazy" decoding="async" draggable="false" />
                       <div className="course-card__shade" aria-hidden="true" />
                       <div className="course-card__overlay">
                         <span>Especialização {String(index + 1).padStart(2, '0')}</span>
