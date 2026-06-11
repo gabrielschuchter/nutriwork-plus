@@ -158,19 +158,26 @@ function Courses() {
     <section className="section courses-section">
       <div className="page-width">
         <Reveal><SectionHeading>Veja no que você vai se especializar</SectionHeading></Reveal>
-        <Reveal className="courses-carousel">
-          <div className="sr-only" id="courses-help">Carrossel automático de especializações. Passe o mouse ou use o foco para pausar.</div>
-          <div className="courses-track" role="list" aria-describedby="courses-help" tabIndex={0}>
-            {[0, 1].map((group) => (
-              <div className="courses-group" aria-hidden={group === 1} key={group}>
-                {courses.map((course) => (
-                  <article className="course-card" role="listitem" key={`${group}-${course.title}`}>
-                    <img src={course.image} alt={group === 0 ? `Capa do curso ${course.title}` : ''} width="536" height="800" />
-                    <div className="course-card__overlay"><h3>{course.title}</h3><p>{course.description}</p></div>
-                  </article>
-                ))}
-              </div>
-            ))}
+        <Reveal>
+          <div className="courses-carousel" role="region" aria-roledescription="carrossel" aria-label="Especializações Nutriwork" aria-describedby="courses-help">
+            <p className="sr-only" id="courses-help">Carrossel automático com nove especializações. Passe o mouse ou mantenha o foco no carrossel para pausar.</p>
+            <div className="courses-track" tabIndex={0}>
+              {[0, 1].map((group) => (
+                <div className="courses-group" role={group === 0 ? 'list' : undefined} aria-hidden={group === 1} key={group}>
+                  {courses.map((course, index) => (
+                    <article className="course-card" role={group === 0 ? 'listitem' : undefined} key={`${group}-${course.title}`}>
+                      <img src={course.image} alt={group === 0 ? `Capa do curso ${course.title}` : ''} width="536" height="800" loading="lazy" decoding="async" />
+                      <div className="course-card__shade" aria-hidden="true" />
+                      <div className="course-card__overlay">
+                        <span>Especialização {String(index + 1).padStart(2, '0')}</span>
+                        <h3>{course.title}</h3>
+                        <p>{course.description}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </Reveal>
       </div>
