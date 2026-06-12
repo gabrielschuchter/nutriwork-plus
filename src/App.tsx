@@ -26,12 +26,13 @@ const checkout = {
 const platformVideo = 'https://gruponutriwork.com.br/_assets/video/121f9f7d30c317a4871e3f531eb5287d.mp4';
 
 type Theme = 'light' | 'dark';
+type Page = 'home' | 'estude';
 
 function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <div className={`reveal ${className}`}>{children}</div>;
 }
 
-function useScrollReveal() {
+function useScrollReveal(refreshKey: unknown) {
   useEffect(() => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduceMotion) {
@@ -53,13 +54,13 @@ function useScrollReveal() {
 
     document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
     return () => observer.disconnect();
-  }, []);
+  }, [refreshKey]);
 }
 
-function useMobileCtaVisibility() {
+function useMobileCtaVisibility(refreshKey: unknown) {
   useEffect(() => {
     const cta = document.querySelector<HTMLElement>('.mobile-cta');
-    const protectedSections = document.querySelectorAll('.mentor-section, .pricing-section, .faq-section, .footer');
+    const protectedSections = document.querySelectorAll('.estude-section, .study-benefits, .mentor-section, .pricing-section, .faq-section, .footer');
     if (!cta || !protectedSections.length) return;
 
     const visibleSections = new Set<Element>();
@@ -73,7 +74,39 @@ function useMobileCtaVisibility() {
 
     protectedSections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
+  }, [refreshKey]);
+}
+
+function getCurrentPage(): Page {
+  return window.location.hash === '#/estude' ? 'estude' : 'home';
+}
+
+function useCurrentPage() {
+  const [page, setPage] = useState<Page>(() => getCurrentPage());
+
+  useEffect(() => {
+    const updatePage = () => setPage(getCurrentPage());
+    window.addEventListener('hashchange', updatePage);
+    return () => window.removeEventListener('hashchange', updatePage);
   }, []);
+
+  return page;
+}
+
+function useHashScroll(page: Page) {
+  useEffect(() => {
+    if (page === 'estude') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    const hash = window.location.hash;
+    if (!hash || hash.startsWith('#/')) return;
+
+    window.requestAnimationFrame(() => {
+      document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start' });
+    });
+  }, [page]);
 }
 
 function Icon({ name }: { name: string }) {
@@ -97,6 +130,7 @@ function Icon({ name }: { name: string }) {
     sun: <><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></>,
     moon: <path d="M20.7 15.2A8.6 8.6 0 0 1 8.8 3.3 9 9 0 1 0 20.7 15.2Z"/>,
     pause: <><rect x="7" y="5" width="3.5" height="14" rx="1"/><rect x="13.5" y="5" width="3.5" height="14" rx="1"/></>,
+    gauge: <><path d="M4 14a8 8 0 0 1 16 0"/><path d="M6.2 19a9.8 9.8 0 0 1-2.2-6 8 8 0 0 1 16 0 9.8 9.8 0 0 1-2.2 6Z"/><path d="m12 14 4-5"/><circle cx="12" cy="14" r="1"/></>,
     volume: <><path d="M4 10v4h4l5 4V6l-5 4H4Z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></>,
     volumeOff: <><path d="M4 10v4h4l5 4V6l-5 4H4Z"/><path d="m18 9-5 5M13 9l5 5"/></>
   };
@@ -129,7 +163,7 @@ function Header() {
 
   return (
     <header className="site-header">
-      <a className="brand" href="#inicio" aria-label="Nutriwork Plus, voltar ao início">NUTRIWORK<span>+</span></a>
+      <a className="brand" href="/#inicio" aria-label="Nutriwork Plus, voltar ao início">NUTRIWORK<span>+</span></a>
       <nav className={`nav ${open ? 'nav--open' : ''}`} aria-label="Navegação principal">
         {navItems.map((item) => <a key={item.href} href={item.href} onClick={() => setOpen(false)}>{item.label}</a>)}
       </nav>
@@ -162,7 +196,7 @@ function Hero() {
         <h1>Nutriwork<span>plus.</span></h1>
         <p>Uma plataforma para todo estudante de Nutrição.</p>
         <div className="hero-actions">
-          <Button href="#sobre" variant="outline">Venha fazer parte</Button>
+          <Button href="/#planos" variant="outline">Venha fazer parte</Button>
           <Button href="https://plus.gruponutriwork.com.br/" variant="outline" className="member-cta" external>Já sou membro(a)</Button>
         </div>
       </Reveal>
@@ -425,7 +459,7 @@ function Testimonials() {
         <div className="testimonials-grid">
           {testimonials.map((item) => <Reveal key={item.name}><article className="testimonial-card"><header><img src={item.image} alt={`Foto de ${item.name}`}/><div><h3>{item.name}</h3><p>{item.role}</p></div></header><blockquote>“{item.quote}”</blockquote><div className="stars" aria-label="5 de 5 estrelas">★★★★★</div></article></Reveal>)}
         </div>
-        <Reveal className="testimonial-cta"><p>Se você acredita em nutrição com fundamento científico e<br/>troca genuína de conhecimento, <strong>aqui é o seu lugar.</strong></p><Button href="#planos">Quero evoluir meus estudos!</Button></Reveal>
+        <Reveal className="testimonial-cta"><p>Se você acredita em nutrição com fundamento científico e<br/>troca genuína de conhecimento, <strong>aqui é o seu lugar.</strong></p><Button href="/#planos">Quero evoluir meus estudos!</Button></Reveal>
       </div>
     </section>
   );
@@ -434,7 +468,7 @@ function Testimonials() {
 function Estude() {
   const audienceIcons = ['trend', 'cap', 'light', 'book'];
   return (
-    <section className="section estude-section">
+    <section id="estude" className="section estude-section">
       <div className="page-width">
         <Reveal className="problem-card glass-card"><h2>Na prática, muitos estudantes lidam com:</h2><ul><li>Excesso de conteúdo;</li><li>Dificuldade em manter uma rotina que funcione de verdade.</li></ul></Reveal>
         <Reveal><p className="method-copy">Mas isso não é falta de esforço. <strong>É a<br/>ausência de método bem definido.</strong></p></Reveal>
@@ -447,7 +481,7 @@ function Estude() {
         </Reveal>
         <Reveal><p className="estude-detail">O material discute como se preparar melhor para provas e destaca fatores que influenciam o desempenho cognitivo, como sono, ambiente de estudo, exercício físico, nutrição, uso de cafeína e suplementos, além do impacto das redes sociais.</p></Reveal>
         <Reveal className="audience"><h2>O Estude foi planejado para quem:</h2>{estudeAudience.map((item, index) => <div key={item}><Icon name={audienceIcons[index]}/><p>{item}</p></div>)}</Reveal>
-        <Reveal className="objections"><h2>Isto é, se você...</h2><div>{estudeObjections.map((item, index) => <article className="glass-card" key={item}><span>×</span><Icon name={['evidence','light','student'][index]}/><h3>{item}</h3></article>)}</div><p>Essa é a oportunidade certa.</p></Reveal>
+        <Reveal className="objections"><h2>Isto é, se você...</h2><div>{estudeObjections.map((item, index) => <article className="glass-card" key={item}><span>×</span><Icon name={['evidence','light','gauge'][index]}/><h3>{item}</h3></article>)}</div><p>Essa é a oportunidade certa.</p></Reveal>
       </div>
     </section>
   );
@@ -501,11 +535,30 @@ function Pricing() {
     <section id="planos" className="section pricing-section">
       <div className="page-width page-width--narrow">
         <Reveal><SectionHeading>Planos pensados para se adaptar à sua<br/>rotina de estudos</SectionHeading></Reveal>
-        <Reveal className="pricing-card pricing-card--featured"><img className="featured-badge" src="/assets/featured-badge.webp" alt="Plano destaque"/><h2>Nutriwork Plus Anual + livro ESTUDE!</h2><h3>A experiência completa Nutriwork.</h3><Price value="24,90" monthly/><span className="payment-note">*pagamento à vista</span><ul>{['Desenvolva sua rotina com o Estude.','Aprofunde-se com nossos cursos completos.','Mantenha acesso à plataforma durante 1 ano.','Acompanhe evoluções, ajustes e novos conteúdos.','Sustente o hábito de estudar com clareza.'].map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul><Button href={checkout.complete} external>Garantir plano completo</Button><div className="scarcity">🔥 últimas vagas restantes!</div></Reveal>
-        <Reveal className="pricing-card"><span className="corner-badge">À vista</span><h2>Guia Estude</h2><h3>Material prático para organizar<br/>seus estudos.</h3><Price value="77,90"/><ul>{['Estratégias para criar uma rotina possível','Orientações para manter constância','Material de apoio para aplicar no dia a dia','Acesso ao conteúdo completo do guia'].map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul><Button href={checkout.guide} external>Começar agora</Button></Reveal>
+        <Reveal className="pricing-card pricing-card--featured"><img className="featured-badge" src="/assets/featured-badge.webp" alt="Plano destaque"/><h2>Nutriwork Plus Anual + livro ESTUDE!</h2><h3>A experiência completa Nutriwork.</h3><Price value="24,90" monthly/><span className="payment-note">*pagamento à vista</span><ul>{['Desenvolva sua rotina com o Estude.','Aprofunde-se com nossos cursos completos.','Mantenha acesso à plataforma durante 1 ano.','Acompanhe evoluções, ajustes e novos conteúdos.','Sustente o hábito de estudar com clareza.'].map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul><div className="pricing-actions"><Button href={checkout.complete} external>Garantir plano completo</Button><Button href="/#/estude" variant="outline" className="pricing-card__secondary">Conheça o ESTUDE</Button></div><div className="scarcity">🔥 últimas vagas restantes!</div></Reveal>
+        <Reveal className="pricing-card pricing-card--estude"><span className="corner-badge">À vista</span><h2>Guia Estude</h2><h3>Material prático para organizar<br/>seus estudos.</h3><Price value="77,90"/><ul>{['Estratégias para criar uma rotina possível','Orientações para manter constância','Material de apoio para aplicar no dia a dia','Acesso ao conteúdo completo do guia'].map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul><Button href={checkout.guide} external>Começar agora</Button></Reveal>
         <Reveal className="platform-pricing"><header><div><h2>Planos nutriwork</h2><p>Acesso à plataforma Nutriwork.</p></div><span>À vista</span></header><div className="mini-plans">{platformPlans.map((plan, index) => <article key={plan.title}><h3>{plan.title}</h3><Price value={plan.price}/><p>por mês.</p><Button href={planLinks[index]} external>Quero assinar</Button></article>)}</div><ul>{platformBenefits.map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul></Reveal>
       </div>
     </section>
+  );
+}
+
+function FaqItem({ item, index }: { item: typeof faqItems[number]; index: number }) {
+  const [open, setOpen] = useState(false);
+  const contentId = `faq-answer-${index}`;
+
+  return (
+    <Reveal>
+      <article className={`faq-item ${open ? 'faq-item--open' : ''}`}>
+        <button type="button" aria-expanded={open} aria-controls={contentId} onClick={() => setOpen((value) => !value)}>
+          {item.question}
+          <span aria-hidden="true">+</span>
+        </button>
+        <div className="faq-answer" id={contentId} role="region">
+          <div><p>{item.answer}</p></div>
+        </div>
+      </article>
+    </Reveal>
   );
 }
 
@@ -515,9 +568,9 @@ function FAQ() {
       <div className="page-width page-width--narrow">
         <Reveal><SectionHeading>Dúvidas frequentes</SectionHeading><p className="faq-intro">Informações diretas para você escolher com segurança e começar seus estudos.</p></Reveal>
         <div className="faq-list">
-          {faqItems.map((item) => <Reveal key={item.question}><details><summary>{item.question}<span aria-hidden="true">+</span></summary><p>{item.answer}</p></details></Reveal>)}
+          {faqItems.map((item, index) => <FaqItem item={item} index={index} key={item.question} />)}
         </div>
-        <Reveal className="faq-cta"><p>Pronto para fazer parte?</p><Button href="#planos">Conhecer os planos</Button></Reveal>
+        <Reveal className="faq-cta"><p>Pronto para fazer parte?</p><Button href="/#planos">Conhecer os planos</Button></Reveal>
       </div>
     </section>
   );
@@ -539,8 +592,19 @@ function Footer() {
   );
 }
 
+function HomePage() {
+  return <main><Hero/><Platform/><Courses/><Extras/><Testimonials/><Estude/><StudyBenefits/><Evidence/><Mentor/><Pricing/><FAQ/></main>;
+}
+
+function EstudePage() {
+  return <main className="estude-page"><Estude/><StudyBenefits/></main>;
+}
+
 export default function App() {
-  useScrollReveal();
-  useMobileCtaVisibility();
-  return <><Header/><main><Hero/><Platform/><Courses/><Extras/><Testimonials/><Estude/><StudyBenefits/><Evidence/><Mentor/><Pricing/><FAQ/></main><Footer/><Button href="#planos" className="mobile-cta">Ver planos</Button></>;
+  const page = useCurrentPage();
+  useScrollReveal(page);
+  useMobileCtaVisibility(page);
+  useHashScroll(page);
+
+  return <><Header/>{page === 'estude' ? <EstudePage/> : <HomePage/>}<Footer/><Button href="/#planos" className="mobile-cta">Ver planos</Button></>;
 }

@@ -1,10 +1,10 @@
 export const navItems = [
-  { label: 'início', href: '#inicio' },
-  { label: 'sobre', href: '#sobre' },
-  { label: 'benefícios', href: '#beneficios' },
-  { label: 'planos', href: '#planos' },
-  { label: 'dúvidas', href: '#duvidas' },
-  { label: 'contatos', href: '#contatos' }
+  { label: 'início', href: '/#inicio' },
+  { label: 'benefícios', href: '/#beneficios' },
+  { label: 'estude', href: '/#/estude' },
+  { label: 'planos', href: '/#planos' },
+  { label: 'dúvidas', href: '/#duvidas' },
+  { label: 'contatos', href: '/#contatos' }
 ];
 
 export const promises = [
