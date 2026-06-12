@@ -497,6 +497,23 @@ function StudyBenefits() {
   );
 }
 
+function EstudePlan() {
+  return (
+    <section className="section estude-plan-section">
+      <div className="page-width page-width--narrow">
+        <Reveal className="pricing-card pricing-card--estude">
+          <span className="corner-badge">À vista</span>
+          <h2>Guia Estude</h2>
+          <h3>Material prático para organizar<br/>seus estudos.</h3>
+          <Price value="77,90"/>
+          <ul>{['Estratégias para criar uma rotina possível','Orientações para manter constância','Material de apoio para aplicar no dia a dia','Acesso ao conteúdo completo do guia'].map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul>
+          <Button href={checkout.guide} external>Começar agora</Button>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 function Evidence() {
   return (
     <section className="section evidence-section">
@@ -535,7 +552,7 @@ function Pricing() {
     <section id="planos" className="section pricing-section">
       <div className="page-width page-width--narrow">
         <Reveal><SectionHeading>Planos pensados para se adaptar à sua<br/>rotina de estudos</SectionHeading></Reveal>
-        <Reveal className="pricing-card pricing-card--featured"><img className="featured-badge" src="/assets/featured-badge.webp" alt="Plano destaque"/><h2>Nutriwork Plus Anual + livro ESTUDE!</h2><h3>A experiência completa Nutriwork.</h3><Price value="24,90" monthly/><span className="payment-note">*pagamento à vista</span><ul>{['Desenvolva sua rotina com o Estude.','Aprofunde-se com nossos cursos completos.','Mantenha acesso à plataforma durante 1 ano.','Acompanhe evoluções, ajustes e novos conteúdos.','Sustente o hábito de estudar com clareza.'].map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul><div className="pricing-actions"><Button href={checkout.complete} external>Garantir plano completo</Button><Button href="/#/estude" variant="outline" className="pricing-card__secondary">Conheça o ESTUDE</Button></div><div className="scarcity">🔥 últimas vagas restantes!</div></Reveal>
+        <Reveal className="pricing-card pricing-card--featured"><img className="featured-badge" src="/assets/featured-badge.webp" alt="Plano destaque"/><h2>Nutriwork Plus Anual</h2><h3>A experiência completa Nutriwork.</h3><Price value="24,90" monthly/><span className="payment-note">*pagamento à vista</span><ul>{['Aprofunde-se com nossos cursos completos.','Mantenha acesso à plataforma durante 1 ano.','Acompanhe evoluções, ajustes e novos conteúdos.','Estude com clareza, método e constância.','Tenha uma experiência completa de formação.'].map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul><div className="pricing-actions"><Button href={checkout.complete} external>Garantir plano completo</Button><Button href="/#/estude" variant="outline" className="pricing-card__secondary">Conheça o ESTUDE</Button></div><div className="scarcity">🔥 últimas vagas restantes!</div></Reveal>
         <Reveal className="pricing-card pricing-card--estude"><span className="corner-badge">À vista</span><h2>Guia Estude</h2><h3>Material prático para organizar<br/>seus estudos.</h3><Price value="77,90"/><ul>{['Estratégias para criar uma rotina possível','Orientações para manter constância','Material de apoio para aplicar no dia a dia','Acesso ao conteúdo completo do guia'].map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul><Button href={checkout.guide} external>Começar agora</Button></Reveal>
         <Reveal className="platform-pricing"><header><div><h2>Planos nutriwork</h2><p>Acesso à plataforma Nutriwork.</p></div><span>À vista</span></header><div className="mini-plans">{platformPlans.map((plan, index) => <article key={plan.title}><h3>{plan.title}</h3><Price value={plan.price}/><p>por mês.</p><Button href={planLinks[index]} external>Quero assinar</Button></article>)}</div><ul>{platformBenefits.map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul></Reveal>
       </div>
@@ -593,11 +610,11 @@ function Footer() {
 }
 
 function HomePage() {
-  return <main><Hero/><Platform/><Courses/><Extras/><Testimonials/><Estude/><StudyBenefits/><Evidence/><Mentor/><Pricing/><FAQ/></main>;
+  return <main><Hero/><Platform/><Courses/><Extras/><Testimonials/><Evidence/><Mentor/><Pricing/><FAQ/></main>;
 }
 
 function EstudePage() {
-  return <main className="estude-page"><Estude/><StudyBenefits/></main>;
+  return <main className="estude-page"><Estude/><StudyBenefits/><EstudePlan/></main>;
 }
 
 export default function App() {
