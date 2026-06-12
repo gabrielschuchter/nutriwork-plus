@@ -23,6 +23,8 @@ const checkout = {
   semiannual: 'https://pay.kiwify.com.br/TbFu6TD'
 };
 
+const platformVideo = 'https://gruponutriwork.com.br/_assets/video/121f9f7d30c317a4871e3f531eb5287d.mp4';
+
 type Theme = 'light' | 'dark';
 
 function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
@@ -93,7 +95,10 @@ function Icon({ name }: { name: string }) {
     phone: <><path d="M8 3h8l1 3-2 2a15 15 0 0 0 3 3l2-2 3 1v8c0 1.1-.9 2-2 2C11.1 20 4 12.9 4 4a2 2 0 0 1 2-2l2 1Z"/></>,
     mail: <><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></>,
     sun: <><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></>,
-    moon: <path d="M20.7 15.2A8.6 8.6 0 0 1 8.8 3.3 9 9 0 1 0 20.7 15.2Z"/>
+    moon: <path d="M20.7 15.2A8.6 8.6 0 0 1 8.8 3.3 9 9 0 1 0 20.7 15.2Z"/>,
+    pause: <><rect x="7" y="5" width="3.5" height="14" rx="1"/><rect x="13.5" y="5" width="3.5" height="14" rx="1"/></>,
+    volume: <><path d="M4 10v4h4l5 4V6l-5 4H4Z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></>,
+    volumeOff: <><path d="M4 10v4h4l5 4V6l-5 4H4Z"/><path d="m18 9-5 5M13 9l5 5"/></>
   };
   return <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>;
 }
@@ -165,6 +170,59 @@ function Hero() {
   );
 }
 
+function PlatformVideo() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [paused, setPaused] = useState(false);
+  const [muted, setMuted] = useState(true);
+
+  const togglePlayback = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.paused) {
+      void video.play();
+    } else {
+      video.pause();
+    }
+  };
+
+  const toggleMute = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = !video.muted;
+    setMuted(video.muted);
+  };
+
+  return (
+    <>
+      <video
+        ref={videoRef}
+        className="dashboard-video"
+        autoPlay
+        muted
+        loop
+        playsInline
+        poster="/assets/platform-dashboard.jpg"
+        aria-label="Previa em video da plataforma Nutriwork"
+        onPlay={() => setPaused(false)}
+        onPause={() => setPaused(true)}
+        onVolumeChange={(event) => setMuted(event.currentTarget.muted)}
+      >
+        <source src={platformVideo} type="video/mp4" />
+      </video>
+      <div className="video-controls" aria-label="Controles do video da plataforma">
+        <button className="video-control" type="button" aria-label={paused ? 'Reproduzir video' : 'Pausar video'} title={paused ? 'Reproduzir video' : 'Pausar video'} onClick={togglePlayback}>
+          <Icon name={paused ? 'play' : 'pause'} />
+        </button>
+        <button className="video-control" type="button" aria-label={muted ? 'Ativar som do video' : 'Silenciar video'} title={muted ? 'Ativar som' : 'Silenciar'} onClick={toggleMute}>
+          <Icon name={muted ? 'volumeOff' : 'volume'} />
+        </button>
+      </div>
+    </>
+  );
+}
+
 function Platform() {
   return (
     <section id="sobre" className="section platform-section">
@@ -172,7 +230,7 @@ function Platform() {
         <Reveal><SectionHeading accent>Veja o que nossa plataforma tem a oferecer:</SectionHeading></Reveal>
         <Reveal className="dashboard-shell">
           <div className="dashboard-lights" aria-hidden="true" />
-          <img src="/assets/platform-dashboard.jpg" alt="Tela da plataforma Nutriwork com aulas, podcasts e materiais de estudo" width="1600" height="899" loading="eager" />
+          <PlatformVideo />
         </Reveal>
         <Reveal className="intro-copy">
           <h3>Um espaço para transformar a forma<br/>como você estuda nutrição.</h3>
