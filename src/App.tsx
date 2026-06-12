@@ -23,10 +23,13 @@ const checkout = {
   semiannual: 'https://pay.kiwify.com.br/TbFu6TD'
 };
 
+const contactEmail = 'equipenutriwork@gmail.com';
+const partnerForm = 'https://forms.gle/avn9yrBdbEHkaGg8A';
+const whatsappContact = `https://wa.me/5512997505188?text=${encodeURIComponent('Olá, equipe Nutriwork! Vim pelo site e gostaria de tirar uma dúvida sobre o Nutriwork Plus.')}`;
 const platformVideo = 'https://gruponutriwork.com.br/_assets/video/121f9f7d30c317a4871e3f531eb5287d.mp4';
 
 type Theme = 'light' | 'dark';
-type Page = 'home' | 'estude';
+type Page = 'home' | 'estude' | 'partners';
 
 function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <div className={`reveal ${className}`}>{children}</div>;
@@ -60,7 +63,7 @@ function useScrollReveal(refreshKey: unknown) {
 function useMobileCtaVisibility(refreshKey: unknown) {
   useEffect(() => {
     const cta = document.querySelector<HTMLElement>('.mobile-cta');
-    const protectedSections = document.querySelectorAll('.estude-section, .study-benefits, .mentor-section, .pricing-section, .faq-section, .footer');
+    const protectedSections = document.querySelectorAll('.estude-section, .study-benefits, .mentor-section, .pricing-section, .faq-section, .partners-page, .footer');
     if (!cta || !protectedSections.length) return;
 
     const visibleSections = new Set<Element>();
@@ -78,7 +81,9 @@ function useMobileCtaVisibility(refreshKey: unknown) {
 }
 
 function getCurrentPage(): Page {
-  return window.location.hash === '#/estude' ? 'estude' : 'home';
+  if (window.location.hash === '#/estude') return 'estude';
+  if (window.location.hash === '#/parceiros') return 'partners';
+  return 'home';
 }
 
 function useCurrentPage() {
@@ -95,7 +100,7 @@ function useCurrentPage() {
 
 function useHashScroll(page: Page) {
   useEffect(() => {
-    if (page === 'estude') {
+    if (page !== 'home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -107,6 +112,62 @@ function useHashScroll(page: Page) {
       document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start' });
     });
   }, [page]);
+}
+
+function useInitialLoader() {
+  const [loading, setLoading] = useState(() => {
+    try {
+      return sessionStorage.getItem('nutriwork-loader-seen') !== '1';
+    } catch {
+      return true;
+    }
+  });
+
+  useEffect(() => {
+    if (!loading) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const timer = window.setTimeout(() => {
+      try {
+        sessionStorage.setItem('nutriwork-loader-seen', '1');
+      } catch {
+        // The loader can still close when session storage is unavailable.
+      }
+      setLoading(false);
+    }, reduceMotion ? 120 : 720);
+
+    return () => window.clearTimeout(timer);
+  }, [loading]);
+
+  return loading;
+}
+
+function useRouteTransition(page: Page) {
+  const firstRender = useRef(true);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+
+    const root = document.documentElement;
+    root.classList.add('route-transition');
+    const timer = window.setTimeout(() => root.classList.remove('route-transition'), 240);
+    return () => {
+      window.clearTimeout(timer);
+      root.classList.remove('route-transition');
+    };
+  }, [page]);
+}
+
+function LoadingScreen({ active }: { active: boolean }) {
+  return (
+    <div className={`loading-screen ${active ? 'loading-screen--active' : ''}`} aria-hidden={!active}>
+      <div className="loading-screen__mark">N<span>+</span></div>
+      <div className="loading-screen__bar" />
+    </div>
+  );
 }
 
 function Icon({ name }: { name: string }) {
@@ -257,6 +318,30 @@ function PlatformVideo() {
   );
 }
 
+function SocialProof() {
+  const proofQuotes = [testimonials[0], testimonials[3]];
+  const badges = ['Relatos reais', 'Baseado em evidências', 'Acesso no celular'];
+
+  return (
+    <Reveal className="social-proof">
+      <div className="social-proof__badges">
+        {badges.map((badge) => <span key={badge}>{badge}</span>)}
+      </div>
+      <div className="social-proof__quotes">
+        {proofQuotes.map((item) => (
+          <article key={item.name}>
+            <img src={item.image} alt={`Foto de ${item.name}`} loading="lazy" decoding="async" />
+            <div>
+              <blockquote>“{item.quote}”</blockquote>
+              <p>{item.name}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </Reveal>
+  );
+}
+
 function Platform() {
   return (
     <section id="sobre" className="section platform-section">
@@ -266,6 +351,7 @@ function Platform() {
           <div className="dashboard-lights" aria-hidden="true" />
           <PlatformVideo />
         </Reveal>
+        <SocialProof />
         <Reveal className="intro-copy">
           <h3>Um espaço para transformar a forma<br/>como você estuda nutrição.</h3>
           <p>O Nutriwork é uma comunidade de estudantes e profissionais de Nutrição criada para quem busca:</p>
@@ -465,6 +551,31 @@ function Testimonials() {
   );
 }
 
+function EstudeLandingHero() {
+  return (
+    <section className="section estude-page-hero">
+      <div className="page-width">
+        <Reveal className="estude-page-hero__grid">
+          <div className="estude-page-hero__copy">
+            <p className="eyebrow">Guia Estude</p>
+            <h1>Estude com clareza, método e constância.</h1>
+            <p>Um guia prático para transformar esforço em rendimento, organizar sua rotina e estudar com mais direção ao longo da graduação.</p>
+            <div className="estude-page-hero__actions">
+              <Button href={checkout.guide} external>Quero estudar melhor</Button>
+            </div>
+          </div>
+          <div className="estude-page-hero__visual" aria-hidden="true">
+            <img src="/assets/estude-phone.webp" alt="" />
+            <span>rotina possível</span>
+            <span>menos sobrecarga</span>
+            <span>mais direção</span>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 function Estude() {
   const audienceIcons = ['trend', 'cap', 'light', 'book'];
   return (
@@ -600,8 +711,8 @@ function Footer() {
       <div className="page-width">
         <Reveal><h2>Venha fazer parte do grupo de<br/>Nutrição Baseada em Evidências<br/>que mais cresce no Brasil.</h2></Reveal>
         <div className="footer-grid">
-          <div><p className="footer-label">Visite nossas redes sociais:</p><a href="https://www.instagram.com/gruponutriwork" target="_blank" rel="noreferrer"><Icon name="instagram"/>@gruponutriwork</a><p>Você lidera um projeto e gostaria de se tornar<br/>parceiro do Nutriwork?</p><Button href="https://forms.gle/avn9yrBdbEHkaGg8A" external variant="outline">Torne-se parceiro Nutriwork</Button></div>
-          <div><h3>Dúvidas? Entre em contato.</h3><a href="tel:+5512997505188"><Icon name="phone"/><span><small>Telefone</small>(12) 99750-5188</span></a><a href="mailto:equipenutriwork@gmail.com"><Icon name="mail"/><span><small>E-mail</small>equipenutriwork@gmail.com</span></a></div>
+          <div><p className="footer-label">Visite nossas redes sociais:</p><a className="contact-link" href="https://www.instagram.com/gruponutriwork" target="_blank" rel="noreferrer"><Icon name="instagram"/>@gruponutriwork</a></div>
+          <div><h3>Dúvidas? Entre em contato.</h3><a className="contact-link" href={whatsappContact} target="_blank" rel="noreferrer"><Icon name="phone"/><span><small>WhatsApp</small>(12) 99750-5188</span></a><a className="contact-link" href={`mailto:${contactEmail}`}><Icon name="mail"/><span><small>E-mail</small>{contactEmail}</span></a></div>
         </div>
         <p className="copyright">© {new Date().getFullYear()} Nutriwork. Todos os direitos reservados.</p>
       </div>
@@ -610,18 +721,55 @@ function Footer() {
 }
 
 function HomePage() {
-  return <main><Hero/><Platform/><Courses/><Extras/><Testimonials/><Evidence/><Mentor/><Pricing/><FAQ/></main>;
+  return <main><Hero/><Platform/><Courses/><Extras/><Evidence/><Mentor/><Pricing/><FAQ/></main>;
 }
 
 function EstudePage() {
-  return <main className="estude-page"><Estude/><StudyBenefits/><EstudePlan/></main>;
+  return <main className="estude-page"><EstudeLandingHero/><Estude/><StudyBenefits/><EstudePlan/></main>;
+}
+
+function PartnersPage() {
+  return (
+    <main className="partners-page">
+      <section className="section partners-hero">
+        <div className="page-width">
+          <Reveal className="partners-hero__grid">
+            <div className="partners-hero__copy">
+              <p className="eyebrow">Parcerias Nutriwork</p>
+              <h1>Construa uma parceria com uma comunidade que valoriza ciência, formação e impacto real.</h1>
+              <p>Projetos, marcas e instituições que compartilham uma visão séria de educação em saúde podem conversar com o Nutriwork para criar iniciativas consistentes e relevantes.</p>
+              <div className="partners-hero__actions">
+                <Button href={partnerForm} external>Quero ser parceiro</Button>
+                <a className="partners-hero__contact" href={`mailto:${contactEmail}`}>{contactEmail}</a>
+              </div>
+            </div>
+            <div className="partners-panel" aria-label="Frentes de parceria">
+              {[
+                ['Comunidade', 'Acesso a um público de estudantes e profissionais que estudam com intenção.'],
+                ['Conteúdo', 'Projetos educativos com linguagem clara e compromisso técnico.'],
+                ['Continuidade', 'Parcerias pensadas para gerar relacionamento, não apenas exposição pontual.']
+              ].map(([title, text], index) => (
+                <article key={title}>
+                  <Icon name={['heart', 'evidence', 'structure'][index]} />
+                  <h2>{title}</h2>
+                  <p>{text}</p>
+                </article>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+    </main>
+  );
 }
 
 export default function App() {
   const page = useCurrentPage();
+  const loading = useInitialLoader();
+  useRouteTransition(page);
   useScrollReveal(page);
   useMobileCtaVisibility(page);
   useHashScroll(page);
 
-  return <><Header/>{page === 'estude' ? <EstudePage/> : <HomePage/>}<Footer/><Button href="/#planos" className="mobile-cta">Ver planos</Button></>;
+  return <><LoadingScreen active={loading}/><Header/>{page === 'estude' ? <EstudePage/> : page === 'partners' ? <PartnersPage/> : <HomePage/>}<Footer/>{page === 'home' && <Button href="/#planos" className="mobile-cta">Ver planos</Button>}</>;
 }

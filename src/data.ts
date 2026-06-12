@@ -2,6 +2,7 @@ export const navItems = [
   { label: 'início', href: '/#inicio' },
   { label: 'benefícios', href: '/#beneficios' },
   { label: 'estude', href: '/#/estude' },
+  { label: 'parceiros', href: '/#/parceiros' },
   { label: 'planos', href: '/#planos' },
   { label: 'dúvidas', href: '/#duvidas' },
   { label: 'contatos', href: '/#contatos' }
@@ -134,6 +135,6 @@ export const faqItems = [
   },
   {
     question: 'Ainda tenho uma dúvida. Como falo com a equipe?',
-    answer: 'Você pode entrar em contato pelo telefone (12) 99750-5188 ou pelo e-mail equipenutriwork@gmail.com.'
+    answer: 'Você pode entrar em contato pelo WhatsApp (12) 99750-5188 ou pelo e-mail equipenutriwork@gmail.com.'
   }
 ];
