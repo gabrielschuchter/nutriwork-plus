@@ -23,6 +23,8 @@ const checkout = {
   semiannual: 'https://pay.kiwify.com.br/TbFu6TD'
 };
 
+type Theme = 'light' | 'dark';
+
 function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <div className={`reveal ${className}`}>{children}</div>;
 }
@@ -89,7 +91,9 @@ function Icon({ name }: { name: string }) {
     check: <path d="m4 12 5 5L20 6"/>,
     instagram: <><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></>,
     phone: <><path d="M8 3h8l1 3-2 2a15 15 0 0 0 3 3l2-2 3 1v8c0 1.1-.9 2-2 2C11.1 20 4 12.9 4 4a2 2 0 0 1 2-2l2 1Z"/></>,
-    mail: <><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></>
+    mail: <><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></>,
+    sun: <><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></>,
+    moon: <path d="M20.7 15.2A8.6 8.6 0 0 1 8.8 3.3 9 9 0 1 0 20.7 15.2Z"/>
   };
   return <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>;
 }
@@ -100,15 +104,42 @@ function Button({ href, children, variant = 'primary', className = '', external 
 
 function Header() {
   const [open, setOpen] = useState(false);
+  const [theme, setTheme] = useState<Theme>(() => document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
+  const nextTheme = theme === 'dark' ? 'light' : 'dark';
+
+  const toggleTheme = () => {
+    const root = document.documentElement;
+    root.classList.add('theme-transition');
+    root.dataset.theme = nextTheme;
+    root.style.colorScheme = nextTheme;
+    document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', nextTheme === 'light' ? '#f4f7fc' : '#02040a');
+    try {
+      localStorage.setItem('nutriwork-theme', nextTheme);
+    } catch {
+      // The selected theme still applies when storage is unavailable.
+    }
+    setTheme(nextTheme);
+    window.setTimeout(() => root.classList.remove('theme-transition'), 350);
+  };
+
   return (
     <header className="site-header">
       <a className="brand" href="#inicio" aria-label="Nutriwork Plus, voltar ao início">NUTRIWORK<span>+</span></a>
       <nav className={`nav ${open ? 'nav--open' : ''}`} aria-label="Navegação principal">
         {navItems.map((item) => <a key={item.href} href={item.href} onClick={() => setOpen(false)}>{item.label}</a>)}
       </nav>
-      <button className="menu-button" type="button" aria-label={open ? 'Fechar menu' : 'Abrir menu'} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
-        <span/><span/><span/>
-      </button>
+      <div className="header-actions">
+        <button className="theme-toggle" type="button" aria-label={`Tema atual: ${theme === 'dark' ? 'escuro' : 'claro'}. Alternar para tema ${nextTheme === 'dark' ? 'escuro' : 'claro'}.`} title={`Alternar para tema ${nextTheme === 'dark' ? 'escuro' : 'claro'}`} onClick={toggleTheme}>
+          <span className="theme-toggle__track" aria-hidden="true">
+            <span className="theme-toggle__icon theme-toggle__icon--sun"><Icon name="sun"/></span>
+            <span className="theme-toggle__icon theme-toggle__icon--moon"><Icon name="moon"/></span>
+            <span className="theme-toggle__thumb"><Icon name={theme === 'dark' ? 'moon' : 'sun'}/></span>
+          </span>
+        </button>
+        <button className="menu-button" type="button" aria-label={open ? 'Fechar menu' : 'Abrir menu'} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+          <span/><span/><span/>
+        </button>
+      </div>
     </header>
   );
 }
@@ -125,7 +156,10 @@ function Hero() {
       <Reveal className="hero__content">
         <h1>Nutriwork<span>plus.</span></h1>
         <p>Uma plataforma para todo estudante de Nutrição.</p>
-        <Button href="#sobre" variant="outline">Venha fazer parte</Button>
+        <div className="hero-actions">
+          <Button href="#sobre" variant="outline">Venha fazer parte</Button>
+          <Button href="https://plus.gruponutriwork.com.br/" variant="outline" className="member-cta" external>Já sou membro(a)</Button>
+        </div>
       </Reveal>
     </section>
   );

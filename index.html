@@ -4,6 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#02040a" />
+    <script>
+      (() => {
+        const storageKey = 'nutriwork-theme';
+        let theme = 'dark';
+        try {
+          const savedTheme = localStorage.getItem(storageKey);
+          theme = savedTheme === 'light' || savedTheme === 'dark'
+            ? savedTheme
+            : (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        } catch {
+          theme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        document.querySelector('meta[name="theme-color"]').content = theme === 'light' ? '#f4f7fc' : '#02040a';
+      })();
+    </script>
     <meta name="description" content="Nutriwork Plus: plataforma de estudos em Nutrição com cursos, comunidade, evidências científicas e o guia Estude." />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://gruponutriwork.com.br/" />
