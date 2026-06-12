@@ -249,6 +249,8 @@ html.theme-transition .dashboard-shell,
 html.theme-transition .course-card,
 html.theme-transition .extra-card,
 html.theme-transition .comparison-card,
+html.theme-transition .comparison-heading,
+html.theme-transition .comparison-cell,
 html.theme-transition .testimonial-card,
 html.theme-transition .estude-hero,
 html.theme-transition .benefits-panel,
@@ -374,17 +376,18 @@ html[data-theme='dark'] .theme-toggle__icon--sun { opacity: .58; }
 .path-intro span { font-size: clamp(23px, 2.4vw, 36px); font-weight: 300; }
 
 .comparison-card { position: relative; max-width: 980px; margin: auto; padding: 30px; border: 1px solid transparent; border-radius: 30px; isolation: isolate; background: var(--comparison-bg); box-shadow: var(--comparison-shadow); overflow: hidden; }
-.comparison-card::before { content: ''; position: absolute; z-index: -1; top: 74px; bottom: 28px; left: 30.7%; width: 37.2%; border: 1px solid var(--border); border-radius: 26px; background: var(--comparison-highlight-bg); box-shadow: inset 1px 0 rgba(255,255,255,.12), inset -1px 0 rgba(26,71,181,.35), 0 0 38px rgba(44,83,212,.16); }
-.comparison-card::after { content: ''; position: absolute; z-index: -1; inset: 0; background: radial-gradient(circle at 49% 45%, rgba(80,106,196,.12), transparent 32%), linear-gradient(100deg, transparent, rgba(255,255,255,.025), transparent); pointer-events: none; }
-.comparison-head, .comparison-row { display: grid; grid-template-columns: .9fr 1.3fr 1.15fr; gap: 18px; align-items: stretch; }
-.comparison-head { padding: 0 8px 18px; align-items: end; }
-.comparison-head strong { font-size: 25px; font-weight: 300; }
-.comparison-head span { font-size: 14px; font-weight: 600; text-align: center; text-transform: uppercase; }
-.comparison-row strong, .comparison-row p { margin: 0 0 12px; min-height: 70px; padding: 16px 18px; border: 1px solid var(--border); border-radius: 18px; display: flex; align-items: center; font-size: 13px; line-height: 1.35; }
-.comparison-row strong { font-size: 15px; font-weight: 400; }
-.comparison-row p { border-color: transparent; }
-.comparison-row .comparison-positive { border-color: var(--border); background: var(--comparison-positive-bg); font-weight: 600; }
-.comparison-positive .icon { width: 20px; margin-right: 11px; }
+.comparison-card::after { content: ''; position: absolute; z-index: -1; inset: 0; background: radial-gradient(circle at 48% 45%, var(--glow), transparent 32%), linear-gradient(100deg, transparent, rgba(255,255,255,.025), transparent); opacity: .58; pointer-events: none; }
+.comparison-grid { display: grid; grid-template-columns: minmax(150px, .82fr) minmax(0, 1.28fr) minmax(0, 1.08fr); gap: 12px 14px; align-items: stretch; }
+.comparison-header, .comparison-row { display: contents; }
+.comparison-heading, .comparison-cell { box-sizing: border-box; margin: 0; border: 1px solid var(--border); display: flex; align-items: center; }
+.comparison-heading { min-height: 58px; padding: 12px 18px 14px; justify-content: center; border-color: transparent; color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: .1em; line-height: 1.2; text-align: center; text-transform: uppercase; }
+.comparison-heading--foundation { justify-content: flex-start; color: var(--heading); font-size: 25px; font-weight: 300; letter-spacing: 0; text-align: left; text-transform: none; }
+.comparison-heading--positive { border-color: var(--border); border-radius: 22px 22px 16px 16px; background: var(--comparison-highlight-bg); color: var(--heading); box-shadow: var(--button-outline-shadow); }
+.comparison-cell { min-height: 86px; padding: 17px 18px; border-radius: 18px; color: var(--body-copy); font-size: 13px; line-height: 1.38; }
+.comparison-foundation { color: var(--heading); font-size: 15px; font-weight: 500; }
+.comparison-negative { border-color: transparent; color: var(--muted); }
+.comparison-positive { border-color: var(--button-border); background: var(--comparison-positive-bg); color: var(--heading); font-weight: 600; box-shadow: var(--button-outline-shadow); }
+.comparison-positive .icon { flex: 0 0 auto; width: 20px; margin-right: 11px; color: var(--blue-soft); filter: drop-shadow(0 0 8px var(--glow)); }
 
 .testimonials-section { padding-top: 55px; }
 .testimonials-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
@@ -543,18 +546,17 @@ html[data-theme='dark'] .theme-toggle__icon--sun { opacity: .58; }
   .course-card { width: 245px; }
   .course-card__overlay { padding: 40px 16px 16px; }
   .extras-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-  .comparison-card { padding: 24px; }
-  .comparison-card::before { display: none; }
-  .comparison-head { display: none; }
-  .comparison-row { padding: 18px 0; grid-template-columns: 1fr; gap: 9px; border-bottom: 1px solid var(--border); }
-  .comparison-row:last-child { border-bottom: 0; }
-  .comparison-row strong, .comparison-row p { min-height: 0; margin: 0; padding: 14px 15px; }
-  .comparison-row strong { border: 0; padding-inline: 2px; color: var(--heading); font-size: 17px; }
-  .comparison-row p { display: block; font-size: 12px; }
-  .comparison-row p::before { display: block; margin-bottom: 6px; color: var(--accent); font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
-  .comparison-row .comparison-positive::before { content: 'Com Nutriwork'; }
-  .comparison-row p:last-child::before { content: 'Sem Nutriwork'; color: var(--muted); }
-  .comparison-positive .icon { display: inline-block; margin: 0 7px -4px 0; }
+  .comparison-card { padding: 24px; border-radius: 26px; }
+  .comparison-grid { display: block; }
+  .comparison-header { display: none; }
+  .comparison-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; padding: 16px; border: 1px solid var(--border); border-radius: 20px; background: var(--comparison-highlight-bg); }
+  .comparison-row + .comparison-row { margin-top: 12px; }
+  .comparison-cell { min-height: 0; padding: 14px; border-radius: 15px; font-size: 12px; line-height: 1.38; }
+  .comparison-foundation { grid-column: 1 / -1; padding: 0 2px 4px; border: 0; color: var(--heading); background: transparent; font-size: 17px; }
+  .comparison-row p { display: block; }
+  .comparison-row p::before { content: attr(data-label); display: block; margin-bottom: 7px; color: var(--accent); font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .comparison-negative::before { color: var(--muted); }
+  .comparison-positive .icon { display: inline-block; width: 17px; margin: 0 7px -4px 0; }
   .estude-hero { min-height: 1000px; }
   .mentor-card { grid-template-columns: 1fr minmax(260px, .68fr); gap: 26px; }
   .mentor-card p { font-size: 11.5px; }
@@ -591,6 +593,11 @@ html[data-theme='dark'] .theme-toggle__icon--sun { opacity: .58; }
   .extra-card { min-height: 205px; padding: 24px 20px; border-radius: 18px; }
   .path-intro { margin-top: 78px; }
   .comparison-card { padding: 18px; border-radius: 22px; }
+  .comparison-row { padding: 13px; gap: 8px; border-radius: 18px; }
+  .comparison-cell { padding: 12px; font-size: 11.5px; }
+  .comparison-foundation { padding: 0 1px 3px; font-size: 15px; }
+  .comparison-row p::before { margin-bottom: 6px; font-size: 8px; letter-spacing: .1em; }
+  .comparison-positive .icon { width: 16px; margin-right: 6px; }
   .testimonials-grid { grid-template-columns: 1fr; }
   .testimonial-card { min-height: auto; }
   .testimonial-cta { margin-top: 75px; }

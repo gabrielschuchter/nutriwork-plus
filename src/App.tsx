@@ -399,9 +399,21 @@ function Extras() {
 
 function Comparison() {
   return (
-    <div className="comparison-card" role="table" aria-label="Comparação entre estudar com e sem o Nutriwork">
-      <div className="comparison-head" role="row"><strong>Fundamentos</strong><span>Com Nutriwork</span><span>Sem Nutriwork</span></div>
-      {comparison.map((row) => <div className="comparison-row" role="row" key={row.area}><strong>{row.area}</strong><p className="comparison-positive"><Icon name="check"/>{row.with}</p><p>{row.without}</p></div>)}
+    <div className="comparison-card" role="table" aria-label="Comparacao entre estudar com e sem o Nutriwork">
+      <div className="comparison-grid">
+        <div className="comparison-header" role="row">
+          <strong className="comparison-heading comparison-heading--foundation" role="columnheader">Fundamentos</strong>
+          <span className="comparison-heading comparison-heading--positive" role="columnheader">Com Nutriwork</span>
+          <span className="comparison-heading comparison-heading--negative" role="columnheader">Sem Nutriwork</span>
+        </div>
+        {comparison.map((row) => (
+          <div className="comparison-row" role="row" key={row.area}>
+            <strong className="comparison-cell comparison-foundation" role="rowheader">{row.area}</strong>
+            <p className="comparison-cell comparison-positive" role="cell" data-label="Com Nutriwork"><Icon name="check"/>{row.with}</p>
+            <p className="comparison-cell comparison-negative" role="cell" data-label="Sem Nutriwork">{row.without}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
