@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 
 export interface GlobeMarker {
   lat: number;
@@ -52,12 +52,7 @@ interface MarkerPosition extends ProjectedPoint {
 }
 
 const DEG_TO_RAD = Math.PI / 180;
-const SPHERE_POINTS = Array.from({ length: 180 }, (_, index) => {
-  const y = 1 - (index / 179) * 2;
-  const radius = Math.sqrt(1 - y * y);
-  const theta = Math.PI * (3 - Math.sqrt(5)) * index;
-  return { x: Math.cos(theta) * radius, y, z: Math.sin(theta) * radius };
-});
+const TWO_PI = Math.PI * 2;
 
 function project(lat: number, lng: number, rotation: number): ProjectedPoint {
   const latitude = lat * DEG_TO_RAD;
@@ -70,18 +65,41 @@ function project(lat: number, lng: number, rotation: number): ProjectedPoint {
   };
 }
 
-function rotatePoint(point: ProjectedPoint, rotation: number): ProjectedPoint {
-  const sin = Math.sin(rotation);
-  const cos = Math.cos(rotation);
-  return {
-    x: point.x * cos + point.z * sin,
-    y: point.y,
-    z: point.z * cos - point.x * sin
-  };
-}
+function drawWrappedTextureStrip(
+  context: CanvasRenderingContext2D,
+  texture: HTMLImageElement,
+  sourceX: number,
+  sourceY: number,
+  sourceWidth: number,
+  targetX: number,
+  targetY: number,
+  targetWidth: number,
+  targetHeight: number
+) {
+  const textureWidth = texture.naturalWidth;
+  const textureHeight = texture.naturalHeight;
+  const start = ((sourceX % textureWidth) + textureWidth) % textureWidth;
+  const safeSourceY = Math.max(0, Math.min(textureHeight - 2, sourceY));
 
-function getCssColor(element: HTMLElement, variable: string, fallback: string) {
-  return getComputedStyle(element).getPropertyValue(variable).trim() || fallback;
+  if (start + sourceWidth <= textureWidth) {
+    context.drawImage(texture, start, safeSourceY, sourceWidth, 2, targetX, targetY, targetWidth, targetHeight);
+    return;
+  }
+
+  const firstWidth = textureWidth - start;
+  const firstTargetWidth = targetWidth * (firstWidth / sourceWidth);
+  context.drawImage(texture, start, safeSourceY, firstWidth, 2, targetX, targetY, firstTargetWidth, targetHeight);
+  context.drawImage(
+    texture,
+    0,
+    safeSourceY,
+    sourceWidth - firstWidth,
+    2,
+    targetX + firstTargetWidth,
+    targetY,
+    targetWidth - firstTargetWidth,
+    targetHeight
+  );
 }
 
 export function Globe3D({
@@ -94,23 +112,22 @@ export function Globe3D({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number>();
-  const rotationRef = useRef(config.initialRotation?.y ?? -0.55);
+  const rotationRef = useRef(config.initialRotation?.y ?? 1.02);
   const markerPositionsRef = useRef<MarkerPosition[]>([]);
   const isVisibleRef = useRef(true);
   const isDraggingRef = useRef(false);
   const pointerXRef = useRef(0);
-  const imageMapRef = useRef(new Map<string, HTMLImageElement>());
-  const [hoveredMarker, setHoveredMarker] = useState<MarkerPosition | null>(null);
+  const earthTextureRef = useRef<HTMLImageElement>();
+  const markerImagesRef = useRef(new Map<string, HTMLImageElement>());
   const [reducedMotion, setReducedMotion] = useState(false);
 
   const settings = useMemo(() => ({
-    atmosphereColor: config.atmosphereColor ?? '#1263ff',
-    atmosphereIntensity: config.atmosphereIntensity ?? 0.72,
-    autoRotateSpeed: config.autoRotateSpeed ?? 0.34,
-    markerSize: config.markerSize ?? 0.06,
+    atmosphereColor: config.atmosphereColor ?? '#4d8fff',
+    atmosphereIntensity: config.atmosphereIntensity ?? 0.34,
+    autoRotateSpeed: config.autoRotateSpeed ?? 0.24,
+    markerSize: config.markerSize ?? 0.032,
     showAtmosphere: config.showAtmosphere ?? true,
-    showWireframe: config.showWireframe ?? true,
-    backgroundColor: config.backgroundColor ?? null
+    textureUrl: config.textureUrl ?? '/assets/earth-blue-marble.webp'
   }), [config]);
 
   const draw = useCallback(() => {
@@ -120,7 +137,7 @@ export function Globe3D({
 
     const bounds = container.getBoundingClientRect();
     if (!bounds.width || !bounds.height) return;
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, bounds.width < 560 ? 1.35 : 1.75);
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, bounds.width < 560 ? 1.25 : 1.6);
     const width = Math.round(bounds.width * pixelRatio);
     const height = Math.round(bounds.height * pixelRatio);
     if (canvas.width !== width || canvas.height !== height) {
@@ -132,167 +149,159 @@ export function Globe3D({
     if (!context) return;
     context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     context.clearRect(0, 0, bounds.width, bounds.height);
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = 'high';
 
-    const centerX = bounds.width * 0.54;
-    const centerY = bounds.height * 0.56;
-    const radius = Math.min(bounds.width * 0.43, bounds.height * 0.48);
+    const centerX = bounds.width * 0.5;
+    const centerY = bounds.height * 0.86;
+    const radius = Math.min(bounds.width * 0.56, bounds.height * 0.76);
     const rotation = rotationRef.current;
-    const surface = getCssColor(container, '--globe-surface', '#071b42');
-    const surfaceEdge = getCssColor(container, '--globe-surface-edge', '#020711');
-    const grid = getCssColor(container, '--globe-grid', 'rgba(127, 177, 255, .22)');
-    const dots = getCssColor(container, '--globe-dots', 'rgba(175, 211, 255, .46)');
-    const markerRing = getCssColor(container, '--globe-marker-ring', '#dcecff');
-
-    if (settings.backgroundColor) {
-      context.fillStyle = settings.backgroundColor;
-      context.fillRect(0, 0, bounds.width, bounds.height);
-    }
 
     if (settings.showAtmosphere) {
-      const glow = context.createRadialGradient(centerX, centerY, radius * 0.72, centerX, centerY, radius * 1.34);
-      glow.addColorStop(0, 'transparent');
-      glow.addColorStop(0.62, 'transparent');
-      glow.addColorStop(0.8, settings.atmosphereColor + '42');
-      glow.addColorStop(1, 'transparent');
+      const atmosphere = context.createRadialGradient(centerX, centerY, radius * 0.86, centerX, centerY, radius * 1.1);
+      atmosphere.addColorStop(0, 'transparent');
+      atmosphere.addColorStop(0.72, 'transparent');
+      atmosphere.addColorStop(0.9, settings.atmosphereColor + '28');
+      atmosphere.addColorStop(1, 'transparent');
       context.globalAlpha = settings.atmosphereIntensity;
-      context.fillStyle = glow;
-      context.fillRect(centerX - radius * 1.4, centerY - radius * 1.4, radius * 2.8, radius * 2.8);
+      context.fillStyle = atmosphere;
+      context.fillRect(centerX - radius * 1.16, centerY - radius * 1.16, radius * 2.32, radius * 2.32);
       context.globalAlpha = 1;
     }
 
-    const sphere = context.createRadialGradient(
-      centerX - radius * 0.36,
-      centerY - radius * 0.42,
-      radius * 0.05,
-      centerX,
-      centerY,
-      radius
-    );
-    sphere.addColorStop(0, surface);
-    sphere.addColorStop(0.58, surface);
-    sphere.addColorStop(1, surfaceEdge);
-    context.beginPath();
-    context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    context.fillStyle = sphere;
-    context.fill();
-    context.strokeStyle = settings.atmosphereColor + '8a';
-    context.lineWidth = 1.15;
-    context.stroke();
-
     context.save();
     context.beginPath();
-    context.arc(centerX, centerY, radius - 1, 0, Math.PI * 2);
+    context.arc(centerX, centerY, radius, 0, TWO_PI);
     context.clip();
 
-    const drawGridLine = (points: ProjectedPoint[]) => {
-      let drawing = false;
-      context.beginPath();
-      points.forEach((point) => {
-        if (point.z <= 0) {
-          drawing = false;
-          return;
-        }
-        const x = centerX + point.x * radius;
-        const y = centerY - point.y * radius;
-        if (!drawing) context.moveTo(x, y);
-        else context.lineTo(x, y);
-        drawing = true;
-      });
-      context.stroke();
-    };
+    const texture = earthTextureRef.current;
+    if (texture?.complete && texture.naturalWidth) {
+      const textureSpan = texture.naturalWidth / 2;
+      const textureCenter = (((0.5 - rotation / TWO_PI) % 1 + 1) % 1) * texture.naturalWidth;
+      const stripHeight = bounds.width < 560 ? 2.5 : 2;
+      context.filter = 'saturate(.82) contrast(1.12) brightness(.72)';
 
-    context.strokeStyle = grid;
-    context.lineWidth = 0.72;
-    [-60, -30, 0, 30, 60].forEach((latitude) => {
-      drawGridLine(Array.from({ length: 121 }, (_, index) => project(latitude, index * 3 - 180, rotation)));
-    });
-    if (settings.showWireframe) {
-      for (let longitude = -180; longitude < 180; longitude += 30) {
-        drawGridLine(Array.from({ length: 91 }, (_, index) => project(index * 2 - 90, longitude, rotation)));
+      for (let offsetY = -radius; offsetY <= radius; offsetY += stripHeight) {
+        const normalizedY = -offsetY / radius;
+        const latitude = Math.asin(Math.max(-1, Math.min(1, normalizedY)));
+        const chord = radius * Math.cos(latitude);
+        if (chord < 0.5) continue;
+        const sourceY = (0.5 - latitude / Math.PI) * texture.naturalHeight;
+        drawWrappedTextureStrip(
+          context,
+          texture,
+          textureCenter - textureSpan / 2,
+          sourceY,
+          textureSpan,
+          centerX - chord,
+          centerY + offsetY,
+          chord * 2,
+          stripHeight + 0.6
+        );
       }
+      context.filter = 'none';
+    } else {
+      const fallback = context.createRadialGradient(centerX - radius * 0.32, centerY - radius * 0.38, 0, centerX, centerY, radius);
+      fallback.addColorStop(0, '#173255');
+      fallback.addColorStop(0.62, '#071426');
+      fallback.addColorStop(1, '#01040a');
+      context.fillStyle = fallback;
+      context.fillRect(centerX - radius, centerY - radius, radius * 2, radius * 2);
     }
 
-    context.fillStyle = dots;
-    SPHERE_POINTS.forEach((point) => {
-      const rotated = rotatePoint(point, rotation);
-      if (rotated.z <= 0.02) return;
-      const depth = 0.55 + rotated.z * 0.45;
-      context.globalAlpha = depth * 0.8;
-      context.beginPath();
-      context.arc(centerX + rotated.x * radius, centerY - rotated.y * radius, 0.65 + depth * 0.75, 0, Math.PI * 2);
-      context.fill();
-    });
-    context.globalAlpha = 1;
+    const lighting = context.createRadialGradient(
+      centerX - radius * 0.38,
+      centerY - radius * 0.42,
+      radius * 0.06,
+      centerX + radius * 0.06,
+      centerY + radius * 0.08,
+      radius * 1.16
+    );
+    lighting.addColorStop(0, 'rgba(165,205,255,.12)');
+    lighting.addColorStop(0.42, 'rgba(5,13,28,.04)');
+    lighting.addColorStop(0.72, 'rgba(1,5,14,.34)');
+    lighting.addColorStop(1, 'rgba(0,2,8,.9)');
+    context.fillStyle = lighting;
+    context.fillRect(centerX - radius, centerY - radius, radius * 2, radius * 2);
+
+    const edgeShade = context.createRadialGradient(centerX, centerY, radius * 0.62, centerX, centerY, radius);
+    edgeShade.addColorStop(0, 'transparent');
+    edgeShade.addColorStop(0.76, 'rgba(0,4,12,.06)');
+    edgeShade.addColorStop(1, 'rgba(0,3,10,.62)');
+    context.fillStyle = edgeShade;
+    context.fillRect(centerX - radius, centerY - radius, radius * 2, radius * 2);
+    context.restore();
+
+    context.beginPath();
+    context.arc(centerX, centerY, radius, 0, TWO_PI);
+    context.strokeStyle = 'rgba(84, 139, 230, .42)';
+    context.lineWidth = 1;
+    context.stroke();
 
     const markerPositions = markers
       .map((marker) => ({ marker, ...project(marker.lat, marker.lng, rotation) }))
-      .filter((marker) => marker.z > 0.05)
+      .filter((marker) => marker.z > 0.16)
       .sort((a, b) => a.z - b.z)
-      .map((point) => ({
-        ...point,
-        x: centerX + point.x * radius,
-        y: centerY - point.y * radius,
-        radius: Math.max(8, (point.marker.size ?? settings.markerSize) * radius * 2.2) * (0.78 + point.z * 0.22)
-      }));
-
-    context.setLineDash([3, 5]);
-    context.lineWidth = 0.8;
-    context.strokeStyle = settings.atmosphereColor + '55';
-    for (let index = 1; index < markerPositions.length; index += 2) {
-      const start = markerPositions[index - 1];
-      const end = markerPositions[index];
-      context.beginPath();
-      context.moveTo(start.x, start.y);
-      context.quadraticCurveTo((start.x + end.x) / 2, Math.min(start.y, end.y) - radius * 0.16, end.x, end.y);
-      context.stroke();
-    }
-    context.setLineDash([]);
+      .map((point) => {
+        const surfaceX = centerX + point.x * radius;
+        const surfaceY = centerY - point.y * radius;
+        const directionX = surfaceX - centerX;
+        const directionY = surfaceY - centerY;
+        const directionLength = Math.max(1, Math.hypot(directionX, directionY));
+        const lift = 8 + point.z * 5;
+        return {
+          ...point,
+          x: surfaceX + (directionX / directionLength) * lift,
+          y: surfaceY + (directionY / directionLength) * lift,
+          radius: Math.max(5.5, (point.marker.size ?? settings.markerSize) * radius) * (0.84 + point.z * 0.16),
+          surfaceX,
+          surfaceY
+        };
+      });
 
     markerPositions.forEach((position) => {
-      const image = imageMapRef.current.get(position.marker.src);
-      context.save();
-      context.shadowColor = settings.atmosphereColor;
-      context.shadowBlur = 12;
+      const image = markerImagesRef.current.get(position.marker.src);
       context.beginPath();
-      context.arc(position.x, position.y, position.radius + 3, 0, Math.PI * 2);
-      context.fillStyle = settings.atmosphereColor + '52';
+      context.moveTo(position.surfaceX, position.surfaceY);
+      context.lineTo(position.x, position.y);
+      context.strokeStyle = 'rgba(167, 199, 244, .58)';
+      context.lineWidth = 0.7;
+      context.stroke();
+
+      context.save();
+      context.shadowColor = 'rgba(37, 112, 255, .5)';
+      context.shadowBlur = 6;
+      context.beginPath();
+      context.arc(position.x, position.y, position.radius + 1.6, 0, TWO_PI);
+      context.fillStyle = '#dce9ff';
       context.fill();
       context.shadowBlur = 0;
       context.beginPath();
-      context.arc(position.x, position.y, position.radius, 0, Math.PI * 2);
+      context.arc(position.x, position.y, position.radius, 0, TWO_PI);
       context.clip();
-      if (image?.complete) {
-        context.drawImage(image, position.x - position.radius, position.y - position.radius, position.radius * 2, position.radius * 2);
+      if (image?.complete && image.naturalWidth) {
+        const sourceSize = Math.min(image.naturalWidth, image.naturalHeight);
+        const sourceX = (image.naturalWidth - sourceSize) / 2;
+        const sourceY = (image.naturalHeight - sourceSize) / 2;
+        context.drawImage(
+          image,
+          sourceX,
+          sourceY,
+          sourceSize,
+          sourceSize,
+          position.x - position.radius,
+          position.y - position.radius,
+          position.radius * 2,
+          position.radius * 2
+        );
       } else {
-        context.fillStyle = settings.atmosphereColor;
+        context.fillStyle = '#4c7fc8';
         context.fill();
       }
       context.restore();
-      context.beginPath();
-      context.arc(position.x, position.y, position.radius + 1, 0, Math.PI * 2);
-      context.strokeStyle = markerRing;
-      context.lineWidth = 1.25;
-      context.stroke();
     });
 
     markerPositionsRef.current = markerPositions;
-    context.restore();
-
-    const sheen = context.createRadialGradient(
-      centerX - radius * 0.42,
-      centerY - radius * 0.48,
-      0,
-      centerX - radius * 0.28,
-      centerY - radius * 0.34,
-      radius * 0.76
-    );
-    sheen.addColorStop(0, 'rgba(255,255,255,.16)');
-    sheen.addColorStop(0.44, 'rgba(255,255,255,.025)');
-    sheen.addColorStop(1, 'transparent');
-    context.beginPath();
-    context.arc(centerX, centerY, radius - 1, 0, Math.PI * 2);
-    context.fillStyle = sheen;
-    context.fill();
   }, [markers, settings]);
 
   useEffect(() => {
@@ -304,13 +313,22 @@ export function Globe3D({
   }, []);
 
   useEffect(() => {
+    const texture = new Image();
+    texture.decoding = 'async';
+    texture.src = settings.textureUrl;
+    texture.addEventListener('load', draw, { once: true });
+    earthTextureRef.current = texture;
+    return () => texture.removeEventListener('load', draw);
+  }, [draw, settings.textureUrl]);
+
+  useEffect(() => {
     markers.forEach((marker) => {
-      if (imageMapRef.current.has(marker.src)) return;
+      if (markerImagesRef.current.has(marker.src)) return;
       const image = new Image();
       image.decoding = 'async';
       image.src = marker.src;
       image.addEventListener('load', draw, { once: true });
-      imageMapRef.current.set(marker.src, image);
+      markerImagesRef.current.set(marker.src, image);
     });
   }, [draw, markers]);
 
@@ -321,19 +339,19 @@ export function Globe3D({
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       isVisibleRef.current = entry.isIntersecting;
     }, { rootMargin: '120px' });
-    const themeObserver = new MutationObserver(draw);
     resizeObserver.observe(container);
     intersectionObserver.observe(container);
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
     let previousTime = performance.now();
     const animate = (time: number) => {
-      const elapsed = Math.min(time - previousTime, 40);
-      previousTime = time;
-      if (isVisibleRef.current && !isDraggingRef.current) {
-        rotationRef.current += (elapsed / 1000) * settings.autoRotateSpeed * 0.34;
+      const elapsed = time - previousTime;
+      if (elapsed >= 30) {
+        previousTime = time;
+        if (isVisibleRef.current && !isDraggingRef.current) {
+          rotationRef.current += (elapsed / 1000) * settings.autoRotateSpeed * 0.34;
+        }
+        if (isVisibleRef.current) draw();
       }
-      if (isVisibleRef.current) draw();
       frameRef.current = window.requestAnimationFrame(animate);
     };
 
@@ -343,7 +361,6 @@ export function Globe3D({
     return () => {
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
-      themeObserver.disconnect();
       if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
     };
   }, [draw, reducedMotion, settings.autoRotateSpeed]);
@@ -354,20 +371,18 @@ export function Globe3D({
     const x = clientX - bounds.left;
     const y = clientY - bounds.top;
     return [...markerPositionsRef.current].reverse().find((position) => (
-      Math.hypot(position.x - x, position.y - y) <= position.radius + 7
+      Math.hypot(position.x - x, position.y - y) <= position.radius + 5
     )) ?? null;
   };
 
-  const handlePointerMove = (event: React.PointerEvent<HTMLCanvasElement>) => {
+  const handlePointerMove = (event: ReactPointerEvent<HTMLCanvasElement>) => {
     if (isDraggingRef.current) {
-      rotationRef.current += (event.clientX - pointerXRef.current) * 0.008;
+      rotationRef.current += (event.clientX - pointerXRef.current) * 0.006;
       pointerXRef.current = event.clientX;
       draw();
       return;
     }
-    const marker = findMarker(event.clientX, event.clientY);
-    setHoveredMarker(marker);
-    onMarkerHover?.(marker?.marker ?? null);
+    onMarkerHover?.(findMarker(event.clientX, event.clientY)?.marker ?? null);
   };
 
   return (
@@ -391,15 +406,9 @@ export function Globe3D({
         }}
         onPointerLeave={() => {
           isDraggingRef.current = false;
-          setHoveredMarker(null);
           onMarkerHover?.(null);
         }}
       />
-      {hoveredMarker?.marker.label && (
-        <span className="globe-3d__tooltip" style={{ left: hoveredMarker.x, top: hoveredMarker.y - hoveredMarker.radius - 10 }}>
-          {hoveredMarker.marker.label}
-        </span>
-      )}
     </div>
   );
 }
