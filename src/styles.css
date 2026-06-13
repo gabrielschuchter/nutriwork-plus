@@ -318,13 +318,18 @@ html.route-transition main {
 .app-shell {
   min-height: 100vh;
   background: var(--background);
-  transition: opacity .52s cubic-bezier(.22, 1, .36, 1), filter .52s cubic-bezier(.22, 1, .36, 1), transform .52s cubic-bezier(.22, 1, .36, 1);
+  transition:
+    opacity .62s .08s cubic-bezier(.22, 1, .36, 1),
+    filter .62s .08s cubic-bezier(.22, 1, .36, 1),
+    transform .62s .08s cubic-bezier(.22, 1, .36, 1);
 }
 
 .app-shell--loading {
-  opacity: .22;
-  filter: blur(4px) saturate(.86);
-  transform: scale(.998);
+  opacity: .12;
+  filter: blur(6px) saturate(.82);
+  transform: scale(.996);
+  transition-duration: .32s;
+  transition-delay: 0s;
 }
 
 .loading-experience {
@@ -341,7 +346,9 @@ html.route-transition main {
   visibility: hidden;
   pointer-events: none;
   overflow: hidden;
-  transition: opacity .46s cubic-bezier(.22, 1, .36, 1), visibility .46s ease;
+  transition:
+    opacity .54s cubic-bezier(.22, 1, .36, 1),
+    visibility 0s linear .54s;
 }
 
 .loading-experience::before {
@@ -359,6 +366,9 @@ html.route-transition main {
 .loading-experience--active {
   opacity: 1;
   visibility: visible;
+  transition:
+    opacity .34s cubic-bezier(.22, 1, .36, 1),
+    visibility 0s linear 0s;
 }
 
 .loading-experience--route {
@@ -383,30 +393,44 @@ html.route-transition main {
 .loading-experience__brand {
   position: absolute;
   z-index: 4;
-  top: clamp(20px, 3.2vw, 42px);
+  inset: 0;
+  --loader-brand-offset: clamp(88px, 12vh, 126px);
+  pointer-events: none;
+}
+
+.loading-experience__brand::before {
+  content: '';
+  position: absolute;
+  top: 50%;
   left: 50%;
-  width: min(240px, 64vw);
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-  transform: translateX(-50%);
+  width: clamp(180px, 24vw, 320px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--glow), transparent 68%);
+  filter: blur(18px);
+  opacity: .72;
+  transform: translate(-50%, -50%);
 }
 
 .loading-experience__mark {
   position: absolute;
   z-index: 2;
-  top: 50%;
+  top: calc(50% - var(--loader-brand-offset));
   left: 50%;
-  width: 54px;
-  height: 54px;
+  width: auto;
+  min-width: 76px;
+  height: 48px;
+  padding: 0 17px;
   border: 1px solid var(--loader-border);
-  border-radius: 50%;
-  display: flex;
+  border-radius: 999px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: nowrap;
+  gap: 1px;
   background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(18,99,255,.1));
   box-shadow: inset 0 1px rgba(255,255,255,.18), 0 18px 52px rgba(0,0,0,.18), 0 0 34px var(--glow);
-  font-size: 23px;
+  font-size: 24px;
   font-weight: 800;
   line-height: 1;
   letter-spacing: 0;
@@ -418,12 +442,17 @@ html.route-transition main {
 .loading-experience__mark span { margin-left: 1px; color: var(--accent); }
 
 .spiral-loader {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
   width: clamp(106px, 11vw, 148px);
   aspect-ratio: 1;
   color: var(--blue-soft);
   opacity: .96;
   overflow: hidden;
   filter: drop-shadow(0 0 18px rgba(18,99,255,.52)) drop-shadow(0 22px 40px rgba(0,0,0,.2));
+  transform: translate(-50%, -50%);
 }
 
 .spiral-loader--compact {
@@ -736,8 +765,8 @@ html.route-transition main {
     backdrop-filter: blur(10px) saturate(1.04);
   }
   .loading-experience::before { opacity: .24; }
-  .loading-experience__brand { top: 14px; width: 150px; }
-  .loading-experience__mark { width: 44px; height: 44px; font-size: 21px; }
+  .loading-experience__brand { --loader-brand-offset: clamp(82px, 11vh, 104px); }
+  .loading-experience__mark { min-width: 68px; height: 42px; padding-inline: 14px; font-size: 21px; }
   .spiral-loader { width: 94px; }
   .spiral-loader--compact { width: 78px; }
   .loading-skeleton {
@@ -897,9 +926,9 @@ html.route-transition main {
 }
 
 @media (max-width: 390px) {
-  .loading-experience__brand { width: 128px; }
+  .loading-experience__brand { --loader-brand-offset: 82px; }
   .spiral-loader { width: 84px; }
-  .loading-experience__mark { width: 40px; height: 40px; font-size: 19px; }
+  .loading-experience__mark { min-width: 62px; height: 38px; padding-inline: 12px; font-size: 19px; }
   .skeleton-title--home { height: 96px; width: min(250px, 78vw); }
   .loading-hero-stage { min-height: 330px; }
   .loading-testimonial { flex-basis: min(86vw, 292px); }

@@ -34,6 +34,12 @@ type LoadingVariant = 'intro' | 'return' | 'route';
 type LoadingExperienceState = { active: boolean; variant: LoadingVariant; page: Page };
 
 const loaderStorageKey = 'nutriwork-loading-experience-seen';
+const loaderMinimumDuration: Record<LoadingVariant, number> = {
+  intro: 1350,
+  return: 1000,
+  route: 1100
+};
+const loaderContentSwapDelay = 260;
 const spiralConfig = {
   particleCount: 86,
   trailSpan: 0.28,
@@ -151,9 +157,39 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+function waitForDelay(delay: number) {
+  return new Promise<void>((resolve) => window.setTimeout(resolve, Math.max(0, delay)));
+}
+
+function waitForNextPaint() {
+  return new Promise<void>((resolve) => {
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => resolve()));
+  });
+}
+
+async function waitForRenderedPage() {
+  await waitForNextPaint();
+
+  const fontsReady = document.fonts?.ready ?? Promise.resolve();
+  const images = Array.from(document.querySelectorAll<HTMLImageElement>('main img'))
+    .filter((image) => image.loading !== 'lazy');
+  const imagesReady = images.map((image) => {
+    if (image.complete) return image.decode?.().catch(() => undefined) ?? Promise.resolve();
+
+    return new Promise<void>((resolve) => {
+      image.addEventListener('load', () => resolve(), { once: true });
+      image.addEventListener('error', () => resolve(), { once: true });
+    });
+  });
+
+  await Promise.allSettled([fontsReady, ...imagesReady]);
+}
+
 function useLoadingExperience(page: Page) {
   const hasHandledFirstPage = useRef(false);
   const currentPageRef = useRef(page);
+  const initialStartedAt = useRef(performance.now());
+  const [renderedPage, setRenderedPage] = useState(page);
   const [loading, setLoading] = useState<LoadingExperienceState>(() => {
     const seen = hasSeenLoadingExperience();
     return { active: true, variant: seen ? 'return' : 'intro', page };
@@ -166,45 +202,39 @@ function useLoadingExperience(page: Page) {
   }, [loading.active]);
 
   useEffect(() => {
-    const reduceMotion = prefersReducedMotion();
     const initialVariant = loading.variant;
-    const fallbackDelay = reduceMotion ? 120 : initialVariant === 'intro' ? 2200 : 520;
-    const settleDelay = reduceMotion ? 0 : initialVariant === 'intro' ? 980 : 180;
-    let settled = false;
-    let settleTimer = 0;
+    let cancelled = false;
+    let removeLoadListener = () => {};
 
-    const finish = () => {
-      if (settled) return;
-      settled = true;
-      window.clearTimeout(settleTimer);
+    const windowReady = document.readyState === 'complete'
+      ? Promise.resolve()
+      : new Promise<void>((resolve) => {
+          const handleLoad = () => resolve();
+          window.addEventListener('load', handleLoad, { once: true });
+          removeLoadListener = () => window.removeEventListener('load', handleLoad);
+        });
+
+    const minimumVisible = waitForDelay(
+      loaderMinimumDuration[initialVariant] - (performance.now() - initialStartedAt.current)
+    );
+
+    void Promise.all([
+      windowReady,
+      document.fonts?.ready ?? Promise.resolve(),
+      minimumVisible
+    ]).then(() => {
+      if (cancelled) return;
       markLoadingExperienceSeen();
       setLoading((current) => (
         current.variant === initialVariant && current.active
           ? { ...current, active: false }
           : current
       ));
-    };
-
-    const scheduleFinish = (delay = settleDelay) => {
-      window.clearTimeout(settleTimer);
-      settleTimer = window.setTimeout(finish, delay);
-    };
-
-    try {
-      if (document.readyState === 'complete') {
-        scheduleFinish();
-      } else {
-        window.addEventListener('load', () => scheduleFinish(), { once: true });
-      }
-    } catch {
-      scheduleFinish();
-    }
-
-    const fallbackTimer = window.setTimeout(finish, fallbackDelay);
+    });
 
     return () => {
-      window.clearTimeout(fallbackTimer);
-      window.clearTimeout(settleTimer);
+      cancelled = true;
+      removeLoadListener();
     };
   }, []);
 
@@ -223,25 +253,41 @@ function useLoadingExperience(page: Page) {
 
     const root = document.documentElement;
     const reduceMotion = prefersReducedMotion();
+    const transitionStartedAt = performance.now();
+    let cancelled = false;
+    let routeClassTimer = 0;
     root.classList.add('route-transition');
     setLoading({ active: true, variant: 'route', page });
 
-    const timer = window.setTimeout(() => {
-      setLoading((current) => (
-        current.variant === 'route' && current.page === page
-          ? { ...current, active: false }
-          : current
-      ));
-      root.classList.remove('route-transition');
-    }, reduceMotion ? 90 : 360);
+    const swapTimer = window.setTimeout(() => {
+      setRenderedPage(page);
+
+      void Promise.all([
+        waitForRenderedPage(),
+        waitForDelay(loaderMinimumDuration.route - (performance.now() - transitionStartedAt))
+      ]).then(() => {
+        if (cancelled) return;
+        setLoading((current) => (
+          current.variant === 'route' && current.page === page
+            ? { ...current, active: false }
+            : current
+        ));
+        routeClassTimer = window.setTimeout(
+          () => root.classList.remove('route-transition'),
+          reduceMotion ? 0 : 680
+        );
+      });
+    }, reduceMotion ? 0 : loaderContentSwapDelay);
 
     return () => {
-      window.clearTimeout(timer);
+      cancelled = true;
+      window.clearTimeout(swapTimer);
+      window.clearTimeout(routeClassTimer);
       root.classList.remove('route-transition');
     };
   }, [page]);
 
-  return loading;
+  return { loading, renderedPage };
 }
 
 function normalizeProgress(progress: number) {
@@ -457,28 +503,31 @@ function LoadingSkeleton({ page, compact }: { page: Page; compact: boolean }) {
 
 function LoadingExperience({ state }: { state: LoadingExperienceState }) {
   const compact = state.variant !== 'intro';
-  const [animating, setAnimating] = useState(state.active);
+  const [present, setPresent] = useState(state.active);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (state.active) {
-      setAnimating(true);
-      return;
+      setPresent(true);
+      const frame = window.requestAnimationFrame(() => setVisible(true));
+      return () => window.cancelAnimationFrame(frame);
     }
 
+    setVisible(false);
     const timer = window.setTimeout(
-      () => setAnimating(false),
-      prefersReducedMotion() ? 0 : 480
+      () => setPresent(false),
+      prefersReducedMotion() ? 0 : 560
     );
 
     return () => window.clearTimeout(timer);
   }, [state.active]);
 
   return (
-    <div className={`loading-experience loading-experience--${state.variant} ${state.active ? 'loading-experience--active' : ''} ${animating ? 'loading-experience--animating' : ''}`} aria-hidden="true">
+    <div className={`loading-experience loading-experience--${state.variant} ${visible ? 'loading-experience--active' : ''} ${present ? 'loading-experience--animating' : ''}`} aria-hidden="true">
       <div className="loading-experience__ambient" />
       <div className="loading-experience__brand">
         <div className="loading-experience__mark">N<span>+</span></div>
-        <SpiralSearchLoader active={animating} compact={compact} />
+        <SpiralSearchLoader active={present} compact={compact} />
       </div>
       <LoadingSkeleton page={state.page} compact={compact} />
     </div>
@@ -1082,19 +1131,19 @@ function PartnersPage() {
 
 export default function App() {
   const page = useCurrentPage();
-  const loading = useLoadingExperience(page);
-  useScrollReveal(page);
-  useMobileCtaVisibility(page);
-  useHashScroll(page);
+  const { loading, renderedPage } = useLoadingExperience(page);
+  useScrollReveal(renderedPage);
+  useMobileCtaVisibility(renderedPage);
+  useHashScroll(renderedPage);
 
   return (
     <>
       <LoadingExperience state={loading} />
       <div className={`app-shell ${loading.active ? 'app-shell--loading' : ''}`}>
         <Header/>
-        {page === 'estude' ? <EstudePage/> : page === 'partners' ? <PartnersPage/> : <HomePage/>}
+        {renderedPage === 'estude' ? <EstudePage/> : renderedPage === 'partners' ? <PartnersPage/> : <HomePage/>}
         <Footer/>
-        {page === 'home' && <Button href="/#planos" className="mobile-cta">Ver planos</Button>}
+        {renderedPage === 'home' && <Button href="/#planos" className="mobile-cta">Ver planos</Button>}
       </div>
     </>
   );
