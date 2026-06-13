@@ -63,7 +63,7 @@ function useScrollReveal(refreshKey: unknown) {
 function useMobileCtaVisibility(refreshKey: unknown) {
   useEffect(() => {
     const cta = document.querySelector<HTMLElement>('.mobile-cta');
-    const protectedSections = document.querySelectorAll('.estude-section, .study-benefits, .mentor-section, .pricing-section, .faq-section, .partners-page, .footer');
+    const protectedSections = document.querySelectorAll('.social-proof, .estude-section, .study-benefits, .mentor-section, .pricing-section, .faq-section, .partners-page, .footer');
     if (!cta || !protectedSections.length) return;
 
     const visibleSections = new Set<Element>();
@@ -319,25 +319,27 @@ function PlatformVideo() {
 }
 
 function SocialProof() {
-  const proofQuotes = [testimonials[0], testimonials[3]];
-  const badges = ['Relatos reais', 'Baseado em evidências', 'Acesso no celular'];
+  const stickers = [
+    'Agora sei por onde começar.',
+    'Menos busca. Mais estudo de verdade.',
+    'A teoria finalmente virou prática.',
+    'Bons professores em um só lugar.',
+    'O excesso de conteúdo ficou manejável.',
+    'Estudar deixou de ser tentativa.'
+  ];
 
   return (
     <Reveal className="social-proof">
-      <div className="social-proof__badges">
-        {badges.map((badge) => <span key={badge}>{badge}</span>)}
+      <div className="social-proof__stickers social-proof__stickers--top" aria-hidden="true">
+        {stickers.slice(0, 3).map((sticker) => <span className="social-proof__sticker" key={sticker}>“{sticker}”</span>)}
       </div>
       <div className="social-proof__quotes">
-        {proofQuotes.map((item) => (
-          <article key={item.name}>
-            <img src={item.image} alt={`Foto de ${item.name}`} loading="lazy" decoding="async" />
-            <div>
-              <blockquote>“{item.quote}”</blockquote>
-              <p>{item.name}</p>
-            </div>
-          </article>
-        ))}
+        {testimonials.map((item, index) => <Reveal key={item.name}><article className={`testimonial-card testimonial-card--tone-${index + 1} ${item.quote.length > 340 ? 'testimonial-card--long' : ''}`}><header><img src={item.image} alt={`Foto de ${item.name}`} loading="lazy" decoding="async" /><div><h3>{item.name}</h3><p>{item.role}</p></div></header><blockquote>“{item.quote}”</blockquote><div className="stars" aria-label="5 de 5 estrelas">★★★★★</div></article></Reveal>)}
       </div>
+      <div className="social-proof__stickers social-proof__stickers--bottom" aria-hidden="true">
+        {stickers.slice(3).map((sticker) => <span className="social-proof__sticker" key={sticker}>“{sticker}”</span>)}
+      </div>
+      <Reveal className="testimonial-cta"><p>Se você acredita em nutrição com fundamento científico e<br/>troca genuína de conhecimento, <strong>aqui é o seu lugar.</strong></p><Button href="/#planos">Quero evoluir meus estudos!</Button></Reveal>
     </Reveal>
   );
 }

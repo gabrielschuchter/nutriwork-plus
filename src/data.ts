@@ -64,7 +64,7 @@ export const testimonials = [
     image: '/assets/testimonial-gabriel.jpg',
     name: 'Gabriel Costa',
     role: 'Nutricionista e pesquisador em metaciência',
-    quote: 'A plataforma estimula o aprendizado conjunto e a troca de experiências entre profissionais e estudantes. É um formato expandido, multicêntrico e facilitado pelo meio online.'
+    quote: 'Achei a plataforma interessante para estimular o aprendizado conjunto e a troca de experiências entre profissionais e estudantes. Há materiais sendo produzidos por estudantes dedicados e as referências bibliográficas são de qualidade, indicando que os estudantes são promissores e dedicados. Acredito que a plataforma pode continuar sendo utilizada de forma crescente nesse formato. Ela me lembra a época das ligas acadêmicas na graduação, mas em um formato bastante expandido, multicêntrico e facilitado pelo meio online.'
   }
 ];
 
