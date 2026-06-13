@@ -393,11 +393,11 @@ html[data-theme='dark'] .theme-toggle__icon--sun { opacity: .58; }
 .menu-button { display: none; width: 42px; height: 42px; border: 0; background: none; color: var(--heading); padding: 10px; }
 .menu-button span { display: block; height: 1px; margin: 5px 0; background: currentColor; }
 
-.hero { position: relative; min-height: 860px; padding: 250px 20px 130px; display: grid; place-items: center; overflow: hidden; isolation: isolate; background: var(--hero-bg); }
-.hero__eclipse { position: absolute; z-index: -1; top: -118vw; left: 50%; width: 160vw; max-width: none; aspect-ratio: 1 / 1; border-radius: 50%; background: var(--hero-eclipse-bg); filter: var(--hero-eclipse-glow); transform: translateX(-50%); }
+.hero { --hero-eclipse-size: 160vw; --hero-eclipse-top: -128vw; --hero-glow-top: 390px; --hero-glow-height: 430px; position: relative; min-height: 860px; padding: 250px 20px 130px; display: grid; place-items: center; overflow: hidden; isolation: isolate; background: var(--hero-bg); }
+.hero__eclipse { position: absolute; z-index: -1; top: var(--hero-eclipse-top); left: 50%; width: var(--hero-eclipse-size); max-width: none; aspect-ratio: 1 / 1; border-radius: 50%; background: var(--hero-eclipse-bg); filter: var(--hero-eclipse-glow); transform: translateX(-50%); }
 .hero__eclipse::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: var(--hero-eclipse-sheen); pointer-events: none; }
-.hero__glow { position: absolute; top: 220px; left: 0; width: 100%; height: 360px; background: var(--hero-glow-bg); filter: blur(20px); }
-.hero__content { width: 100%; text-align: center; }
+.hero__glow { position: absolute; z-index: -1; top: var(--hero-glow-top); left: 0; width: 100%; height: var(--hero-glow-height); background: var(--hero-glow-bg); filter: blur(24px); }
+.hero__content { position: relative; z-index: 1; width: 100%; text-align: center; }
 .hero h1 { margin: 0; color: var(--heading); font-size: clamp(60px, 6.7vw, 102px); font-weight: 300; line-height: .95; letter-spacing: -.075em; text-shadow: var(--hero-title-shadow); }
 .hero h1 span { margin-left: .08em; font-size: .55em; letter-spacing: -.045em; }
 .hero p { margin: 22px 0 80px; font-size: clamp(18px, 1.8vw, 28px); font-weight: 300; }
@@ -721,8 +721,7 @@ html[data-theme='light'] .scarcity { color: #795000; background: linear-gradient
   .nav { position: absolute; top: 62px; left: 0; right: 0; padding: 18px; border: 1px solid var(--header-border); border-radius: 22px; flex-direction: column; gap: 8px; background: var(--mobile-nav-bg); box-shadow: var(--header-shadow); backdrop-filter: blur(18px); opacity: 0; visibility: hidden; transform: translateY(-8px); transition: .25s ease; }
   .nav--open { opacity: 1; visibility: visible; transform: none; }
   .nav a { width: 100%; padding: 12px; text-align: center; }
-  .hero { min-height: 790px; padding-top: 210px; }
-  .hero__eclipse { top: -150vw; width: 210vw; }
+  .hero { --hero-eclipse-size: 210vw; --hero-eclipse-top: -163vw; --hero-glow-top: 340px; --hero-glow-height: 380px; min-height: 790px; padding-top: 210px; }
   .social-proof__quotes { grid-template-columns: 1fr; }
   .estude-page-hero, .partners-hero { padding-top: 130px; }
   .estude-page-hero__grid, .partners-hero__grid { grid-template-columns: 1fr; }
@@ -763,8 +762,7 @@ html[data-theme='light'] .scarcity { color: #795000; background: linear-gradient
   .page-width, .page-width--narrow { width: min(100% - 28px, 560px); }
   .section { padding: 72px 0; }
   .section-heading { margin-bottom: 38px; }
-  .hero { min-height: 690px; padding: 185px 16px 90px; }
-  .hero__eclipse { top: -205vw; width: 280vw; }
+  .hero { --hero-eclipse-size: 280vw; --hero-eclipse-top: -225vw; --hero-glow-top: 300px; --hero-glow-height: 330px; min-height: 690px; padding: 185px 16px 90px; }
   .hero p { margin-bottom: 54px; }
   .dashboard-shell { padding: 4px; border-radius: 25px; }
   .dashboard-shell img, .dashboard-shell video { border-radius: 21px; }
@@ -908,7 +906,7 @@ html[data-theme='light'] .scarcity { color: #795000; background: linear-gradient
 @media (min-width: 1600px) {
   .page-width { width: min(1240px, calc(100% - 80px)); }
   .page-width--narrow { width: min(1020px, calc(100% - 80px)); }
-  .hero { min-height: 1080px; }
+  .hero { --hero-glow-top: 475px; min-height: 1080px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
