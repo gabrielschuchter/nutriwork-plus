@@ -43,8 +43,8 @@ const loaderContentSwapDelay = 260;
 const spiralConfig = {
   particleCount: 86,
   trailSpan: 0.28,
-  durationMs: 7800,
-  pulseDurationMs: 6800,
+  durationMs: 3200,
+  pulseDurationMs: 3600,
   strokeWidth: 4.3,
   searchTurns: 4,
   searchBaseRadius: 8,
@@ -59,12 +59,6 @@ function Reveal({ children, className = '' }: { children: ReactNode; className?:
 
 function useScrollReveal(refreshKey: unknown) {
   useEffect(() => {
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduceMotion) {
-      document.querySelectorAll('.reveal').forEach((element) => element.classList.add('is-visible'));
-      return;
-    }
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -151,10 +145,6 @@ function markLoadingExperienceSeen() {
   } catch {
     // The experience should still complete when storage is unavailable.
   }
-}
-
-function prefersReducedMotion() {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 function waitForDelay(delay: number) {
@@ -252,7 +242,6 @@ function useLoadingExperience(page: Page) {
     currentPageRef.current = page;
 
     const root = document.documentElement;
-    const reduceMotion = prefersReducedMotion();
     const transitionStartedAt = performance.now();
     let cancelled = false;
     let routeClassTimer = 0;
@@ -274,10 +263,10 @@ function useLoadingExperience(page: Page) {
         ));
         routeClassTimer = window.setTimeout(
           () => root.classList.remove('route-transition'),
-          reduceMotion ? 0 : 680
+          680
         );
       });
-    }, reduceMotion ? 0 : loaderContentSwapDelay);
+    }, loaderContentSwapDelay);
 
     return () => {
       cancelled = true;
@@ -336,12 +325,10 @@ function SpiralSearchLoader({ active, compact = false }: { active: boolean; comp
 
     let frame = 0;
     const startedAt = performance.now();
-    const reduceMotion = prefersReducedMotion();
-
     const render = (now: number) => {
       const time = now - startedAt + (compact ? 1850 : 0);
       const progress = (time % spiralConfig.durationMs) / spiralConfig.durationMs;
-      const detailScale = reduceMotion ? 0.76 : getSpiralDetailScale(time);
+      const detailScale = getSpiralDetailScale(time);
 
       path.setAttribute('d', buildSpiralPath(detailScale, compact ? 260 : 360));
       group.setAttribute('transform', `rotate(${compact ? -8 : 0} 50 50)`);
@@ -357,7 +344,7 @@ function SpiralSearchLoader({ active, compact = false }: { active: boolean; comp
         node.setAttribute('opacity', (0.05 + fade * 0.9).toFixed(3));
       });
 
-      if (!reduceMotion) frame = window.requestAnimationFrame(render);
+      frame = window.requestAnimationFrame(render);
     };
 
     render(startedAt);
@@ -405,6 +392,8 @@ function LoadingTestimonial({ long = false }: { long?: boolean }) {
 }
 
 function LoadingSkeleton({ page, compact }: { page: Page; compact: boolean }) {
+  if (page === 'home') return null;
+
   if (page === 'estude') {
     return (
       <div className={`loading-skeleton loading-skeleton--estude ${compact ? 'loading-skeleton--compact' : ''}`}>
@@ -472,33 +461,7 @@ function LoadingSkeleton({ page, compact }: { page: Page; compact: boolean }) {
     );
   }
 
-  return (
-    <div className={`loading-skeleton loading-skeleton--home ${compact ? 'loading-skeleton--compact' : ''}`}>
-      <div className="loading-hero-stage">
-        <div className="loading-hero-orbit" />
-        <div className="loading-hero-copy">
-          <SkeletonBlock className="skeleton-title skeleton-title--home" />
-          <SkeletonBlock className="skeleton-line skeleton-line--subtitle" />
-          <div className="skeleton-action-row skeleton-action-row--center">
-            <SkeletonBlock className="skeleton-button" />
-            <SkeletonBlock className="skeleton-button skeleton-button--muted" />
-          </div>
-        </div>
-      </div>
-      <div className="loading-dashboard">
-        <SkeletonBlock className="loading-dashboard__screen" />
-      </div>
-      <div className="loading-social-grid">
-        <LoadingTestimonial />
-        <LoadingTestimonial />
-        <LoadingTestimonial long />
-        <LoadingTestimonial long />
-      </div>
-      <div className="loading-card-strip">
-        {[0, 1, 2, 3].map((item) => <SkeletonBlock className="loading-mini-card" key={item} />)}
-      </div>
-    </div>
-  );
+  return null;
 }
 
 function LoadingExperience({ state }: { state: LoadingExperienceState }) {
@@ -516,7 +479,7 @@ function LoadingExperience({ state }: { state: LoadingExperienceState }) {
     setVisible(false);
     const timer = window.setTimeout(
       () => setPresent(false),
-      prefersReducedMotion() ? 0 : 560
+      560
     );
 
     return () => window.clearTimeout(timer);
@@ -527,7 +490,9 @@ function LoadingExperience({ state }: { state: LoadingExperienceState }) {
       <div className="loading-experience__ambient" />
       <div className="loading-experience__brand">
         <div className="loading-experience__mark">N<span>+</span></div>
-        <SpiralSearchLoader active={present} compact={compact} />
+        <div className={`loading-experience__process ${compact ? 'loading-experience__process--compact' : ''}`}>
+          <SpiralSearchLoader active={present} compact={compact} />
+        </div>
       </div>
       <LoadingSkeleton page={state.page} compact={compact} />
     </div>

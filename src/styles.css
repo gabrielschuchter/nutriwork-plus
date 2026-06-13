@@ -378,7 +378,7 @@ html.route-transition main {
 .loading-experience--route .loading-skeleton,
 .loading-experience--return .loading-skeleton {
   transform: translateY(-18px) scale(.975);
-  opacity: .78;
+  opacity: .28;
 }
 
 .loading-experience__ambient {
@@ -410,6 +410,7 @@ html.route-transition main {
   filter: blur(18px);
   opacity: .72;
   transform: translate(-50%, -50%);
+  animation: loader-ambient-breathe 3.4s ease-in-out infinite;
 }
 
 .loading-experience__mark {
@@ -437,26 +438,56 @@ html.route-transition main {
   white-space: nowrap;
   transform: translate(-50%, -50%);
   text-shadow: 0 0 22px var(--glow), 0 0 14px rgba(255,255,255,.16);
+  animation: loader-mark-presence 2.6s cubic-bezier(.45, 0, .2, 1) infinite;
 }
 
 .loading-experience__mark span { margin-left: 1px; color: var(--accent); }
 
-.spiral-loader {
+.loading-experience__process {
   position: absolute;
   z-index: 1;
   top: 50%;
   left: 50%;
   width: clamp(106px, 11vw, 148px);
   aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+
+.loading-experience__process::before,
+.loading-experience__process::after {
+  content: '';
+  position: absolute;
+  inset: 3%;
+  border: 1px solid var(--loader-line-strong);
+  border-radius: 50%;
+  opacity: .22;
+  animation: loader-process-ring 2.4s cubic-bezier(.45, 0, .2, 1) infinite;
+}
+
+.loading-experience__process::after {
+  inset: 16%;
+  border-color: var(--loader-line);
+  animation-delay: -1.2s;
+}
+
+.spiral-loader {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   color: var(--blue-soft);
   opacity: .96;
   overflow: hidden;
   filter: drop-shadow(0 0 18px rgba(18,99,255,.52)) drop-shadow(0 22px 40px rgba(0,0,0,.2));
-  transform: translate(-50%, -50%);
+  transform-origin: center;
+  animation: loader-spiral-orbit 8s linear infinite;
+}
+
+.loading-experience__process--compact {
+  width: clamp(82px, 8vw, 112px);
 }
 
 .spiral-loader--compact {
-  width: clamp(82px, 8vw, 112px);
   opacity: .84;
 }
 
@@ -474,9 +505,10 @@ html.route-transition main {
   display: grid;
   align-content: start;
   gap: clamp(20px, 3vw, 38px);
-  opacity: 1;
+  opacity: .38;
+  filter: saturate(.72) contrast(.9);
   transform: translateY(0) scale(1);
-  transition: opacity .44s cubic-bezier(.22, 1, .36, 1), transform .44s cubic-bezier(.22, 1, .36, 1);
+  transition: opacity .54s cubic-bezier(.22, 1, .36, 1), transform .54s cubic-bezier(.22, 1, .36, 1);
 }
 
 .skeleton-block,
@@ -490,9 +522,9 @@ html.route-transition main {
   overflow: hidden;
   border: 1px solid var(--loader-border);
   background:
-    radial-gradient(circle at 28% 18%, rgba(38, 126, 255, .16), transparent 32%),
+    radial-gradient(circle at 28% 18%, rgba(38, 126, 255, .08), transparent 32%),
     linear-gradient(145deg, var(--loader-surface-strong), var(--loader-surface));
-  box-shadow: inset 0 1px rgba(255,255,255,.08), 0 22px 58px rgba(0,0,0,.14), 0 0 34px rgba(18,99,255,.08);
+  box-shadow: inset 0 1px rgba(255,255,255,.05), 0 18px 44px rgba(0,0,0,.08), 0 0 24px rgba(18,99,255,.04);
 }
 
 .skeleton-block {
@@ -511,8 +543,9 @@ html.route-transition main {
   position: absolute;
   inset: 0;
   background: linear-gradient(105deg, transparent 12%, var(--loader-shimmer) 46%, transparent 72%);
+  opacity: .22;
   transform: translateX(-120%);
-  animation: skeleton-shimmer 2.45s cubic-bezier(.22, 1, .36, 1) infinite;
+  animation: skeleton-shimmer 3.8s linear infinite;
   pointer-events: none;
 }
 
@@ -740,6 +773,26 @@ html.route-transition main {
   to { transform: translateX(120%); }
 }
 
+@keyframes loader-mark-presence {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); filter: brightness(1); }
+  50% { transform: translate(-50%, -50%) scale(1.035); filter: brightness(1.12); }
+}
+
+@keyframes loader-process-ring {
+  0% { opacity: .08; transform: scale(.78) rotate(0deg); }
+  45% { opacity: .3; }
+  100% { opacity: 0; transform: scale(1.2) rotate(42deg); }
+}
+
+@keyframes loader-ambient-breathe {
+  0%, 100% { opacity: .48; transform: translate(-50%, -50%) scale(.92); }
+  50% { opacity: .78; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+@keyframes loader-spiral-orbit {
+  to { transform: rotate(360deg); }
+}
+
 @media (max-width: 1024px) {
   .loading-skeleton { width: min(100% - 32px, 900px); padding-top: clamp(118px, 12vh, 150px); }
   .loading-skeleton__grid--estude,
@@ -767,8 +820,8 @@ html.route-transition main {
   .loading-experience::before { opacity: .24; }
   .loading-experience__brand { --loader-brand-offset: clamp(82px, 11vh, 104px); }
   .loading-experience__mark { min-width: 68px; height: 42px; padding-inline: 14px; font-size: 21px; }
-  .spiral-loader { width: 94px; }
-  .spiral-loader--compact { width: 78px; }
+  .loading-experience__process { width: 94px; }
+  .loading-experience__process--compact { width: 78px; }
   .loading-skeleton {
     width: min(100% - 28px, 560px);
     padding-top: 105px;
@@ -927,7 +980,7 @@ html.route-transition main {
 
 @media (max-width: 390px) {
   .loading-experience__brand { --loader-brand-offset: 82px; }
-  .spiral-loader { width: 84px; }
+  .loading-experience__process { width: 84px; }
   .loading-experience__mark { min-width: 62px; height: 38px; padding-inline: 12px; font-size: 19px; }
   .skeleton-title--home { height: 96px; width: min(250px, 78vw); }
   .loading-hero-stage { min-height: 330px; }
@@ -1532,18 +1585,4 @@ html[data-theme='light'] .scarcity { color: #795000; background: linear-gradient
   .page-width { width: min(1240px, calc(100% - 80px)); }
   .page-width--narrow { width: min(1020px, calc(100% - 80px)); }
   .hero { --hero-glow-top: 475px; min-height: 1080px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .reveal, .button, .promise-card, .course-card, .course-card img, .extra-card, .testimonial-card, .app-shell, .loading-experience, .loading-skeleton { transition-duration: .01ms !important; }
-  .reveal, .reveal.is-visible { opacity: 1; transform: none; }
-  .social-proof__sticker,
-  .skeleton-block::after,
-  .loading-testimonial::after,
-  .loading-dashboard::after,
-  .loading-problem-card::after,
-  .loading-estude-panel::after,
-  .loading-partners-card::after { animation: none; }
-  .app-shell--loading { filter: none; transform: none; }
 }
