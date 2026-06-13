@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import {
   comparison,
   courses,
@@ -52,6 +52,8 @@ const spiralConfig = {
   searchPulse: 2.4,
   searchScale: 1
 };
+
+const PartnersGlobeCard = lazy(() => import('./components/PartnersGlobeCard'));
 
 function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <div className={`reveal ${className}`}>{children}</div>;
@@ -443,19 +445,12 @@ function LoadingSkeleton({ page, compact }: { page: Page; compact: boolean }) {
               <SkeletonBlock className="skeleton-link" />
             </div>
           </div>
-          <div className="loading-partners-panel">
-            {[0, 1, 2].map((item) => (
-              <article className="loading-partners-card" key={item}>
-                <SkeletonBlock className="skeleton-icon" />
-                <SkeletonBlock className="skeleton-line skeleton-line--name" />
-                <SkeletonBlock className="skeleton-line skeleton-line--wide" />
-                <SkeletonBlock className="skeleton-line skeleton-line--short" />
-              </article>
-            ))}
+          <div className="loading-partners-globe">
+            <SkeletonBlock className="skeleton-kicker" />
+            <SkeletonBlock className="skeleton-line skeleton-line--name" />
+            <SkeletonBlock className="skeleton-line skeleton-line--wide" />
+            <SkeletonBlock className="loading-partners-globe__sphere" />
           </div>
-        </div>
-        <div className="loading-partners-strip">
-          {[0, 1, 2, 3].map((item) => <SkeletonBlock className="loading-partners-tile" key={item} />)}
         </div>
       </div>
     );
@@ -1074,19 +1069,9 @@ function PartnersPage() {
                 <a className="partners-hero__contact" href={`mailto:${contactEmail}`}>{contactEmail}</a>
               </div>
             </div>
-            <div className="partners-panel" aria-label="Frentes de parceria">
-              {[
-                ['Comunidade', 'Acesso a um público de estudantes e profissionais que estudam com intenção.'],
-                ['Conteúdo', 'Projetos educativos com linguagem clara e compromisso técnico.'],
-                ['Continuidade', 'Parcerias pensadas para gerar relacionamento, não apenas exposição pontual.']
-              ].map(([title, text], index) => (
-                <article key={title}>
-                  <Icon name={['heart', 'evidence', 'structure'][index]} />
-                  <h2>{title}</h2>
-                  <p>{text}</p>
-                </article>
-              ))}
-            </div>
+            <Suspense fallback={<div className="partners-globe-card partners-globe-card--fallback" aria-hidden="true" />}>
+              <PartnersGlobeCard />
+            </Suspense>
           </Reveal>
         </div>
       </section>
