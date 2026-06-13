@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, type PointerEvent as ReactPointerEvent } from 'react';
 
 export interface GlobeMarker {
   lat: number;
@@ -113,13 +113,14 @@ export function Globe3D({
   const containerRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number>();
   const rotationRef = useRef(config.initialRotation?.y ?? 1.02);
+  const animationTimeRef = useRef(0);
   const markerPositionsRef = useRef<MarkerPosition[]>([]);
+  const hoveredMarkerRef = useRef<GlobeMarker | null>(null);
   const isVisibleRef = useRef(true);
   const isDraggingRef = useRef(false);
   const pointerXRef = useRef(0);
   const earthTextureRef = useRef<HTMLImageElement>();
   const markerImagesRef = useRef(new Map<string, HTMLImageElement>());
-  const [reducedMotion, setReducedMotion] = useState(false);
 
   const settings = useMemo(() => ({
     atmosphereColor: config.atmosphereColor ?? '#4d8fff',
@@ -137,7 +138,7 @@ export function Globe3D({
 
     const bounds = container.getBoundingClientRect();
     if (!bounds.width || !bounds.height) return;
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, bounds.width < 560 ? 1.25 : 1.6);
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, bounds.width < 560 ? 1.18 : 1.45);
     const width = Math.round(bounds.width * pixelRatio);
     const height = Math.round(bounds.height * pixelRatio);
     if (canvas.width !== width || canvas.height !== height) {
@@ -147,21 +148,32 @@ export function Globe3D({
 
     const context = canvas.getContext('2d');
     if (!context) return;
+    const theme = getComputedStyle(container);
+    const atmosphereColor = theme.getPropertyValue('--globe-atmosphere').trim() || settings.atmosphereColor;
+    const rimColor = theme.getPropertyValue('--globe-rim').trim() || 'rgba(93,151,244,.38)';
+    const markerLine = theme.getPropertyValue('--globe-marker-line').trim() || 'rgba(156,194,244,.5)';
+    const markerRing = theme.getPropertyValue('--globe-marker-ring').trim() || '#c9dcfa';
+    const markerRingHover = theme.getPropertyValue('--globe-marker-ring-hover').trim() || '#f5f9ff';
+    const markerGlow = theme.getPropertyValue('--globe-marker-glow').trim() || 'rgba(18,99,255,.38)';
+    const markerGlowHover = theme.getPropertyValue('--globe-marker-glow-hover').trim() || 'rgba(41,168,255,.72)';
     context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     context.clearRect(0, 0, bounds.width, bounds.height);
     context.imageSmoothingEnabled = true;
     context.imageSmoothingQuality = 'high';
 
+    const motionTime = animationTimeRef.current;
+    const floatOffset = Math.sin(motionTime * 0.00068) * Math.min(4, bounds.height * 0.011);
+    const breathScale = 1 + Math.sin(motionTime * 0.0005 + 1.2) * 0.004;
     const centerX = bounds.width * 0.5;
-    const centerY = bounds.height * 0.86;
-    const radius = Math.min(bounds.width * 0.56, bounds.height * 0.76);
+    const centerY = bounds.height * 0.86 + floatOffset;
+    const radius = Math.min(bounds.width * 0.56, bounds.height * 0.76) * breathScale;
     const rotation = rotationRef.current;
 
     if (settings.showAtmosphere) {
       const atmosphere = context.createRadialGradient(centerX, centerY, radius * 0.86, centerX, centerY, radius * 1.1);
       atmosphere.addColorStop(0, 'transparent');
       atmosphere.addColorStop(0.72, 'transparent');
-      atmosphere.addColorStop(0.9, settings.atmosphereColor + '28');
+      atmosphere.addColorStop(0.9, atmosphereColor + '28');
       atmosphere.addColorStop(1, 'transparent');
       context.globalAlpha = settings.atmosphereIntensity;
       context.fillStyle = atmosphere;
@@ -178,7 +190,7 @@ export function Globe3D({
     if (texture?.complete && texture.naturalWidth) {
       const textureSpan = texture.naturalWidth / 2;
       const textureCenter = (((0.5 - rotation / TWO_PI) % 1 + 1) % 1) * texture.naturalWidth;
-      const stripHeight = bounds.width < 560 ? 2.5 : 2;
+      const stripHeight = bounds.width < 560 ? 3.5 : 3;
       context.filter = 'saturate(.82) contrast(1.12) brightness(.72)';
 
       for (let offsetY = -radius; offsetY <= radius; offsetY += stripHeight) {
@@ -234,7 +246,7 @@ export function Globe3D({
 
     context.beginPath();
     context.arc(centerX, centerY, radius, 0, TWO_PI);
-    context.strokeStyle = 'rgba(84, 139, 230, .42)';
+    context.strokeStyle = rimColor;
     context.lineWidth = 1;
     context.stroke();
 
@@ -261,23 +273,25 @@ export function Globe3D({
 
     markerPositions.forEach((position) => {
       const image = markerImagesRef.current.get(position.marker.src);
+      const isHovered = hoveredMarkerRef.current === position.marker;
+      const markerRadius = position.radius * (isHovered ? 1.16 : 1);
       context.beginPath();
       context.moveTo(position.surfaceX, position.surfaceY);
       context.lineTo(position.x, position.y);
-      context.strokeStyle = 'rgba(167, 199, 244, .58)';
+      context.strokeStyle = markerLine;
       context.lineWidth = 0.7;
       context.stroke();
 
       context.save();
-      context.shadowColor = 'rgba(37, 112, 255, .5)';
-      context.shadowBlur = 6;
+      context.shadowColor = isHovered ? markerGlowHover : markerGlow;
+      context.shadowBlur = isHovered ? 10 : 5;
       context.beginPath();
-      context.arc(position.x, position.y, position.radius + 1.6, 0, TWO_PI);
-      context.fillStyle = '#dce9ff';
+      context.arc(position.x, position.y, markerRadius + 1.3, 0, TWO_PI);
+      context.fillStyle = isHovered ? markerRingHover : markerRing;
       context.fill();
       context.shadowBlur = 0;
       context.beginPath();
-      context.arc(position.x, position.y, position.radius, 0, TWO_PI);
+      context.arc(position.x, position.y, markerRadius, 0, TWO_PI);
       context.clip();
       if (image?.complete && image.naturalWidth) {
         const sourceSize = Math.min(image.naturalWidth, image.naturalHeight);
@@ -289,10 +303,10 @@ export function Globe3D({
           sourceY,
           sourceSize,
           sourceSize,
-          position.x - position.radius,
-          position.y - position.radius,
-          position.radius * 2,
-          position.radius * 2
+          position.x - markerRadius,
+          position.y - markerRadius,
+          markerRadius * 2,
+          markerRadius * 2
         );
       } else {
         context.fillStyle = '#4c7fc8';
@@ -303,14 +317,6 @@ export function Globe3D({
 
     markerPositionsRef.current = markerPositions;
   }, [markers, settings]);
-
-  useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const updatePreference = () => setReducedMotion(media.matches);
-    updatePreference();
-    media.addEventListener('change', updatePreference);
-    return () => media.removeEventListener('change', updatePreference);
-  }, []);
 
   useEffect(() => {
     const texture = new Image();
@@ -344,26 +350,26 @@ export function Globe3D({
 
     let previousTime = performance.now();
     const animate = (time: number) => {
-      const elapsed = time - previousTime;
-      if (elapsed >= 30) {
-        previousTime = time;
-        if (isVisibleRef.current && !isDraggingRef.current) {
-          rotationRef.current += (elapsed / 1000) * settings.autoRotateSpeed * 0.34;
-        }
-        if (isVisibleRef.current) draw();
+      const elapsed = Math.min(time - previousTime, 34);
+      previousTime = time;
+      animationTimeRef.current = time;
+      if (isVisibleRef.current && !isDraggingRef.current) {
+        rotationRef.current += (elapsed / 1000) * settings.autoRotateSpeed * 0.34;
       }
+      if (isVisibleRef.current) draw();
       frameRef.current = window.requestAnimationFrame(animate);
     };
 
+    animationTimeRef.current = performance.now();
     draw();
-    if (!reducedMotion && settings.autoRotateSpeed > 0) frameRef.current = window.requestAnimationFrame(animate);
+    frameRef.current = window.requestAnimationFrame(animate);
 
     return () => {
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
     };
-  }, [draw, reducedMotion, settings.autoRotateSpeed]);
+  }, [draw, settings.autoRotateSpeed]);
 
   const findMarker = (clientX: number, clientY: number) => {
     const bounds = canvasRef.current?.getBoundingClientRect();
@@ -382,7 +388,9 @@ export function Globe3D({
       draw();
       return;
     }
-    onMarkerHover?.(findMarker(event.clientX, event.clientY)?.marker ?? null);
+    const marker = findMarker(event.clientX, event.clientY)?.marker ?? null;
+    hoveredMarkerRef.current = marker;
+    onMarkerHover?.(marker);
   };
 
   return (
@@ -406,6 +414,7 @@ export function Globe3D({
         }}
         onPointerLeave={() => {
           isDraggingRef.current = false;
+          hoveredMarkerRef.current = null;
           onMarkerHover?.(null);
         }}
       />

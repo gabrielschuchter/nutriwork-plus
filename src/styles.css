@@ -130,6 +130,20 @@
   --faq-card-bg: linear-gradient(145deg, rgba(13,18,29,.94), rgba(3,5,10,.96));
   --partners-bg: radial-gradient(circle at 18% 22%, rgba(18,99,255,.22), transparent 34%), linear-gradient(145deg, #03050b 0%, #071124 48%, #02040a 100%);
   --partners-panel-bg: linear-gradient(145deg, rgba(18, 25, 43, .92), rgba(3, 6, 13, .96));
+  --partners-globe-card-bg: radial-gradient(circle at 72% 86%, rgba(18,99,255,.13), transparent 48%), linear-gradient(155deg, rgba(13,27,55,.97), rgba(3,7,16,.99) 68%);
+  --partners-globe-card-border: rgba(125,171,255,.22);
+  --partners-globe-card-shadow: inset 0 1px rgba(255,255,255,.07), 0 28px 78px rgba(0,0,0,.46), 0 0 42px rgba(18,99,255,.1);
+  --partners-globe-heading: #f5f8ff;
+  --partners-globe-copy: rgba(220,230,246,.72);
+  --partners-globe-meta-bg: rgba(3,8,20,.5);
+  --partners-globe-meta-text: rgba(210,224,244,.56);
+  --globe-atmosphere: #1263ff;
+  --globe-rim: rgba(93,151,244,.38);
+  --globe-marker-line: rgba(156,194,244,.5);
+  --globe-marker-ring: #c9dcfa;
+  --globe-marker-ring-hover: #f5f9ff;
+  --globe-marker-glow: rgba(18,99,255,.38);
+  --globe-marker-glow-hover: rgba(41,168,255,.72);
   --footer-orbit-border: rgba(130,196,255,.78);
   --footer-orbit-shadow: 0 0 24px #4bb4ff, 0 0 90px #0b56ff, 0 0 180px #003bff;
   --copyright: #727a8e;
@@ -255,6 +269,20 @@ html[data-theme='light'] {
   --faq-card-bg: linear-gradient(145deg, rgba(255,255,255,.98), rgba(236,244,255,.96));
   --partners-bg: radial-gradient(circle at 18% 22%, rgba(18,99,255,.12), transparent 34%), linear-gradient(145deg, #f9fbff 0%, #edf4ff 50%, #f4f7fc 100%);
   --partners-panel-bg: linear-gradient(145deg, rgba(255,255,255,.96), rgba(232,240,255,.92));
+  --partners-globe-card-bg: radial-gradient(circle at 76% 88%, rgba(18,99,255,.12), transparent 48%), linear-gradient(145deg, rgba(255,255,255,.98), rgba(226,237,255,.95));
+  --partners-globe-card-border: rgba(31,88,181,.18);
+  --partners-globe-card-shadow: inset 0 1px rgba(255,255,255,.94), 0 26px 72px rgba(36,75,135,.17), 0 0 34px rgba(18,99,255,.08);
+  --partners-globe-heading: #07152a;
+  --partners-globe-copy: rgba(31,54,88,.72);
+  --partners-globe-meta-bg: rgba(242,247,255,.72);
+  --partners-globe-meta-text: rgba(40,65,101,.62);
+  --globe-atmosphere: #0b63f6;
+  --globe-rim: rgba(23,99,220,.32);
+  --globe-marker-line: rgba(30,91,190,.46);
+  --globe-marker-ring: #d8e8ff;
+  --globe-marker-ring-hover: #ffffff;
+  --globe-marker-glow: rgba(18,99,255,.28);
+  --globe-marker-glow-hover: rgba(18,99,255,.58);
   --footer-orbit-border: rgba(18, 99, 255, .28);
   --footer-orbit-shadow: 0 0 24px rgba(75,180,255,.26), 0 0 90px rgba(11,86,255,.18), 0 0 180px rgba(0,59,255,.12);
   --copyright: #6c7788;
@@ -1353,31 +1381,25 @@ html[data-theme='light'] .scarcity { color: #795000; background: linear-gradient
   position: relative;
   min-width: 0;
   min-height: 520px;
-  border: 1px solid rgba(255,255,255,.08);
+  border: 1px solid var(--partners-globe-card-border);
   border-radius: 28px;
   isolation: isolate;
   overflow: hidden;
-  color: #f5f7ff;
-  background: linear-gradient(180deg, #15171b 0%, #111318 100%);
-  box-shadow: 0 30px 80px rgba(0,0,0,.34), inset 0 1px rgba(255,255,255,.035);
+  color: var(--partners-globe-heading);
+  background: var(--partners-globe-card-bg);
+  box-shadow: var(--partners-globe-card-shadow);
 }
-.partners-globe-card::before { content: ''; position: absolute; z-index: 0; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,.025), transparent 38%); pointer-events: none; }
+.partners-globe-card::before { content: ''; position: absolute; z-index: 0; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,.07), transparent 38%); opacity: .55; pointer-events: none; }
 .partners-globe-card__copy { position: relative; z-index: 3; max-width: 430px; padding: 38px 38px 0; }
-.partners-globe-card h2 { margin: 0 0 14px; color: #f7f8fc; font-size: clamp(25px, 2.35vw, 34px); font-weight: 600; line-height: 1.08; letter-spacing: -.035em; }
-.partners-globe-card__copy > p { max-width: 390px; margin: 0; color: rgba(222,228,239,.76); font-size: 14px; line-height: 1.55; }
+.partners-globe-card h2 { margin: 0 0 14px; color: var(--partners-globe-heading); font-size: clamp(25px, 2.35vw, 34px); font-weight: 600; line-height: 1.08; letter-spacing: -.035em; }
+.partners-globe-card__copy > p { max-width: 390px; margin: 0; color: var(--partners-globe-copy); font-size: 14px; line-height: 1.55; }
 .partners-globe-card__visual { position: absolute; z-index: 1; left: 0; right: 0; bottom: -3%; width: 100%; height: 70%; cursor: grab; touch-action: pan-y; }
 .partners-globe-card__visual:active { cursor: grabbing; }
 .globe-3d canvas { width: 100%; height: 100%; display: block; }
-.partners-globe-card__meta { position: absolute; z-index: 3; left: 28px; bottom: 18px; margin: 0; padding: 5px 8px; border-radius: 999px; color: rgba(220,228,240,.56); background: rgba(5,8,14,.38); backdrop-filter: blur(8px); font-size: 9px; letter-spacing: .035em; }
+.partners-globe-card__meta { position: absolute; z-index: 3; left: 28px; bottom: 18px; margin: 0; padding: 5px 8px; border-radius: 999px; color: var(--partners-globe-meta-text); background: var(--partners-globe-meta-bg); backdrop-filter: blur(8px); font-size: 9px; letter-spacing: .035em; }
 .partners-globe-card__meta span { margin-right: 4px; color: rgba(132,180,255,.86); font-size: 11px; font-weight: 700; }
 .partners-globe-card--fallback::after { content: ''; position: absolute; left: 50%; top: 58%; width: 220px; height: 220px; border: 1px solid rgba(79,145,255,.2); border-top-color: rgba(79,145,255,.62); border-radius: 50%; transform: translate(-50%, -50%); animation: partners-globe-fallback 1.8s linear infinite; }
-html[data-theme='light'] .partners-globe-card { border-color: rgba(20,42,77,.16); box-shadow: 0 28px 74px rgba(36,75,135,.2), inset 0 1px rgba(255,255,255,.045); }
-
 @keyframes partners-globe-fallback { to { transform: translate(-50%, -50%) rotate(360deg); } }
-
-@media (prefers-reduced-motion: reduce) {
-  .partners-globe-card--fallback::after { animation: none; }
-}
 
 .faq-section { overflow: hidden; background: var(--faq-bg); }
 .faq-intro { max-width: 620px; margin: -42px auto 54px; color: var(--muted); font-size: 16px; line-height: 1.6; text-align: center; }
