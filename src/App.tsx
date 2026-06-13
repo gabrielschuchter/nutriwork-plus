@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import {
   comparison,
   courses,
@@ -30,6 +30,22 @@ const platformVideo = 'https://gruponutriwork.com.br/_assets/video/121f9f7d30c31
 
 type Theme = 'light' | 'dark';
 type Page = 'home' | 'estude' | 'partners';
+type LoadingVariant = 'intro' | 'return' | 'route';
+type LoadingExperienceState = { active: boolean; variant: LoadingVariant; page: Page };
+
+const loaderStorageKey = 'nutriwork-loading-experience-seen';
+const spiralConfig = {
+  particleCount: 86,
+  trailSpan: 0.28,
+  durationMs: 7800,
+  pulseDurationMs: 6800,
+  strokeWidth: 4.3,
+  searchTurns: 4,
+  searchBaseRadius: 8,
+  searchRadiusAmp: 8.5,
+  searchPulse: 2.4,
+  searchScale: 1
+};
 
 function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <div className={`reveal ${className}`}>{children}</div>;
@@ -114,58 +130,357 @@ function useHashScroll(page: Page) {
   }, [page]);
 }
 
-function useInitialLoader() {
-  const [loading, setLoading] = useState(() => {
-    try {
-      return sessionStorage.getItem('nutriwork-loader-seen') !== '1';
-    } catch {
-      return true;
-    }
+function hasSeenLoadingExperience() {
+  try {
+    return localStorage.getItem(loaderStorageKey) === '1' || sessionStorage.getItem(loaderStorageKey) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function markLoadingExperienceSeen() {
+  try {
+    localStorage.setItem(loaderStorageKey, '1');
+    sessionStorage.setItem(loaderStorageKey, '1');
+  } catch {
+    // The experience should still complete when storage is unavailable.
+  }
+}
+
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function useLoadingExperience(page: Page) {
+  const hasHandledFirstPage = useRef(false);
+  const currentPageRef = useRef(page);
+  const [loading, setLoading] = useState<LoadingExperienceState>(() => {
+    const seen = hasSeenLoadingExperience();
+    return { active: true, variant: seen ? 'return' : 'intro', page };
   });
 
   useEffect(() => {
-    if (!loading) return;
-
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const timer = window.setTimeout(() => {
-      try {
-        sessionStorage.setItem('nutriwork-loader-seen', '1');
-      } catch {
-        // The loader can still close when session storage is unavailable.
-      }
-      setLoading(false);
-    }, reduceMotion ? 120 : 720);
-
-    return () => window.clearTimeout(timer);
-  }, [loading]);
-
-  return loading;
-}
-
-function useRouteTransition(page: Page) {
-  const firstRender = useRef(true);
+    const root = document.documentElement;
+    root.classList.toggle('loading-active', loading.active);
+    return () => root.classList.remove('loading-active');
+  }, [loading.active]);
 
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
+    const reduceMotion = prefersReducedMotion();
+    const initialVariant = loading.variant;
+    const fallbackDelay = reduceMotion ? 120 : initialVariant === 'intro' ? 2200 : 520;
+    const settleDelay = reduceMotion ? 0 : initialVariant === 'intro' ? 980 : 180;
+    let settled = false;
+    let settleTimer = 0;
+
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(settleTimer);
+      markLoadingExperienceSeen();
+      setLoading((current) => (
+        current.variant === initialVariant && current.active
+          ? { ...current, active: false }
+          : current
+      ));
+    };
+
+    const scheduleFinish = (delay = settleDelay) => {
+      window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(finish, delay);
+    };
+
+    try {
+      if (document.readyState === 'complete') {
+        scheduleFinish();
+      } else {
+        window.addEventListener('load', () => scheduleFinish(), { once: true });
+      }
+    } catch {
+      scheduleFinish();
+    }
+
+    const fallbackTimer = window.setTimeout(finish, fallbackDelay);
+
+    return () => {
+      window.clearTimeout(fallbackTimer);
+      window.clearTimeout(settleTimer);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!hasHandledFirstPage.current) {
+      hasHandledFirstPage.current = true;
+      currentPageRef.current = page;
       return;
     }
 
+    if (currentPageRef.current === page) {
+      return;
+    }
+
+    currentPageRef.current = page;
+
     const root = document.documentElement;
+    const reduceMotion = prefersReducedMotion();
     root.classList.add('route-transition');
-    const timer = window.setTimeout(() => root.classList.remove('route-transition'), 240);
+    setLoading({ active: true, variant: 'route', page });
+
+    const timer = window.setTimeout(() => {
+      setLoading((current) => (
+        current.variant === 'route' && current.page === page
+          ? { ...current, active: false }
+          : current
+      ));
+      root.classList.remove('route-transition');
+    }, reduceMotion ? 90 : 360);
+
     return () => {
       window.clearTimeout(timer);
       root.classList.remove('route-transition');
     };
   }, [page]);
+
+  return loading;
 }
 
-function LoadingScreen({ active }: { active: boolean }) {
+function normalizeProgress(progress: number) {
+  return ((progress % 1) + 1) % 1;
+}
+
+function getSpiralPoint(progress: number, detailScale: number) {
+  const t = progress * Math.PI * 2;
+  const angle = t * spiralConfig.searchTurns;
+  const radius = spiralConfig.searchBaseRadius + (1 - Math.cos(t)) * (spiralConfig.searchRadiusAmp + detailScale * spiralConfig.searchPulse);
+
+  return {
+    x: 50 + Math.cos(angle) * radius * spiralConfig.searchScale,
+    y: 50 + Math.sin(angle) * radius * spiralConfig.searchScale
+  };
+}
+
+function getSpiralDetailScale(time: number) {
+  const pulseProgress = (time % spiralConfig.pulseDurationMs) / spiralConfig.pulseDurationMs;
+  const pulseAngle = pulseProgress * Math.PI * 2;
+  return 0.52 + ((Math.sin(pulseAngle + 0.55) + 1) / 2) * 0.48;
+}
+
+function buildSpiralPath(detailScale: number, steps = 360) {
+  return Array.from({ length: steps + 1 }, (_, index) => {
+    const point = getSpiralPoint(index / steps, detailScale);
+    return `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`;
+  }).join(' ');
+}
+
+function SpiralSearchLoader({ active, compact = false }: { active: boolean; compact?: boolean }) {
+  const pathRef = useRef<SVGPathElement>(null);
+  const groupRef = useRef<SVGGElement>(null);
+  const particlesRef = useRef<SVGCircleElement[]>([]);
+  const particleCount = compact ? 58 : spiralConfig.particleCount;
+
+  useEffect(() => {
+    if (!active) return;
+
+    const path = pathRef.current;
+    const group = groupRef.current;
+    if (!path || !group) return;
+
+    particlesRef.current = particlesRef.current.slice(0, particleCount);
+    path.setAttribute('stroke-width', String(compact ? 3.7 : spiralConfig.strokeWidth));
+
+    let frame = 0;
+    const startedAt = performance.now();
+    const reduceMotion = prefersReducedMotion();
+
+    const render = (now: number) => {
+      const time = now - startedAt + (compact ? 1850 : 0);
+      const progress = (time % spiralConfig.durationMs) / spiralConfig.durationMs;
+      const detailScale = reduceMotion ? 0.76 : getSpiralDetailScale(time);
+
+      path.setAttribute('d', buildSpiralPath(detailScale, compact ? 260 : 360));
+      group.setAttribute('transform', `rotate(${compact ? -8 : 0} 50 50)`);
+
+      particlesRef.current.forEach((node, index) => {
+        const tailOffset = index / Math.max(particleCount - 1, 1);
+        const point = getSpiralPoint(normalizeProgress(progress - tailOffset * spiralConfig.trailSpan), detailScale);
+        const fade = Math.pow(1 - tailOffset, 0.56);
+
+        node.setAttribute('cx', point.x.toFixed(2));
+        node.setAttribute('cy', point.y.toFixed(2));
+        node.setAttribute('r', (0.9 + fade * (compact ? 2.1 : 2.7)).toFixed(2));
+        node.setAttribute('opacity', (0.05 + fade * 0.9).toFixed(3));
+      });
+
+      if (!reduceMotion) frame = window.requestAnimationFrame(render);
+    };
+
+    render(startedAt);
+    return () => window.cancelAnimationFrame(frame);
+  }, [active, compact, particleCount]);
+
   return (
-    <div className={`loading-screen ${active ? 'loading-screen--active' : ''}`} aria-hidden={!active}>
-      <div className="loading-screen__mark">N<span>+</span></div>
-      <div className="loading-screen__bar" />
+    <svg className={`spiral-loader ${compact ? 'spiral-loader--compact' : ''}`} viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <g ref={groupRef}>
+        <path ref={pathRef} className="spiral-loader__path" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" opacity="0.12" />
+        {Array.from({ length: particleCount }, (_, index) => (
+          <circle
+            key={index}
+            ref={(node) => {
+              if (node) particlesRef.current[index] = node;
+            }}
+            fill="currentColor"
+          />
+        ))}
+      </g>
+    </svg>
+  );
+}
+
+function SkeletonBlock({ className = '' }: { className?: string }) {
+  return <span className={`skeleton-block ${className}`} />;
+}
+
+function LoadingTestimonial({ long = false }: { long?: boolean }) {
+  return (
+    <article className={`loading-testimonial ${long ? 'loading-testimonial--long' : ''}`}>
+      <div className="loading-testimonial__header">
+        <SkeletonBlock className="skeleton-avatar" />
+        <div>
+          <SkeletonBlock className="skeleton-line skeleton-line--name" />
+          <SkeletonBlock className="skeleton-line skeleton-line--role" />
+        </div>
+      </div>
+      <SkeletonBlock className="skeleton-line skeleton-line--wide" />
+      <SkeletonBlock className="skeleton-line skeleton-line--wide" />
+      <SkeletonBlock className="skeleton-line skeleton-line--medium" />
+      <SkeletonBlock className="skeleton-stars" />
+    </article>
+  );
+}
+
+function LoadingSkeleton({ page, compact }: { page: Page; compact: boolean }) {
+  if (page === 'estude') {
+    return (
+      <div className={`loading-skeleton loading-skeleton--estude ${compact ? 'loading-skeleton--compact' : ''}`}>
+        <div className="loading-skeleton__grid loading-skeleton__grid--estude">
+          <div className="loading-skeleton__copy">
+            <SkeletonBlock className="skeleton-kicker" />
+            <SkeletonBlock className="skeleton-title skeleton-title--estude" />
+            <SkeletonBlock className="skeleton-line skeleton-line--wide" />
+            <SkeletonBlock className="skeleton-line skeleton-line--medium" />
+            <SkeletonBlock className="skeleton-button" />
+          </div>
+          <div className="loading-phone">
+            <SkeletonBlock className="loading-phone__device" />
+            <SkeletonBlock className="loading-chip loading-chip--one" />
+            <SkeletonBlock className="loading-chip loading-chip--two" />
+            <SkeletonBlock className="loading-chip loading-chip--three" />
+          </div>
+        </div>
+        <div className="loading-estude-body">
+          <div className="loading-problem-card">
+            <SkeletonBlock className="skeleton-line skeleton-line--medium" />
+            <SkeletonBlock className="skeleton-line skeleton-line--wide" />
+            <SkeletonBlock className="skeleton-line skeleton-line--short" />
+          </div>
+          <div className="loading-estude-panel">
+            <SkeletonBlock className="skeleton-title skeleton-title--compact" />
+            <SkeletonBlock className="loading-phone__device loading-phone__device--small" />
+            <SkeletonBlock className="loading-chip loading-chip--panel-one" />
+            <SkeletonBlock className="loading-chip loading-chip--panel-two" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (page === 'partners') {
+    return (
+      <div className={`loading-skeleton loading-skeleton--partners ${compact ? 'loading-skeleton--compact' : ''}`}>
+        <div className="loading-skeleton__grid loading-skeleton__grid--partners">
+          <div className="loading-skeleton__copy">
+            <SkeletonBlock className="skeleton-kicker" />
+            <SkeletonBlock className="skeleton-title skeleton-title--partners" />
+            <SkeletonBlock className="skeleton-line skeleton-line--wide" />
+            <SkeletonBlock className="skeleton-line skeleton-line--medium" />
+            <div className="skeleton-action-row">
+              <SkeletonBlock className="skeleton-button" />
+              <SkeletonBlock className="skeleton-link" />
+            </div>
+          </div>
+          <div className="loading-partners-panel">
+            {[0, 1, 2].map((item) => (
+              <article className="loading-partners-card" key={item}>
+                <SkeletonBlock className="skeleton-icon" />
+                <SkeletonBlock className="skeleton-line skeleton-line--name" />
+                <SkeletonBlock className="skeleton-line skeleton-line--wide" />
+                <SkeletonBlock className="skeleton-line skeleton-line--short" />
+              </article>
+            ))}
+          </div>
+        </div>
+        <div className="loading-partners-strip">
+          {[0, 1, 2, 3].map((item) => <SkeletonBlock className="loading-partners-tile" key={item} />)}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`loading-skeleton loading-skeleton--home ${compact ? 'loading-skeleton--compact' : ''}`}>
+      <div className="loading-hero-stage">
+        <div className="loading-hero-orbit" />
+        <div className="loading-hero-copy">
+          <SkeletonBlock className="skeleton-title skeleton-title--home" />
+          <SkeletonBlock className="skeleton-line skeleton-line--subtitle" />
+          <div className="skeleton-action-row skeleton-action-row--center">
+            <SkeletonBlock className="skeleton-button" />
+            <SkeletonBlock className="skeleton-button skeleton-button--muted" />
+          </div>
+        </div>
+      </div>
+      <div className="loading-dashboard">
+        <SkeletonBlock className="loading-dashboard__screen" />
+      </div>
+      <div className="loading-social-grid">
+        <LoadingTestimonial />
+        <LoadingTestimonial />
+        <LoadingTestimonial long />
+        <LoadingTestimonial long />
+      </div>
+      <div className="loading-card-strip">
+        {[0, 1, 2, 3].map((item) => <SkeletonBlock className="loading-mini-card" key={item} />)}
+      </div>
+    </div>
+  );
+}
+
+function LoadingExperience({ state }: { state: LoadingExperienceState }) {
+  const compact = state.variant !== 'intro';
+  const [animating, setAnimating] = useState(state.active);
+
+  useEffect(() => {
+    if (state.active) {
+      setAnimating(true);
+      return;
+    }
+
+    const timer = window.setTimeout(
+      () => setAnimating(false),
+      prefersReducedMotion() ? 0 : 480
+    );
+
+    return () => window.clearTimeout(timer);
+  }, [state.active]);
+
+  return (
+    <div className={`loading-experience loading-experience--${state.variant} ${state.active ? 'loading-experience--active' : ''} ${animating ? 'loading-experience--animating' : ''}`} aria-hidden="true">
+      <div className="loading-experience__ambient" />
+      <div className="loading-experience__brand">
+        <div className="loading-experience__mark">N<span>+</span></div>
+        <SpiralSearchLoader active={animating} compact={compact} />
+      </div>
+      <LoadingSkeleton page={state.page} compact={compact} />
     </div>
   );
 }
@@ -767,11 +1082,20 @@ function PartnersPage() {
 
 export default function App() {
   const page = useCurrentPage();
-  const loading = useInitialLoader();
-  useRouteTransition(page);
+  const loading = useLoadingExperience(page);
   useScrollReveal(page);
   useMobileCtaVisibility(page);
   useHashScroll(page);
 
-  return <><LoadingScreen active={loading}/><Header/>{page === 'estude' ? <EstudePage/> : page === 'partners' ? <PartnersPage/> : <HomePage/>}<Footer/>{page === 'home' && <Button href="/#planos" className="mobile-cta">Ver planos</Button>}</>;
+  return (
+    <>
+      <LoadingExperience state={loading} />
+      <div className={`app-shell ${loading.active ? 'app-shell--loading' : ''}`}>
+        <Header/>
+        {page === 'estude' ? <EstudePage/> : page === 'partners' ? <PartnersPage/> : <HomePage/>}
+        <Footer/>
+        {page === 'home' && <Button href="/#planos" className="mobile-cta">Ver planos</Button>}
+      </div>
+    </>
+  );
 }
