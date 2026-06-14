@@ -572,18 +572,317 @@ function SectionHeading({ children, accent = false }: { children: ReactNode; acc
   return <h2 className={`section-heading ${accent ? 'section-heading--accent' : ''}`}>{children}</h2>;
 }
 
+type HeroDemoTab = 'dashboard' | 'lessons' | 'ebooks' | 'community';
+
+const heroDemoTabs: Array<{ id: HeroDemoTab; label: string; eyebrow: string }> = [
+  { id: 'dashboard', label: 'Início', eyebrow: 'Dashboard' },
+  { id: 'lessons', label: 'Aulas', eyebrow: 'Trilha prática' },
+  { id: 'ebooks', label: 'E-books', eyebrow: 'Biblioteca' },
+  { id: 'community', label: 'Comunidade', eyebrow: 'Discussões' }
+];
+
+const heroDemoLessons = [
+  {
+    title: 'Estratégias para melhorar adesão em pacientes com rotina instável',
+    tag: 'Clínica comportamental',
+    duration: '18 min',
+    progress: '68%'
+  },
+  {
+    title: 'Como estruturar retornos mais objetivos e aplicáveis',
+    tag: 'Consulta e retorno',
+    duration: '14 min',
+    progress: '42%'
+  },
+  {
+    title: 'Planejamento alimentar prático sem excesso de complexidade',
+    tag: 'Planejamento',
+    duration: '22 min',
+    progress: '27%'
+  }
+];
+
+const heroDemoEbooks = [
+  {
+    title: 'Guia prático de acompanhamento nutricional',
+    detail: 'Fluxos, condutas e perguntas para evoluir o plano com clareza.',
+    pages: ['Anamnese aplicada', 'Objetivos por etapa', 'Registro de evolução']
+  },
+  {
+    title: 'Checklist de primeira consulta e retorno',
+    detail: 'Uma sequência enxuta para não perder informações importantes.',
+    pages: ['Antes da consulta', 'Durante o atendimento', 'Plano de retorno']
+  }
+];
+
+const heroDemoTopics = [
+  {
+    title: 'Discussão em alta: adesão alimentar no fim de semana',
+    replies: '24 respostas',
+    tag: 'Comportamento'
+  },
+  {
+    title: 'Como explicar ajuste calórico sem gerar ansiedade?',
+    replies: '16 respostas',
+    tag: 'Comunicação'
+  },
+  {
+    title: 'Modelos de retorno para pacientes com baixa disponibilidade',
+    replies: '11 respostas',
+    tag: 'Rotina clínica'
+  }
+];
+
+function HeroMonitorDemo() {
+  const [activeTab, setActiveTab] = useState<HeroDemoTab>('dashboard');
+  const [selectedLesson, setSelectedLesson] = useState(heroDemoLessons[0]);
+  const [selectedEbook, setSelectedEbook] = useState(heroDemoEbooks[0]);
+  const [selectedTopic, setSelectedTopic] = useState(heroDemoTopics[0]);
+  const [playing, setPlaying] = useState(false);
+  const activeTabData = heroDemoTabs.find((tab) => tab.id === activeTab) ?? heroDemoTabs[0];
+
+  const openLesson = (lesson = selectedLesson) => {
+    setSelectedLesson(lesson);
+    setActiveTab('lessons');
+  };
+
+  const openEbook = (ebook = selectedEbook) => {
+    setSelectedEbook(ebook);
+    setActiveTab('ebooks');
+  };
+
+  return (
+    <div className="monitor-demo">
+      <aside className="monitor-demo__sidebar" aria-label="Navegação da prévia">
+        <div className="monitor-demo__brand">N<span>+</span></div>
+        <nav>
+          {heroDemoTabs.map((tab) => (
+            <button
+              key={tab.id}
+              className={activeTab === tab.id ? 'is-active' : ''}
+              type="button"
+              aria-pressed={activeTab === tab.id}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </nav>
+      </aside>
+
+      <main className="monitor-demo__main">
+        <header className="monitor-demo__topbar">
+          <div>
+            <span>{activeTabData.eyebrow}</span>
+            <strong>Nutriwork Plus</strong>
+          </div>
+          <span className="monitor-demo__badge">Novo módulo liberado</span>
+        </header>
+
+        <div className="monitor-demo__scroll" tabIndex={0} aria-label="Conteúdo navegável da prévia Nutriwork Plus">
+          {activeTab === 'dashboard' && (
+            <section className="monitor-demo__view monitor-demo__dashboard" aria-label="Dashboard da prévia">
+              <button className="demo-spotlight demo-spotlight--brand" type="button" onClick={() => openLesson(heroDemoLessons[0])}>
+                <span>Grupo de estudos</span>
+                <strong>Nutriwork<span>+</span></strong>
+                <small>Nutrição Baseada em Evidências</small>
+              </button>
+              <div className="demo-metrics">
+                <article><strong>12</strong><span>aulas novas</span></article>
+                <article><strong>4</strong><span>e-books ativos</span></article>
+                <article><strong>87%</strong><span>trilha aplicada</span></article>
+              </div>
+              <div className="demo-next">
+                <button type="button" onClick={() => openLesson(heroDemoLessons[0])}>
+                  <span>Aula em destaque</span>
+                  <strong>Adesão em pacientes com rotina instável</strong>
+                </button>
+                <button type="button" onClick={() => openEbook(heroDemoEbooks[1])}>
+                  <span>Checklist recomendado</span>
+                  <strong>Primeira consulta e retorno</strong>
+                </button>
+              </div>
+              <div className="demo-next demo-next--secondary">
+                <button type="button" onClick={() => setActiveTab('community')}>
+                  <span>Comunidade</span>
+                  <strong>Discussões aplicadas da semana</strong>
+                </button>
+                <button type="button" onClick={() => openEbook(heroDemoEbooks[0])}>
+                  <span>Biblioteca</span>
+                  <strong>Guia de acompanhamento nutricional</strong>
+                </button>
+              </div>
+            </section>
+          )}
+
+          {activeTab === 'lessons' && (
+            <section className="monitor-demo__view monitor-demo__lessons" aria-label="Aulas da prévia">
+              <div className="demo-list">
+                {heroDemoLessons.map((lesson) => (
+                  <button
+                    key={lesson.title}
+                    className={selectedLesson.title === lesson.title ? 'is-selected' : ''}
+                    type="button"
+                    onClick={() => openLesson(lesson)}
+                  >
+                    <span>{lesson.tag}</span>
+                    <strong>{lesson.title}</strong>
+                    <small>{lesson.duration}</small>
+                  </button>
+                ))}
+              </div>
+              <article className="demo-player">
+                <div className="demo-player__thumb">
+                  <button type="button" aria-label={playing ? 'Pausar aula demonstrativa' : 'Reproduzir aula demonstrativa'} onClick={() => setPlaying((value) => !value)}>
+                    <Icon name={playing ? 'pause' : 'play'} />
+                  </button>
+                </div>
+                <span>{selectedLesson.tag} · {selectedLesson.duration}</span>
+                <h3>{selectedLesson.title}</h3>
+                <div className="demo-progress" aria-label={`Progresso demonstrativo ${selectedLesson.progress}`}>
+                  <span style={{ width: selectedLesson.progress }} />
+                </div>
+              </article>
+              <div className="demo-session-notes">
+                <span>Próximos passos</span>
+                <p>Aplicar uma meta simples, revisar barreiras de rotina e preparar um retorno com perguntas objetivas.</p>
+              </div>
+            </section>
+          )}
+
+          {activeTab === 'ebooks' && (
+            <section className="monitor-demo__view monitor-demo__ebooks" aria-label="E-books da prévia">
+              <div className="demo-ebook-grid">
+                {heroDemoEbooks.map((ebook) => (
+                  <button
+                    key={ebook.title}
+                    className={selectedEbook.title === ebook.title ? 'is-selected' : ''}
+                    type="button"
+                    onClick={() => openEbook(ebook)}
+                  >
+                    <span>E-book</span>
+                    <strong>{ebook.title}</strong>
+                  </button>
+                ))}
+              </div>
+              <article className="demo-ebook-preview">
+                <div className="demo-ebook-cover">
+                  <span>PDF</span>
+                  <strong>{selectedEbook.title}</strong>
+                </div>
+                <div>
+                  <p>{selectedEbook.detail}</p>
+                  <ul>
+                    {selectedEbook.pages.map((page) => <li key={page}>{page}</li>)}
+                  </ul>
+                </div>
+              </article>
+              <div className="demo-session-notes">
+                <span>Uso sugerido</span>
+                <p>Salvar como roteiro de consulta, adaptar perguntas e combinar com a aula selecionada.</p>
+              </div>
+            </section>
+          )}
+
+          {activeTab === 'community' && (
+            <section className="monitor-demo__view monitor-demo__community" aria-label="Comunidade da prévia">
+              <div className="demo-community-list">
+                {heroDemoTopics.map((topic) => (
+                  <button
+                    key={topic.title}
+                    className={selectedTopic.title === topic.title ? 'is-selected' : ''}
+                    type="button"
+                    onClick={() => setSelectedTopic(topic)}
+                  >
+                    <span>{topic.tag}</span>
+                    <strong>{topic.title}</strong>
+                    <small>{topic.replies}</small>
+                  </button>
+                ))}
+              </div>
+              <article className="demo-topic-card">
+                <span>{selectedTopic.tag}</span>
+                <h3>{selectedTopic.title}</h3>
+                <p>Trocas entre estudantes e profissionais com foco em condutas possíveis, linguagem clara e acompanhamento aplicável.</p>
+                <strong>{selectedTopic.replies}</strong>
+              </article>
+              <div className="demo-session-notes">
+                <span>Síntese do tópico</span>
+                <p>Priorize estratégias que preservem adesão sem transformar o plano alimentar em uma lista rígida de regras.</p>
+              </div>
+            </section>
+          )}
+        </div>
+      </main>
+    </div>
+  );
+}
+
+function HeroMonitor() {
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (window.matchMedia('(max-width: 720px)').matches) return;
+
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const rect = stage.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+    stage.style.setProperty('--hero-tilt-x', `${y * -1.8}deg`);
+    stage.style.setProperty('--hero-tilt-y', `${x * 3.2}deg`);
+    stage.style.setProperty('--hero-shift-x', `${x * 4}px`);
+    stage.style.setProperty('--hero-shift-y', `${y * 3}px`);
+  };
+
+  const resetPointer = () => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    stage.style.setProperty('--hero-tilt-x', '0deg');
+    stage.style.setProperty('--hero-tilt-y', '0deg');
+    stage.style.setProperty('--hero-shift-x', '0px');
+    stage.style.setProperty('--hero-shift-y', '0px');
+  };
+
+  return (
+    <div
+      ref={stageRef}
+      className="hero-monitor-stage"
+      onPointerMove={handlePointerMove}
+      onPointerLeave={resetPointer}
+    >
+      <div className="hero-monitor-stage__glow" aria-hidden="true" />
+      <div className="hero-monitor" role="group" aria-label="Prévia interativa fictícia do Nutriwork Plus em um monitor 3D">
+        <div className="hero-monitor__frame">
+          <div className="hero-monitor__screen">
+            <HeroMonitorDemo />
+          </div>
+        </div>
+        <div className="hero-monitor__neck" aria-hidden="true" />
+        <div className="hero-monitor__base" aria-hidden="true" />
+      </div>
+    </div>
+  );
+}
+
 function Hero() {
   return (
     <section id="inicio" className="hero">
       <div className="hero__eclipse" aria-hidden="true" />
       <div className="hero__glow" aria-hidden="true" />
-      <Reveal className="hero__content">
-        <h1>Nutriwork<span>plus.</span></h1>
-        <p>Uma plataforma para todo estudante de Nutrição.</p>
-        <div className="hero-actions">
-          <Button href="/#planos" variant="outline">Venha fazer parte</Button>
-          <Button href="https://plus.gruponutriwork.com.br/" variant="outline" className="member-cta" external>Já sou membro(a)</Button>
+      <Reveal className="hero__layout">
+        <div className="hero__content">
+          <h1>Nutriwork<span>plus.</span></h1>
+          <p>A plataforma feita para todo estudante de Nutrição.</p>
+          <div className="hero-actions">
+            <Button href="/#planos" variant="outline">Venha fazer parte</Button>
+            <Button href="https://plus.gruponutriwork.com.br/" variant="outline" className="member-cta" external>Já sou membro(a)</Button>
+          </div>
         </div>
+        <HeroMonitor />
       </Reveal>
     </section>
   );
