@@ -1248,12 +1248,28 @@ function Footer() {
     <footer id="contatos" className="footer">
       <div className="footer-orbit" aria-hidden="true" />
       <div className="page-width">
-        <Reveal><h2>Venha fazer parte do grupo de<br/>Nutrição Baseada em Evidências<br/>que mais cresce no Brasil.</h2></Reveal>
+        <Reveal className="footer-statement">
+          <h2 aria-label="A plataforma feita para você, estudante de Nutrição.">
+            <span aria-hidden="true">A plataforma feita para <span className="footer-word-swap"><span className="footer-word-swap__strike">todo</span><span className="footer-word-swap__insert">você,</span></span> estudante de Nutrição.</span>
+          </h2>
+        </Reveal>
         <div className="footer-grid">
-          <div><p className="footer-label">Visite nossas redes sociais:</p><a className="contact-link" href="https://www.instagram.com/gruponutriwork" target="_blank" rel="noreferrer"><Icon name="instagram"/>@gruponutriwork</a></div>
-          <div><h3>Dúvidas? Entre em contato.</h3><a className="contact-link" href={whatsappContact} target="_blank" rel="noreferrer"><Icon name="phone"/><span><small>WhatsApp</small>(12) 99750-5188</span></a><a className="contact-link" href={`mailto:${contactEmail}`}><Icon name="mail"/><span><small>E-mail</small>{contactEmail}</span></a></div>
+          <div className="footer-social">
+            <p className="footer-label">Acompanhe de perto</p>
+            <a className="contact-link contact-link--featured" href="https://www.instagram.com/gruponutriwork" target="_blank" rel="noreferrer"><Icon name="instagram"/><span><small>Instagram</small>@gruponutriwork</span></a>
+          </div>
+          <div className="footer-contact">
+            <p className="footer-label">Canais de contato</p>
+            <h3>Dúvidas, acesso ou próximos passos? Fale com a equipe.</h3>
+            <div className="footer-contact__links">
+              <a className="contact-link" href={whatsappContact} target="_blank" rel="noreferrer"><Icon name="phone"/><span><small>WhatsApp</small>(12) 99750-5188</span></a>
+              <a className="contact-link" href={`mailto:${contactEmail}`}><Icon name="mail"/><span><small>E-mail</small>{contactEmail}</span></a>
+            </div>
+          </div>
         </div>
-        <p className="copyright">© {new Date().getFullYear()} Nutriwork. Todos os direitos reservados.</p>
+        <div className="footer-bottom">
+          <p className="copyright">© {new Date().getFullYear()} Nutriwork. Todos os direitos reservados.</p>
+        </div>
       </div>
     </footer>
   );
