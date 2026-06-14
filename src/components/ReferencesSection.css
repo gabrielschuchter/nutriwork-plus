@@ -1,6 +1,6 @@
 .references-section {
   position: relative;
-  padding: clamp(88px, 9vw, 138px) 0 clamp(94px, 9vw, 146px);
+  padding: clamp(76px, 7vw, 108px) 0 clamp(80px, 7.2vw, 112px);
   border-block: 1px solid var(--section-divider);
   overflow: hidden;
   isolation: isolate;
@@ -21,24 +21,11 @@
 
 .references-section__header {
   width: min(1120px, calc(100% - 40px));
-  margin: 0 auto clamp(46px, 5vw, 68px);
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 36px;
+  margin: 0 auto clamp(38px, 4vw, 52px);
 }
 
-.references-section__header > div:first-child {
+.references-section__header h2 {
   max-width: 820px;
-}
-
-.references-section__eyebrow {
-  margin: 0 0 14px;
-  color: var(--blue-soft);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .16em;
-  text-transform: uppercase;
 }
 
 .references-section h2 {
@@ -52,9 +39,15 @@
 }
 
 .references-section__controls {
-  flex: 0 0 auto;
+  position: absolute;
+  z-index: 5;
+  top: 57%;
+  right: clamp(12px, 2vw, 28px);
+  left: clamp(12px, 2vw, 28px);
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  pointer-events: none;
+  transform: translateY(-50%);
 }
 
 .references-section__controls button {
@@ -69,6 +62,7 @@
   background: color-mix(in srgb, var(--surface) 84%, transparent);
   box-shadow: inset 0 1px rgba(255, 255, 255, .05);
   cursor: pointer;
+  pointer-events: auto;
   transition: border-color .2s ease, color .2s ease, background .2s ease;
 }
 
@@ -107,7 +101,7 @@
 }
 
 .references-group {
-  --references-gap: clamp(24px, 2.4vw, 38px);
+  --references-gap: clamp(20px, 2vw, 30px);
   flex: 0 0 auto;
   padding-right: var(--references-gap);
   display: flex;
@@ -115,7 +109,7 @@
 }
 
 .reference-card {
-  width: clamp(224px, 18vw, 264px);
+  width: clamp(188px, 15.4vw, 222px);
   flex: 0 0 auto;
 }
 
@@ -123,10 +117,12 @@
   position: relative;
   aspect-ratio: 4 / 5;
   border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
-  border-radius: 24px;
+  border-radius: 21px;
   overflow: hidden;
-  background: #f5f7fa;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, .13);
+  background:
+    radial-gradient(circle at 50% 34%, rgba(143, 190, 255, .28), transparent 38%),
+    linear-gradient(145deg, #172a4c 0%, #0b162b 58%, #050b17 100%);
+  box-shadow: inset 0 1px rgba(255, 255, 255, .08), 0 15px 36px rgba(0, 0, 0, .16);
 }
 
 .reference-card__photo::after {
@@ -142,29 +138,29 @@
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: cover;
-  object-position: center;
-  filter: saturate(.92) contrast(1.015);
+  object-fit: contain;
+  object-position: center bottom;
+  filter: saturate(.94) contrast(1.015) drop-shadow(0 12px 18px rgba(0, 0, 0, .12));
 }
 
 .reference-card__content {
-  padding: 20px 3px 0;
+  padding: 14px 2px 0;
 }
 
 .reference-card h3 {
   margin: 0;
   color: var(--heading);
-  font-size: clamp(17px, 1.35vw, 20px);
+  font-size: clamp(15px, 1.15vw, 17px);
   font-weight: 600;
   line-height: 1.25;
   letter-spacing: -.015em;
 }
 
 .reference-card p {
-  margin: 9px 0 0;
+  margin: 6px 0 0;
   color: var(--muted);
-  font-size: clamp(12px, .96vw, 14px);
-  line-height: 1.55;
+  font-size: clamp(10.5px, .82vw, 12.5px);
+  line-height: 1.48;
 }
 
 html[data-theme='light'] .references-section {
@@ -174,39 +170,27 @@ html[data-theme='light'] .references-section {
     linear-gradient(180deg, #f4f7fc, #eef4ff 52%, #f4f7fc);
 }
 
-html[data-theme='light'] .references-section__eyebrow {
-  color: #145bc7;
-}
-
 html[data-theme='light'] .reference-card__photo {
-  box-shadow: 0 18px 42px rgba(38, 72, 126, .12);
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, .96), transparent 42%),
+    linear-gradient(145deg, #f9fbff 0%, #e7effc 58%, #dce8fa 100%);
+  box-shadow: inset 0 1px rgba(255, 255, 255, .92), 0 15px 34px rgba(38, 72, 126, .11);
 }
 
 @media (max-width: 900px) {
-  .references-section__header {
-    align-items: center;
-  }
-
   .reference-card {
-    width: clamp(210px, 28vw, 242px);
+    width: clamp(178px, 24vw, 204px);
   }
 }
 
 @media (max-width: 720px) {
   .references-section {
-    padding: 76px 0 88px;
+    padding: 68px 0 76px;
   }
 
   .references-section__header {
     width: min(560px, calc(100% - 32px));
-    margin-bottom: 38px;
-    align-items: flex-end;
-    gap: 18px;
-  }
-
-  .references-section__eyebrow {
-    margin-bottom: 10px;
-    font-size: 9px;
+    margin-bottom: 32px;
   }
 
   .references-section h2 {
@@ -214,7 +198,9 @@ html[data-theme='light'] .reference-card__photo {
   }
 
   .references-section__controls {
-    gap: 8px;
+    top: 58%;
+    right: 10px;
+    left: 10px;
   }
 
   .references-section__controls button {
@@ -229,44 +215,35 @@ html[data-theme='light'] .reference-card__photo {
   }
 
   .references-group {
-    --references-gap: 22px;
+    --references-gap: 18px;
   }
 
   .reference-card {
-    width: min(58vw, 212px);
+    width: min(48vw, 180px);
   }
 
   .reference-card__photo {
-    border-radius: 20px;
+    border-radius: 18px;
   }
 
   .reference-card__content {
-    padding-top: 16px;
+    padding-top: 12px;
   }
 
   .reference-card h3 {
-    font-size: 17px;
+    font-size: 15px;
   }
 
   .reference-card p {
-    margin-top: 7px;
-    font-size: 12px;
-    line-height: 1.48;
+    margin-top: 5px;
+    font-size: 10.5px;
+    line-height: 1.44;
   }
 }
 
 @media (max-width: 480px) {
-  .references-section__header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .references-section__controls {
-    align-self: flex-end;
-  }
-
   .reference-card {
-    width: min(61vw, 198px);
+    width: min(47vw, 172px);
   }
 }
 

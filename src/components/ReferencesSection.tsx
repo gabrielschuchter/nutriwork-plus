@@ -69,7 +69,6 @@ export default function ReferencesSection() {
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     const syncMotionPreference = () => {
       reduceMotionRef.current = motionQuery.matches;
-      if (motionQuery.matches) nudgeRemainingRef.current = 0;
     };
     syncMotionPreference();
     motionQuery.addEventListener('change', syncMotionPreference);
@@ -96,8 +95,9 @@ export default function ReferencesSection() {
       previousTime = time;
 
       if (groupWidthRef.current > 0) {
-        const autoplaySpeed = viewport.clientWidth <= 720 ? 16 : 20;
-        const autoplayDelta = reduceMotionRef.current ? 0 : autoplaySpeed * elapsed;
+        const standardSpeed = viewport.clientWidth <= 720 ? 17 : 21;
+        const autoplaySpeed = reduceMotionRef.current ? 8 : standardSpeed;
+        const autoplayDelta = autoplaySpeed * elapsed;
         const easing = 1 - Math.exp(-7 * elapsed);
         const manualDelta = nudgeRemainingRef.current * easing;
 
@@ -139,18 +139,16 @@ export default function ReferencesSection() {
   return (
     <section className="references-section" aria-labelledby="references-title">
       <div className="references-section__header">
-        <div>
-          <p className="references-section__eyebrow">Conhecimento que deixa legado</p>
-          <h2 id="references-title">Referências que fazem parte da nossa trajetória:</h2>
-        </div>
-        <div className="references-section__controls" aria-label="Controles do carrossel de referências">
-          <button type="button" onClick={() => move(-1)} aria-label="Ver referências anteriores">
-            <ArrowIcon direction="left" />
-          </button>
-          <button type="button" onClick={() => move(1)} aria-label="Ver próximas referências">
-            <ArrowIcon direction="right" />
-          </button>
-        </div>
+        <h2 id="references-title">Referências que fazem parte da nossa trajetória</h2>
+      </div>
+
+      <div className="references-section__controls" aria-label="Controles do carrossel de referências">
+        <button type="button" onClick={() => move(-1)} aria-label="Ver referências anteriores">
+          <ArrowIcon direction="left" />
+        </button>
+        <button type="button" onClick={() => move(1)} aria-label="Ver próximas referências">
+          <ArrowIcon direction="right" />
+        </button>
       </div>
 
       <div
