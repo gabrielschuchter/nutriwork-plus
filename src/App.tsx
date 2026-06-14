@@ -27,8 +27,6 @@ const checkout = {
 const contactEmail = 'equipenutriwork@gmail.com';
 const partnerForm = 'https://forms.gle/avn9yrBdbEHkaGg8A';
 const whatsappContact = `https://wa.me/5512997505188?text=${encodeURIComponent('Olá, equipe Nutriwork! Vim pelo site e gostaria de tirar uma dúvida sobre o Nutriwork Plus.')}`;
-const platformVideo = 'https://gruponutriwork.com.br/_assets/video/121f9f7d30c317a4871e3f531eb5287d.mp4';
-
 type Theme = 'light' | 'dark';
 type Page = 'home' | 'estude' | 'partners';
 type LoadingVariant = 'intro' | 'return' | 'route';
@@ -82,7 +80,7 @@ function useScrollReveal(refreshKey: unknown) {
 function useMobileCtaVisibility(refreshKey: unknown) {
   useEffect(() => {
     const cta = document.querySelector<HTMLElement>('.mobile-cta');
-    const protectedSections = document.querySelectorAll('.references-section, .social-proof, .estude-section, .study-benefits, .mentor-section, .pricing-section, .faq-section, .partners-page, .footer');
+    const protectedSections = document.querySelectorAll('.references-section, .estude-section, .study-benefits, .mentor-section, .pricing-section, .faq-section, .partners-page, .footer');
     if (!cta || !protectedSections.length) return;
 
     const visibleSections = new Set<Element>();
@@ -889,95 +887,10 @@ function Hero() {
   );
 }
 
-function PlatformVideo() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [paused, setPaused] = useState(false);
-  const [muted, setMuted] = useState(true);
-
-  const togglePlayback = () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (video.paused) {
-      void video.play();
-    } else {
-      video.pause();
-    }
-  };
-
-  const toggleMute = () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    video.muted = !video.muted;
-    setMuted(video.muted);
-  };
-
-  return (
-    <>
-      <video
-        ref={videoRef}
-        className="dashboard-video"
-        autoPlay
-        muted
-        loop
-        playsInline
-        poster="/assets/platform-dashboard.jpg"
-        aria-label="Previa em video da plataforma Nutriwork"
-        onPlay={() => setPaused(false)}
-        onPause={() => setPaused(true)}
-        onVolumeChange={(event) => setMuted(event.currentTarget.muted)}
-      >
-        <source src={platformVideo} type="video/mp4" />
-      </video>
-      <div className="video-controls" aria-label="Controles do video da plataforma">
-        <button className="video-control" type="button" aria-label={paused ? 'Reproduzir video' : 'Pausar video'} title={paused ? 'Reproduzir video' : 'Pausar video'} onClick={togglePlayback}>
-          <Icon name={paused ? 'play' : 'pause'} />
-        </button>
-        <button className="video-control" type="button" aria-label={muted ? 'Ativar som do video' : 'Silenciar video'} title={muted ? 'Ativar som' : 'Silenciar'} onClick={toggleMute}>
-          <Icon name={muted ? 'volumeOff' : 'volume'} />
-        </button>
-      </div>
-    </>
-  );
-}
-
-function SocialProof() {
-  const stickers = [
-    'Agora sei por onde começar.',
-    'Menos busca. Mais estudo de verdade.',
-    'A teoria finalmente virou prática.',
-    'Bons professores em um só lugar.',
-    'O excesso de conteúdo ficou manejável.',
-    'Estudar deixou de ser tentativa.'
-  ];
-
-  return (
-    <Reveal className="social-proof">
-      <div className="social-proof__stickers social-proof__stickers--top" aria-hidden="true">
-        {stickers.slice(0, 3).map((sticker) => <span className="social-proof__sticker" key={sticker}>“{sticker}”</span>)}
-      </div>
-      <div className="social-proof__quotes">
-        {testimonials.map((item, index) => <Reveal key={item.name}><article className={`testimonial-card testimonial-card--tone-${index + 1} ${item.quote.length > 340 ? 'testimonial-card--long' : ''}`}><header><img src={item.image} alt={`Foto de ${item.name}`} loading="lazy" decoding="async" /><div><h3>{item.name}</h3><p>{item.role}</p></div></header><blockquote>“{item.quote}”</blockquote><div className="stars" aria-label="5 de 5 estrelas">★★★★★</div></article></Reveal>)}
-      </div>
-      <div className="social-proof__stickers social-proof__stickers--bottom" aria-hidden="true">
-        {stickers.slice(3).map((sticker) => <span className="social-proof__sticker" key={sticker}>“{sticker}”</span>)}
-      </div>
-      <Reveal className="testimonial-cta"><p>Se você acredita em nutrição com fundamento científico e<br/>troca genuína de conhecimento, <strong>aqui é o seu lugar.</strong></p><Button href="/#planos">Quero evoluir meus estudos!</Button></Reveal>
-    </Reveal>
-  );
-}
-
 function Platform() {
   return (
     <section id="sobre" className="section platform-section">
       <div className="page-width">
-        <Reveal><SectionHeading accent>Veja o que nossa plataforma tem a oferecer:</SectionHeading></Reveal>
-        <Reveal className="dashboard-shell">
-          <div className="dashboard-lights" aria-hidden="true" />
-          <PlatformVideo />
-        </Reveal>
-        <SocialProof />
         <Reveal className="intro-copy">
           <h3>Um espaço para transformar a forma<br/>como você estuda nutrição.</h3>
           <p>O Nutriwork é uma comunidade de estudantes e profissionais de Nutrição criada para quem busca:</p>
