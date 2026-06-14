@@ -7,77 +7,77 @@ export type ReferenceProfile = {
 export const referenceProfiles: ReferenceProfile[] = [
   {
     name: 'Igor Eckert',
-    image: '/assets/references-cutout/igor-eckert.webp',
+    image: '/assets/references-drive/igor-eckert.webp',
     credential: 'Bacharel em Nutrição e Pesquisador'
   },
   {
     name: 'Thales Faccin',
-    image: '/assets/references-cutout/thales-faccin.webp',
+    image: '/assets/references-drive/thales-faccin.webp',
     credential: 'Nutricionista clínico e esportivo, Criador de Conteúdo'
   },
   {
     name: 'Grazieli Benedetti',
-    image: '/assets/references-cutout/grazieli-benedetti.webp',
+    image: '/assets/references-drive/grazieli-benedetti.webp',
     credential: 'Nutricionista, Doutora e Professora'
   },
   {
     name: 'Beatriz Gracia',
-    image: '/assets/references-cutout/beatriz-gracia.webp',
+    image: '/assets/references-drive/beatriz-gracia.webp',
     credential: 'Nutricionista, Especialista em Esportiva e Obesidade'
   },
   {
     name: 'Davi Costa',
-    image: '/assets/references-cutout/davi-costa.webp',
+    image: '/assets/references-drive/davi-costa.webp',
     credential: 'Estudante de Nutrição, Criador de Conteúdo'
   },
   {
     name: 'Guilherme Costa',
-    image: '/assets/references-cutout/guilherme-costa.webp',
+    image: '/assets/references-drive/guilherme-costa.webp',
     credential: 'Nutricionista Clínico e Esportivo'
   },
   {
     name: 'Guilherme Villas',
-    image: '/assets/references-cutout/guilherme-villas.webp',
+    image: '/assets/references-drive/guilherme-villas.webp',
     credential: 'Nutricionista e Educador Físico'
   },
   {
     name: 'Laura Luna',
-    image: '/assets/references-cutout/laura-luna.webp',
+    image: '/assets/references-drive/laura-luna.webp',
     credential: 'Nutricionista Clínica e Comportamental'
   },
   {
     name: 'Mariana Whelan',
-    image: '/assets/references-cutout/mariana-whelan.webp',
+    image: '/assets/references-drive/mariana-whelan.webp',
     credential: 'Mestranda, Nutricionista Clínica e Esportiva'
   },
   {
     name: 'Rodrigo Pabriça',
-    image: '/assets/references-cutout/rodrigo-pabrica.webp',
+    image: '/assets/references-drive/rodrigo-pabrica.webp',
     credential: 'Nutricionista, Especialista em Bioquímica e Comportamental'
   },
   {
     name: 'Rose Borba',
-    image: '/assets/references-cutout/rose-borba.webp',
+    image: '/assets/references-drive/rose-borba.webp',
     credential: 'Nutricionista, Saúde da Mulher'
   },
   {
     name: 'Victor Pimenta',
-    image: '/assets/references-cutout/victor-pimenta.webp',
+    image: '/assets/references-drive/victor-pimenta.webp',
     credential: 'Nutricionista Clínico e Esportivo'
   },
   {
     name: 'Vini Meraki',
-    image: '/assets/references-cutout/vini-meraki.webp',
+    image: '/assets/references-drive/vini-meraki.webp',
     credential: 'Nutricionista Comportamental & Esportivo'
   },
   {
     name: 'Wyllian Oliveira',
-    image: '/assets/references-cutout/wyllian-oliveira.webp',
+    image: '/assets/references-drive/wyllian-oliveira.webp',
     credential: 'Nutricionista e Educador Físico'
   },
   {
     name: 'Guilherme Moreira',
-    image: '/assets/references-cutout/guilherme-moreira.webp',
+    image: '/assets/references-drive/guilherme-moreira.webp',
     credential: 'Nutricionista Clínico e Esportivo'
   }
 ];

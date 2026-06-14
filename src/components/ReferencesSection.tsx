@@ -26,8 +26,8 @@ function ReferenceGroup({ duplicate, groupRef }: { duplicate: boolean; groupRef?
             <img
               src={profile.image}
               alt={duplicate ? '' : profile.name}
-              width="720"
-              height="900"
+              width="1080"
+              height="1350"
               loading={!duplicate && index < 3 ? 'eager' : 'lazy'}
               decoding="async"
               draggable="false"
