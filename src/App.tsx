@@ -14,6 +14,7 @@ import {
   promises,
   testimonials
 } from './data';
+import ReferencesSection from './components/ReferencesSection';
 
 const checkout = {
   complete: 'https://pay.kiwify.com.br/nyBH9vq',
@@ -81,7 +82,7 @@ function useScrollReveal(refreshKey: unknown) {
 function useMobileCtaVisibility(refreshKey: unknown) {
   useEffect(() => {
     const cta = document.querySelector<HTMLElement>('.mobile-cta');
-    const protectedSections = document.querySelectorAll('.social-proof, .estude-section, .study-benefits, .mentor-section, .pricing-section, .faq-section, .partners-page, .footer');
+    const protectedSections = document.querySelectorAll('.references-section, .social-proof, .estude-section, .study-benefits, .mentor-section, .pricing-section, .faq-section, .partners-page, .footer');
     if (!cta || !protectedSections.length) return;
 
     const visibleSections = new Set<Element>();
@@ -1346,7 +1347,7 @@ function Footer() {
 }
 
 function HomePage() {
-  return <main><Hero/><Platform/><Courses/><Extras/><Evidence/><Mentor/><Pricing/><FAQ/></main>;
+  return <main><Hero/><ReferencesSection/><Platform/><Courses/><Extras/><Evidence/><Mentor/><Pricing/><FAQ/></main>;
 }
 
 function EstudePage() {
