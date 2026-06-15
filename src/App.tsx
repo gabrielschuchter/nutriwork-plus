@@ -528,7 +528,21 @@ function Button({ href, children, variant = 'primary', className = '', external 
 function Header() {
   const [open, setOpen] = useState(false);
   const [theme, setTheme] = useState<Theme>(() => document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
+  const [activeNavHref, setActiveNavHref] = useState(() => {
+    const hash = window.location.hash;
+    return hash && hash !== '#' ? `/${hash}` : '/#inicio';
+  });
   const nextTheme = theme === 'dark' ? 'light' : 'dark';
+
+  useEffect(() => {
+    const updateActiveNav = () => {
+      const hash = window.location.hash;
+      setActiveNavHref(hash && hash !== '#' ? `/${hash}` : '/#inicio');
+    };
+
+    window.addEventListener('hashchange', updateActiveNav);
+    return () => window.removeEventListener('hashchange', updateActiveNav);
+  }, []);
 
   const toggleTheme = () => {
     const root = document.documentElement;
@@ -549,7 +563,10 @@ function Header() {
     <header className="site-header">
       <a className="brand" href="/#inicio" aria-label="Nutriwork Plus, voltar ao início">NUTRIWORK<span>+</span></a>
       <nav className={`nav ${open ? 'nav--open' : ''}`} aria-label="Navegação principal">
-        {navItems.map((item) => <a key={item.href} href={item.href} onClick={() => setOpen(false)}>{item.label}</a>)}
+        {navItems.map((item) => {
+          const active = activeNavHref === item.href;
+          return <a key={item.href} className={active ? 'is-active' : undefined} href={item.href} aria-current={active ? 'page' : undefined} onClick={() => setOpen(false)}>{item.label}</a>;
+        })}
       </nav>
       <div className="header-actions">
         <button className="theme-toggle" type="button" aria-label={`Tema atual: ${theme === 'dark' ? 'escuro' : 'claro'}. Alternar para tema ${nextTheme === 'dark' ? 'escuro' : 'claro'}.`} title={`Alternar para tema ${nextTheme === 'dark' ? 'escuro' : 'claro'}`} onClick={toggleTheme}>
@@ -1204,7 +1221,7 @@ function Evidence() {
       <div className="evidence-glow" aria-hidden="true" />
       <img className="evidence-shape" src="/assets/evidence-shape.webp" alt="" aria-hidden="true" />
       <div className="page-width page-width--narrow">
-        <Reveal><h2><span>Conheça nosso</span><span>módulo especial de</span><em>Nutrição Baseada em Evidências</em><span>e aprenda a:</span></h2></Reveal>
+        <Reveal className="evidence-heading"><h2>Aprenda a usar evidências sem se perder em termos difíceis.</h2><p>No módulo de Nutrição Baseada em Evidências, você aprende a:</p></Reveal>
         <div className="evidence-list">{evidenceLearning.map((item) => <Reveal key={item}><p>{item}</p></Reveal>)}</div>
       </div>
     </section>
@@ -1217,7 +1234,7 @@ function Mentor() {
       <div className="page-width page-width--narrow">
         <Reveal><p className="mentor-kicker">Com acompanhamento especial e <strong>direto</strong> de</p></Reveal>
         <Reveal className="mentor-card">
-          <div className="mentor-copy"><h2>Gabriel Schuchter</h2><h3>Fundador e professor do Nutriwork</h3><p>Bacharel em Nutrição formado pela Universidade Federal de Uberlândia (UFU), pesquisador e consultor de pesquisa, com atuação concentrada em revisões sistemáticas e meta-análises. É analista do Reviews, plataforma que oferece análises críticas e interpretações técnicas de artigos científicos para profissionais da saúde.</p><p>É fundador do Nutriwork, o maior grupo de Nutrição Baseada em Evidências do Brasil, e atua como professor de Prática Baseada em Evidências, já tendo ministrado aulas e formações para cursos de Psicologia, Medicina, Nutrição, Fisioterapia e Enfermagem.</p><p>Além da atuação acadêmica, Gabriel é mentor em Prática Baseada em Evidências e pesquisa científica, orientando alunos e profissionais no desenvolvimento de leitura crítica, projetos científicos e tomada de decisão baseada em evidências. Seu trabalho é voltado a formar profissionais mais críticos, tecnicamente seguros e alinhados com a ciência de alta qualidade aplicada à prática em saúde.</p></div>
+          <div className="mentor-copy"><h2>Gabriel Schuchter</h2><h3>Fundador e professor do Nutriwork</h3><p>Bacharel em Nutrição pela Universidade Federal de Uberlândia (UFU), pesquisador com atuação em revisões sistemáticas e meta-análises, dois dos métodos mais importantes para sintetizar evidências na área da saúde.</p><p>É analista do Reviews, plataforma especializada em análise crítica e interpretação técnica de artigos científicos para profissionais da saúde. Também atua como mentor em Prática Baseada em Evidências, orientando estudantes e profissionais na leitura crítica da literatura, construção de raciocínio científico e tomada de decisão clínica.</p><p>Ao longo da sua trajetória, já ministrou aulas e formações para cursos e profissionais de Nutrição, Medicina, Psicologia, Fisioterapia e Enfermagem, levando a Prática Baseada em Evidências para diferentes áreas da saúde.</p><p>No Nutriwork, Gabriel aproxima a ciência da rotina real de quem estuda Nutrição. Ele mostra como olhar para um artigo sem medo, entender o peso de uma evidência e pensar antes de repetir uma conduta pronta.</p></div>
           <figure className="mentor-photo"><img src="/assets/mentor-gabriel.webp" alt="Gabriel Schuchter, fundador e professor do Nutriwork" width="1070" height="1600" /></figure>
         </Reveal>
       </div>

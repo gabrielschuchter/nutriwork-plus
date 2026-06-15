@@ -89,11 +89,11 @@ export const estudeBenefits = [
 ];
 
 export const evidenceLearning = [
-  'Construir perguntas clínicas bem definidas e direcionadas',
-  'Critérios práticos para avaliar a qualidade de estudos científicos',
-  'Encontrar evidências científicas de forma eficiente e confiável',
-  'Interpretação consciente dos resultados e desfechos dos estudos',
-  'Transformar evidências em decisões aplicáveis à prática'
+  'Construir perguntas clínicas antes de procurar respostas.',
+  'Encontrar evidências científicas de forma mais rápida e organizada.',
+  'Entender resultados sem travar nos termos técnicos.',
+  'Avaliar se um estudo é forte ou fraco.',
+  'Transformar resultados de estudos em decisões para a prática clínica.'
 ];
 
 export const platformPlans = [
