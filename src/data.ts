@@ -27,18 +27,19 @@ export const courses = [
 ];
 
 export const extras = [
-  { icon: 'podcast', title: 'NW Cast', label: 'Conteúdo em áudio para acompanhar onde estiver.' },
-  { icon: 'play', title: 'Aulas gravadas', label: 'Aprenda no seu ritmo e revise quando precisar.' },
-  { icon: 'analysis', title: 'Análise de artigos', label: 'Leitura crítica aplicada à prática baseada em evidências.' },
-  { icon: 'heart', title: 'Comfort Place', label: 'Um espaço de acolhimento dentro da comunidade.' }
+  { icon: 'podcast', title: 'NW Cast', label: 'Áudios para estudar no transporte, na caminhada ou nos intervalos da rotina.' },
+  { icon: 'play', title: 'Aulas gravadas', label: 'Assista quando puder. Revise antes da prova, do estágio ou quando bater a dúvida.' },
+  { icon: 'analysis', title: 'Análise de artigos', label: 'Aprenda a entender o que um estudo realmente diz, sem depender de resumo de internet.' },
+  { icon: 'heart', title: 'Comfort Place', label: 'Um espaço para trocar dificuldades, aliviar a pressão da faculdade e lembrar que você não está sozinho.' }
 ];
 
 export const comparison = [
-  { area: 'Baseado em Evidências', with: 'Conteúdos atualizados e baseados em evidências.', without: 'Conteúdos superficiais, desatualizados ou apenas teóricos.' },
-  { area: 'Alta eficácia', with: 'Interpreta artigos científicos com clareza e aproveita melhor cada leitura.', without: 'Dificuldade em interpretar estudos e aplicar na prática.' },
-  { area: 'Economia de tempo', with: 'Materiais organizados e focados no que realmente importa.', without: 'Horas gastas buscando materiais confiáveis e de qualidade.' },
-  { area: 'Comunidade de apoio', with: 'Grupo de estudos para troca de experiências.', without: 'Jornada solitária, sem trocas e pouco motivadora.' },
-  { area: 'Preparação profissional', with: 'Materiais e encontros que aproximam a teoria da rotina real.', without: 'Dificuldade para transformar conceitos em prática profissional.' }
+  { area: 'O que estudar', with: 'Sabe por onde começar e segue uma sequência lógica.', without: 'Pula de assunto em assunto sem saber o que priorizar.' },
+  { area: 'Artigos científicos', with: 'Entende o que o estudo realmente mostra e quais são seus limites.', without: 'Lê conclusões prontas sem saber se a evidência é boa.' },
+  { area: 'Estágio e prática', with: 'Chega com mais repertório para discutir casos e condutas.', without: 'Sente insegurança para ligar teoria com atendimentos reais.' },
+  { area: 'Tempo de estudo', with: 'Estuda materiais selecionados e evita perder horas procurando conteúdo.', without: 'Gasta tempo caçando PDF, aulas e referências confiáveis.' },
+  { area: 'Confiança profissional', with: 'Consegue justificar melhor suas decisões com base em evidências.', without: 'Repete o que ouviu de professores, influencers ou colegas.' },
+  { area: 'Rede de apoio', with: 'Aprende junto com estudantes e profissionais que têm os mesmos objetivos.', without: 'Estuda sozinho e demora mais para tirar dúvidas importantes.' }
 ];
 
 export const testimonials = [

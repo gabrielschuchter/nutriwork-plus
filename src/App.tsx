@@ -1061,12 +1061,12 @@ function Extras() {
   return (
     <section id="beneficios" className="section extras-section">
       <div className="page-width">
-        <Reveal><SectionHeading>Extras que tornam a experiência<br/>completa para você</SectionHeading></Reveal>
-        <Reveal><p className="extras-lead">Recursos complementares para aprofundar o conteúdo, revisar com autonomia e continuar próximo da comunidade.</p></Reveal>
+        <Reveal><SectionHeading>Aprenda Nutrição entre uma aula,<br/>um estágio ou uma prova</SectionHeading></Reveal>
+        <Reveal><p className="extras-lead">Quando a rotina aperta, você não precisa parar de estudar. Tenha acesso a diferentes formatos para aprender do seu jeito.</p></Reveal>
         <div className="extras-grid">
           {extras.map((extra) => <Reveal key={extra.title}><article className="extra-card"><Icon name={extra.icon}/><div><h3>{extra.title}</h3><p>{extra.label}</p></div></article></Reveal>)}
         </div>
-        <Reveal className="path-intro"><p>Veja como esse projeto se integra à sua<br/>jornada acadêmica e profissional.</p><h2>Dois caminhos.</h2><span>resultados diferentes.</span></Reveal>
+        <Reveal className="path-intro"><p>O que muda quando você estuda com o Nutriwork?</p><h2>Dois caminhos.</h2><span>resultados diferentes.</span></Reveal>
         <Reveal><Comparison /></Reveal>
       </div>
     </section>
