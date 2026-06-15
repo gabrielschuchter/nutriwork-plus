@@ -140,8 +140,7 @@ export default function ReferencesSection() {
     <section className="references-section" aria-labelledby="references-title">
       <div className="references-section__header">
         <div>
-          <p>Confiança construída em rede</p>
-          <h2 id="references-title">Referências que reconhecem a seriedade do Nutriwork</h2>
+          <h2 id="references-title">Referências que fazem parte da nossa trajetória</h2>
         </div>
         <a className="references-section__partner-link" href="/#/parceiros">Quero ser parceiro Nutriwork</a>
       </div>

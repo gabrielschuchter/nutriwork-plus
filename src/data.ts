@@ -9,36 +9,36 @@ export const navItems = [
 ];
 
 export const promises = [
-  { icon: 'brain', title: 'Pensamento crítico para estudar e decidir com mais segurança' },
-  { icon: 'structure', title: 'Conteúdo organizado para avançar sem se perder' },
-  { icon: 'evidence', title: 'Formação conectada às melhores evidências disponíveis' }
+  { icon: 'brain', title: 'Formação de pensamento crítico nos estudos' },
+  { icon: 'structure', title: 'Aprendizado prático e estruturado' },
+  { icon: 'evidence', title: 'Conteúdo fundamentado em evidências científicas' }
 ];
 
 export const courses = [
-  { image: '/assets/course-intro.jpg', title: 'Introdução à Nutrição', description: 'Construa uma base sólida para compreender a Nutrição com mais clareza desde o início.' },
-  { image: '/assets/course-biochemistry.jpg', title: 'Bioquímica da Nutrição', description: 'Entenda como carboidratos, proteínas e outros nutrientes participam dos processos do organismo.' },
-  { image: '/assets/course-evidence.jpg', title: 'Nutrição Baseada em Evidências', description: 'Aprenda a buscar, interpretar e aplicar artigos científicos com mais segurança.' },
-  { image: '/assets/course-sports.jpg', title: 'Nutrição Esportiva', description: 'Aprofunde decisões ligadas à performance esportiva com materiais baseados em evidências.' },
-  { image: '/assets/course-behavior.jpg', title: 'Nutrição Comportamental', description: 'Compreenda o comportamento alimentar para conduzir uma prática clínica mais consistente.' },
-  { image: '/assets/course-physiology.jpg', title: 'Fisiologia Humana', description: 'Conecte os fundamentos da fisiologia aos mecanismos metabólicos e hormonais.' },
-  { image: '/assets/course-clinical.jpg', title: 'Nutrição Clínica', description: 'Ganhe repertório para compreender condições clínicas e qualificar o cuidado nutricional.' },
-  { image: '/assets/course-maternal.jpg', title: 'Nutrição Materno-infantil', description: 'Avance em aleitamento, introdução alimentar e temas centrais do cuidado materno-infantil.' },
-  { image: '/assets/course-community.jpg', title: 'Saúde Coletiva', description: 'Entenda temas como classificação NOVA e PNAN dentro da realidade da saúde coletiva.' }
+  { image: '/assets/course-intro.jpg', title: 'Introdução à Nutrição', description: 'Um curso introdutório, abordando os principais aspectos da Nutrição.' },
+  { image: '/assets/course-biochemistry.jpg', title: 'Bioquímica da Nutrição', description: 'Tudo sobre carboidratos, proteínas, assim como outros nutrientes!' },
+  { image: '/assets/course-evidence.jpg', title: 'Nutrição Baseada em Evidências', description: 'Busca, interpretação e implementação de artigos científicos na prática clínica.' },
+  { image: '/assets/course-sports.jpg', title: 'Nutrição Esportiva', description: 'Veja como a Nutrição pode auxiliar na performance esportiva com materiais baseados em evidências.' },
+  { image: '/assets/course-behavior.jpg', title: 'Nutrição Comportamental', description: 'Compreenda como o comportamento alimentar é crucial para a prática clínica baseada em evidências.' },
+  { image: '/assets/course-physiology.jpg', title: 'Fisiologia Humana', description: 'Compreenda fundamentos da fisiologia humana relacionando o corpo aos mecanismos metabólicos e hormonais.' },
+  { image: '/assets/course-clinical.jpg', title: 'Nutrição Clínica', description: 'Aprenda sobre as principais condições clínicas, se especializando no cuidado de cada uma.' },
+  { image: '/assets/course-maternal.jpg', title: 'Nutrição Materno-infantil', description: 'Entenda sobre aleitamento materno, introdução alimentar e outros temas relacionados.' },
+  { image: '/assets/course-community.jpg', title: 'Saúde Coletiva', description: 'Classificação NOVA, PNAN, entre outros temas relacionados à saúde coletiva.' }
 ];
 
 export const extras = [
-  { icon: 'podcast', title: 'NW Cast', label: 'Continue aprendendo em áudio, mesmo nos dias mais corridos.' },
-  { icon: 'play', title: 'Aulas gravadas', label: 'Avance no seu ritmo e volte aos pontos importantes quando precisar.' },
-  { icon: 'analysis', title: 'Análise de artigos', label: 'Desenvolva leitura crítica para não depender de interpretações superficiais.' },
-  { icon: 'heart', title: 'Comfort Place', label: 'Encontre acolhimento e troca em uma comunidade que entende sua jornada.' }
+  { icon: 'podcast', title: 'NW Cast', label: 'Conteúdo em áudio para acompanhar onde estiver.' },
+  { icon: 'play', title: 'Aulas gravadas', label: 'Aprenda no seu ritmo e revise quando precisar.' },
+  { icon: 'analysis', title: 'Análise de artigos', label: 'Leitura crítica aplicada à prática baseada em evidências.' },
+  { icon: 'heart', title: 'Comfort Place', label: 'Um espaço de acolhimento dentro da comunidade.' }
 ];
 
 export const comparison = [
-  { area: 'Baseado em evidências', with: 'Estuda com conteúdos atualizados e critérios científicos claros.', without: 'Fica exposto a conteúdos superficiais, desatualizados ou apenas teóricos.' },
-  { area: 'Clareza na leitura', with: 'Interpreta artigos com mais segurança e aproveita melhor cada leitura.', without: 'Trava diante dos estudos e tem dificuldade para avaliar o que é confiável.' },
-  { area: 'Economia de tempo', with: 'Encontra materiais organizados e focados no que realmente importa.', without: 'Gasta horas reunindo fontes sem saber quais merecem atenção.' },
-  { area: 'Comunidade de apoio', with: 'Troca experiências e dúvidas com pessoas que vivem desafios parecidos.', without: 'Enfrenta uma jornada mais solitária e difícil de sustentar.' },
-  { area: 'Preparação profissional', with: 'Aproxima a teoria das decisões que encontrará na prática.', without: 'Acumula conceitos, mas sente dificuldade para transformá-los em ação.' }
+  { area: 'Baseado em Evidências', with: 'Conteúdos atualizados e baseados em evidências.', without: 'Conteúdos superficiais, desatualizados ou apenas teóricos.' },
+  { area: 'Alta eficácia', with: 'Interpreta artigos científicos com clareza e aproveita melhor cada leitura.', without: 'Dificuldade em interpretar estudos e aplicar na prática.' },
+  { area: 'Economia de tempo', with: 'Materiais organizados e focados no que realmente importa.', without: 'Horas gastas buscando materiais confiáveis e de qualidade.' },
+  { area: 'Comunidade de apoio', with: 'Grupo de estudos para troca de experiências.', without: 'Jornada solitária, sem trocas e pouco motivadora.' },
+  { area: 'Preparação profissional', with: 'Materiais e encontros que aproximam a teoria da rotina real.', without: 'Dificuldade para transformar conceitos em prática profissional.' }
 ];
 
 export const testimonials = [
@@ -102,10 +102,10 @@ export const platformPlans = [
 ];
 
 export const platformBenefits = [
-  'Acesso completo à plataforma Nutriwork',
-  'Conteúdos organizados por área e atualizados continuamente',
-  'Liberdade para estudar pelo computador ou celular',
-  'Comunidade Nutriwork para troca e apoio'
+  'Acesso à plataforma Nutriwork',
+  'Conteúdos organizados por área e atualizações contínuas',
+  'Acesso via computador e celular',
+  'Comunidade Nutriwork'
 ];
 
 export const faqItems = [

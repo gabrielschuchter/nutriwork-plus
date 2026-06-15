@@ -1463,9 +1463,7 @@ html[data-theme='light'] .estude-section .objections article h3 { color: #14233c
 .pricing-card--estude::before { content: ''; position: absolute; top: -72px; left: 14%; right: 14%; height: 1px; background: linear-gradient(90deg, transparent, rgba(120,175,255,.58), transparent); box-shadow: 0 0 28px rgba(30,111,255,.36); }
 .pricing-card h2 { margin: 0; font-size: clamp(26px, 3vw, 42px); }
 .pricing-card h3 { margin: 5px 0 35px; font-size: clamp(20px, 2vw, 29px); font-weight: 400; }
-.featured-badge { position: absolute; z-index: 3; top: -54px; right: 24px; width: 154px; aspect-ratio: 3 / 4; display: grid; place-items: center; filter: drop-shadow(0 12px 18px rgba(255,187,21,.36)); }
-.featured-badge img { width: 100%; height: 100%; display: block; object-fit: contain; }
-.featured-badge span { position: absolute; top: 35%; left: 50%; width: 68%; transform: translate(-50%, -50%); color: #765019; font-size: 15px; font-weight: 900; line-height: .94; letter-spacing: -.02em; text-align: center; text-transform: uppercase; text-shadow: 0 1px rgba(255,255,255,.64); }
+.featured-badge { position: absolute; z-index: 3; top: -42px; right: 28px; width: 145px; filter: drop-shadow(0 12px 18px rgba(255,187,21,.36)); }
 .corner-badge { position: absolute; top: -20px; right: 50px; padding: 20px 38px; border-radius: 16px; color: var(--button-text); background: linear-gradient(#071732, #0a6fff); box-shadow: 0 0 25px rgba(15,100,255,.6); font-size: 27px; text-transform: uppercase; }
 .price { margin: 22px 0 24px; font-size: clamp(76px, 8vw, 118px); font-weight: 300; line-height: 1; letter-spacing: -.07em; text-shadow: var(--price-shadow); }
 .price > span { margin-right: .13em; font-size: .56em; }
@@ -1816,8 +1814,7 @@ html[data-theme='light'] .scarcity { color: #795000; background: linear-gradient
   .pricing-card--featured h2 { max-width: 100%; }
   .pricing-card--estude { margin-top: 120px; }
   .pricing-card--estude::before { top: -62px; left: 10%; right: 10%; }
-  .featured-badge { top: -42px; right: 10px; width: 118px; }
-  .featured-badge span { font-size: 11.5px; }
+  .featured-badge { top: -33px; right: 12px; width: 110px; }
   .corner-badge { top: -15px; right: 20px; padding: 12px 19px; font-size: 17px; }
   .price { font-size: clamp(68px, 21vw, 100px); }
   .pricing-card li { gap: 12px; font-size: 14px; }
@@ -1909,8 +1906,7 @@ html[data-theme='light'] .scarcity { color: #795000; background: linear-gradient
   .course-card__overlay p { font-size: 10px; }
   .hero h1 { font-size: 52px; }
   .hero h1 span { display: block; margin: 8px 0 0; }
-  .featured-badge { width: 104px; }
-  .featured-badge span { font-size: 10px; }
+  .featured-badge { width: 94px; }
   .footer h2 { font-size: 32px; }
   .footer-grid a { font-size: 16px; }
   .footer-grid .icon { width: 30px; height: 30px; }

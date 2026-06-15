@@ -875,9 +875,9 @@ function Hero() {
       <Reveal className="hero__layout">
         <div className="hero__content">
           <h1>Nutriwork<span>plus.</span></h1>
-          <p>Menos conteúdo solto. Mais clareza para estudar Nutrição com método e evidência.</p>
+          <p>A plataforma feita para todo estudante de Nutrição.</p>
           <div className="hero-actions">
-            <Button href="/#planos" variant="outline">Quero fazer parte</Button>
+            <Button href="/#planos" variant="outline">Venha fazer parte</Button>
             <Button href="https://plus.gruponutriwork.com.br/" variant="outline" className="member-cta" external>Já sou membro(a)</Button>
           </div>
         </div>
@@ -892,13 +892,13 @@ function Platform() {
     <section id="sobre" className="section platform-section">
       <div className="page-width">
         <Reveal className="intro-copy">
-          <h3>Uma base para sair do estudo fragmentado<br/>e avançar com mais segurança.</h3>
-          <p>O Nutriwork reúne estudantes e profissionais de Nutrição que querem desenvolver:</p>
+          <h3>Um espaço para transformar a forma<br/>como você estuda nutrição.</h3>
+          <p>O Nutriwork é uma comunidade de estudantes e profissionais de Nutrição criada para quem busca:</p>
         </Reveal>
         <div className="promise-grid">
           {promises.map((item) => <Reveal key={item.title} className="glass-card promise-card"><Icon name={item.icon}/><h3>{item.title}</h3></Reveal>)}
         </div>
-        <Reveal><p className="mission">Para que cada etapa da formação aproxime você de uma<br/><strong>atuação mais segura, ética e atualizada.</strong></p></Reveal>
+        <Reveal><p className="mission">Nosso objetivo é preparar nutricionistas para uma<br/><strong>atuação mais segura, ética e atualizada.</strong></p></Reveal>
       </div>
     </section>
   );
@@ -1017,7 +1017,7 @@ function Courses() {
   return (
     <section className="section courses-section">
       <div className="page-width">
-        <Reveal><SectionHeading>Escolha onde aprofundar sua formação</SectionHeading></Reveal>
+        <Reveal><SectionHeading>Veja no que você vai se especializar</SectionHeading></Reveal>
         <Reveal>
           <div className="courses-carousel" role="region" aria-roledescription="carrossel" aria-label="Especializações Nutriwork" aria-describedby="courses-help">
             <p className="sr-only" id="courses-help">Carrossel automático com nove especializações. Arraste para navegar. Passe o mouse ou mantenha o foco no carrossel para pausar.</p>
@@ -1061,12 +1061,12 @@ function Extras() {
   return (
     <section id="beneficios" className="section extras-section">
       <div className="page-width">
-        <Reveal><SectionHeading>Recursos para estudar melhor<br/>e continuar avançando</SectionHeading></Reveal>
-        <Reveal><p className="extras-lead">Aprofunde conteúdos, revise com autonomia e mantenha uma rede de apoio por perto durante a sua formação.</p></Reveal>
+        <Reveal><SectionHeading>Extras que tornam a experiência<br/>completa para você</SectionHeading></Reveal>
+        <Reveal><p className="extras-lead">Recursos complementares para aprofundar o conteúdo, revisar com autonomia e continuar próximo da comunidade.</p></Reveal>
         <div className="extras-grid">
           {extras.map((extra) => <Reveal key={extra.title}><article className="extra-card"><Icon name={extra.icon}/><div><h3>{extra.title}</h3><p>{extra.label}</p></div></article></Reveal>)}
         </div>
-        <Reveal className="path-intro"><p>O acesso à informação é amplo. A diferença está em<br/>como você organiza, interpreta e aplica o que estuda.</p><h2>Dois caminhos.</h2><span>resultados diferentes.</span></Reveal>
+        <Reveal className="path-intro"><p>Veja como esse projeto se integra à sua<br/>jornada acadêmica e profissional.</p><h2>Dois caminhos.</h2><span>resultados diferentes.</span></Reveal>
         <Reveal><Comparison /></Reveal>
       </div>
     </section>
@@ -1204,7 +1204,7 @@ function Evidence() {
       <div className="evidence-glow" aria-hidden="true" />
       <img className="evidence-shape" src="/assets/evidence-shape.webp" alt="" aria-hidden="true" />
       <div className="page-width page-width--narrow">
-        <Reveal><h2><span>Desenvolva uma habilidade que acompanha</span><span>toda a sua formação com o módulo de</span><em>Nutrição Baseada em Evidências</em><span>e aprenda a:</span></h2></Reveal>
+        <Reveal><h2><span>Conheça nosso</span><span>módulo especial de</span><em>Nutrição Baseada em Evidências</em><span>e aprenda a:</span></h2></Reveal>
         <div className="evidence-list">{evidenceLearning.map((item) => <Reveal key={item}><p>{item}</p></Reveal>)}</div>
       </div>
     </section>
@@ -1215,7 +1215,7 @@ function Mentor() {
   return (
     <section className="section mentor-section">
       <div className="page-width page-width--narrow">
-        <Reveal><p className="mentor-kicker">Com acompanhamento especial e <strong>direto</strong> de quem vive a pesquisa na prática</p></Reveal>
+        <Reveal><p className="mentor-kicker">Com acompanhamento especial e <strong>direto</strong> de</p></Reveal>
         <Reveal className="mentor-card">
           <div className="mentor-copy"><h2>Gabriel Schuchter</h2><h3>Fundador e professor do Nutriwork</h3><p>Bacharel em Nutrição formado pela Universidade Federal de Uberlândia (UFU), pesquisador e consultor de pesquisa, com atuação concentrada em revisões sistemáticas e meta-análises. É analista do Reviews, plataforma que oferece análises críticas e interpretações técnicas de artigos científicos para profissionais da saúde.</p><p>É fundador do Nutriwork, o maior grupo de Nutrição Baseada em Evidências do Brasil, e atua como professor de Prática Baseada em Evidências, já tendo ministrado aulas e formações para cursos de Psicologia, Medicina, Nutrição, Fisioterapia e Enfermagem.</p><p>Além da atuação acadêmica, Gabriel é mentor em Prática Baseada em Evidências e pesquisa científica, orientando alunos e profissionais no desenvolvimento de leitura crítica, projetos científicos e tomada de decisão baseada em evidências. Seu trabalho é voltado a formar profissionais mais críticos, tecnicamente seguros e alinhados com a ciência de alta qualidade aplicada à prática em saúde.</p></div>
           <figure className="mentor-photo"><img src="/assets/mentor-gabriel.webp" alt="Gabriel Schuchter, fundador e professor do Nutriwork" width="1070" height="1600" /></figure>
@@ -1235,9 +1235,9 @@ function Pricing() {
   return (
     <section id="planos" className="section pricing-section">
       <div className="page-width page-width--narrow">
-        <Reveal><SectionHeading>Escolha como começar sua evolução<br/>dentro do Nutriwork</SectionHeading></Reveal>
-        <Reveal className="pricing-card pricing-card--featured"><div className="featured-badge" aria-label="Plano destaque"><img src="/assets/featured-badge.webp" alt=""/><span>Plano<br/>destaque</span></div><h2>Nutriwork Plus Anual + ESTUDE</h2><h3>Doze meses de formação e um método para organizar seus estudos.</h3><Price value="24,90" monthly/><span className="payment-note">12 meses de acesso • pagamento anual</span><ul>{['Acesso completo aos cursos e recursos do Nutriwork Plus.','12 meses para aprofundar conteúdos e revisar quando precisar.','Livro ESTUDE incluído para organizar prioridades e rotina.','Atualizações contínuas durante o período de acesso.','Comunidade para trocar dúvidas e continuar evoluindo.'].map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul><div className="pricing-actions"><Button href={checkout.complete} external>Escolher o plano anual</Button><Button href="/#/estude" variant="outline" className="pricing-card__secondary">Conhecer o ESTUDE</Button></div><div className="scarcity">Plano anual + livro ESTUDE incluído</div></Reveal>
-        <Reveal className="platform-pricing"><header><div><h2>Outros planos Nutriwork</h2><p>Comece pelo período que faz sentido para a sua rotina.</p></div><span>À vista</span></header><div className="mini-plans">{platformPlans.map((plan, index) => <article key={plan.title}><h3>{plan.title}</h3><Price value={plan.price}/><p>por mês.</p><Button href={planLinks[index]} external>Escolher plano</Button></article>)}</div><ul>{platformBenefits.map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul></Reveal>
+        <Reveal><SectionHeading>Planos pensados para se adaptar à sua<br/>rotina de estudos</SectionHeading></Reveal>
+        <Reveal className="pricing-card pricing-card--featured"><img className="featured-badge" src="/assets/featured-badge.webp" alt="Plano destaque"/><h2>Nutriwork Plus Anual + ESTUDE</h2><h3>Doze meses de formação e um método para organizar seus estudos.</h3><Price value="24,90" monthly/><span className="payment-note">12 meses de acesso • pagamento anual</span><ul>{['Acesso completo aos cursos e recursos do Nutriwork Plus.','12 meses para aprofundar conteúdos e revisar quando precisar.','Livro ESTUDE incluído para organizar prioridades e rotina.','Atualizações contínuas durante o período de acesso.','Comunidade para trocar dúvidas e continuar evoluindo.'].map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul><div className="pricing-actions"><Button href={checkout.complete} external>Escolher o plano anual</Button><Button href="/#/estude" variant="outline" className="pricing-card__secondary">Conhecer o ESTUDE</Button></div><div className="scarcity">🔥 últimas vagas restantes!</div></Reveal>
+        <Reveal className="platform-pricing"><header><div><h2>Planos nutriwork</h2><p>Acesso à plataforma Nutriwork.</p></div><span>À vista</span></header><div className="mini-plans">{platformPlans.map((plan, index) => <article key={plan.title}><h3>{plan.title}</h3><Price value={plan.price}/><p>por mês.</p><Button href={planLinks[index]} external>Quero assinar</Button></article>)}</div><ul>{platformBenefits.map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul></Reveal>
       </div>
     </section>
   );
