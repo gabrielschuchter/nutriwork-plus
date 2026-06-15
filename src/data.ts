@@ -9,36 +9,36 @@ export const navItems = [
 ];
 
 export const promises = [
-  { icon: 'brain', title: 'Formação de pensamento crítico nos estudos' },
-  { icon: 'structure', title: 'Aprendizado prático e estruturado' },
-  { icon: 'evidence', title: 'Conteúdo fundamentado em evidências científicas' }
+  { icon: 'brain', title: 'Pensamento crítico para estudar e decidir com mais segurança' },
+  { icon: 'structure', title: 'Conteúdo organizado para avançar sem se perder' },
+  { icon: 'evidence', title: 'Formação conectada às melhores evidências disponíveis' }
 ];
 
 export const courses = [
-  { image: '/assets/course-intro.jpg', title: 'Introdução à Nutrição', description: 'Um curso introdutório, abordando os principais aspectos da Nutrição.' },
-  { image: '/assets/course-biochemistry.jpg', title: 'Bioquímica da Nutrição', description: 'Tudo sobre carboidratos, proteínas, assim como outros nutrientes!' },
-  { image: '/assets/course-evidence.jpg', title: 'Nutrição Baseada em Evidências', description: 'Busca, interpretação e implementação de artigos científicos na prática clínica.' },
-  { image: '/assets/course-sports.jpg', title: 'Nutrição Esportiva', description: 'Veja como a Nutrição pode auxiliar na performance esportiva com materiais baseados em evidências.' },
-  { image: '/assets/course-behavior.jpg', title: 'Nutrição Comportamental', description: 'Compreenda como o comportamento alimentar é crucial para a prática clínica baseada em evidências.' },
-  { image: '/assets/course-physiology.jpg', title: 'Fisiologia Humana', description: 'Compreenda fundamentos da fisiologia humana relacionando o corpo aos mecanismos metabólicos e hormonais.' },
-  { image: '/assets/course-clinical.jpg', title: 'Nutrição Clínica', description: 'Aprenda sobre as principais condições clínicas, se especializando no cuidado de cada uma.' },
-  { image: '/assets/course-maternal.jpg', title: 'Nutrição Materno-infantil', description: 'Entenda sobre aleitamento materno, introdução alimentar e outros temas relacionados.' },
-  { image: '/assets/course-community.jpg', title: 'Saúde Coletiva', description: 'Classificação NOVA, PNAN, entre outros temas relacionados à saúde coletiva.' }
+  { image: '/assets/course-intro.jpg', title: 'Introdução à Nutrição', description: 'Construa uma base sólida para compreender a Nutrição com mais clareza desde o início.' },
+  { image: '/assets/course-biochemistry.jpg', title: 'Bioquímica da Nutrição', description: 'Entenda como carboidratos, proteínas e outros nutrientes participam dos processos do organismo.' },
+  { image: '/assets/course-evidence.jpg', title: 'Nutrição Baseada em Evidências', description: 'Aprenda a buscar, interpretar e aplicar artigos científicos com mais segurança.' },
+  { image: '/assets/course-sports.jpg', title: 'Nutrição Esportiva', description: 'Aprofunde decisões ligadas à performance esportiva com materiais baseados em evidências.' },
+  { image: '/assets/course-behavior.jpg', title: 'Nutrição Comportamental', description: 'Compreenda o comportamento alimentar para conduzir uma prática clínica mais consistente.' },
+  { image: '/assets/course-physiology.jpg', title: 'Fisiologia Humana', description: 'Conecte os fundamentos da fisiologia aos mecanismos metabólicos e hormonais.' },
+  { image: '/assets/course-clinical.jpg', title: 'Nutrição Clínica', description: 'Ganhe repertório para compreender condições clínicas e qualificar o cuidado nutricional.' },
+  { image: '/assets/course-maternal.jpg', title: 'Nutrição Materno-infantil', description: 'Avance em aleitamento, introdução alimentar e temas centrais do cuidado materno-infantil.' },
+  { image: '/assets/course-community.jpg', title: 'Saúde Coletiva', description: 'Entenda temas como classificação NOVA e PNAN dentro da realidade da saúde coletiva.' }
 ];
 
 export const extras = [
-  { icon: 'podcast', title: 'NW Cast', label: 'Conteúdo em áudio para acompanhar onde estiver.' },
-  { icon: 'play', title: 'Aulas gravadas', label: 'Aprenda no seu ritmo e revise quando precisar.' },
-  { icon: 'analysis', title: 'Análise de artigos', label: 'Leitura crítica aplicada à prática baseada em evidências.' },
-  { icon: 'heart', title: 'Comfort Place', label: 'Um espaço de acolhimento dentro da comunidade.' }
+  { icon: 'podcast', title: 'NW Cast', label: 'Continue aprendendo em áudio, mesmo nos dias mais corridos.' },
+  { icon: 'play', title: 'Aulas gravadas', label: 'Avance no seu ritmo e volte aos pontos importantes quando precisar.' },
+  { icon: 'analysis', title: 'Análise de artigos', label: 'Desenvolva leitura crítica para não depender de interpretações superficiais.' },
+  { icon: 'heart', title: 'Comfort Place', label: 'Encontre acolhimento e troca em uma comunidade que entende sua jornada.' }
 ];
 
 export const comparison = [
-  { area: 'Baseado em Evidências', with: 'Conteúdos atualizados e baseados em evidências.', without: 'Conteúdos superficiais, desatualizados ou apenas teóricos.' },
-  { area: 'Alta eficácia', with: 'Interpreta artigos científicos com clareza e aproveita melhor cada leitura.', without: 'Dificuldade em interpretar estudos e aplicar na prática.' },
-  { area: 'Economia de tempo', with: 'Materiais organizados e focados no que realmente importa.', without: 'Horas gastas buscando materiais confiáveis e de qualidade.' },
-  { area: 'Comunidade de apoio', with: 'Grupo de estudos para troca de experiências.', without: 'Jornada solitária, sem trocas e pouco motivadora.' },
-  { area: 'Preparação profissional', with: 'Materiais e encontros que aproximam a teoria da rotina real.', without: 'Dificuldade para transformar conceitos em prática profissional.' }
+  { area: 'Baseado em evidências', with: 'Estuda com conteúdos atualizados e critérios científicos claros.', without: 'Fica exposto a conteúdos superficiais, desatualizados ou apenas teóricos.' },
+  { area: 'Clareza na leitura', with: 'Interpreta artigos com mais segurança e aproveita melhor cada leitura.', without: 'Trava diante dos estudos e tem dificuldade para avaliar o que é confiável.' },
+  { area: 'Economia de tempo', with: 'Encontra materiais organizados e focados no que realmente importa.', without: 'Gasta horas reunindo fontes sem saber quais merecem atenção.' },
+  { area: 'Comunidade de apoio', with: 'Troca experiências e dúvidas com pessoas que vivem desafios parecidos.', without: 'Enfrenta uma jornada mais solitária e difícil de sustentar.' },
+  { area: 'Preparação profissional', with: 'Aproxima a teoria das decisões que encontrará na prática.', without: 'Acumula conceitos, mas sente dificuldade para transformá-los em ação.' }
 ];
 
 export const testimonials = [
@@ -69,22 +69,22 @@ export const testimonials = [
 ];
 
 export const estudeAudience = [
-  'Quer transformar esforço em rendimento.',
-  'Busca mais direção nos estudos ao longo da graduação e fora dela.',
-  'Procura mais clareza e menos sobrecarga.',
-  'Quer uma rotina de estudos produtiva e mais eficiente.'
+  'Quer transformar horas de estudo em progresso mais perceptível.',
+  'Busca direção para decidir o que merece prioridade agora.',
+  'Precisa reduzir a sobrecarga sem abandonar seus objetivos.',
+  'Quer construir uma rotina possível de manter, inclusive nas semanas difíceis.'
 ];
 
 export const estudeObjections = [
-  'Se sobrecarrega com excesso de conteúdo.',
-  'Não consegue manter constância nos estudos.',
-  'Estuda muito, mas sente que rende pouco.'
+  'Tenta dar conta de tudo e termina sem saber o que realmente avançou.',
+  'Recomeça a rotina de estudos toda semana.',
+  'Dedica tempo, mas ainda sente que o esforço não se converte em resultado.'
 ];
 
 export const estudeBenefits = [
-  { title: 'Orientações claras e práticas', text: 'Saiba exatamente o que fazer em cada etapa do seu cronograma, com estratégias baseadas em evidências.' },
-  { title: 'Material de apoio para facilitar a aplicação', text: 'Checklists e planners prontos para imprimir ou usar no digital.' },
-  { title: 'Estrutura pensada para a realidade do estudante', text: 'Um método flexível que respeita sua carga horária, rotina e fatores que influenciam o desempenho cognitivo.' }
+  { title: 'Decisões mais claras para a sua rotina', text: 'Defina prioridades e organize cada etapa do cronograma com estratégias baseadas em evidências.' },
+  { title: 'Ferramentas para sair da intenção e aplicar', text: 'Use checklists e planners prontos para imprimir ou preencher no digital.' },
+  { title: 'Um método que cabe na vida real', text: 'Adapte os estudos à sua carga horária e aos fatores que influenciam o desempenho cognitivo.' }
 ];
 
 export const evidenceLearning = [
@@ -102,39 +102,47 @@ export const platformPlans = [
 ];
 
 export const platformBenefits = [
-  'Acesso à plataforma Nutriwork',
-  'Conteúdos organizados por área e atualizações contínuas',
-  'Acesso via computador e celular',
-  'Comunidade Nutriwork'
+  'Acesso completo à plataforma Nutriwork',
+  'Conteúdos organizados por área e atualizados continuamente',
+  'Liberdade para estudar pelo computador ou celular',
+  'Comunidade Nutriwork para troca e apoio'
 ];
 
 export const faqItems = [
   {
     question: 'Para quem é o Nutriwork Plus?',
-    answer: 'Para estudantes e profissionais de Nutrição que buscam conteúdos organizados, pensamento crítico e uma formação alinhada às evidências científicas.'
+    answer: 'Para estudantes de Nutrição que querem construir uma base mais segura e para profissionais que desejam revisar fundamentos, atualizar conhecimentos e tomar decisões com maior respaldo científico.'
   },
   {
     question: 'O que encontro dentro da plataforma?',
-    answer: 'Cursos por áreas da Nutrição, aulas gravadas, análises de artigos, conteúdos em áudio e acesso à comunidade Nutriwork.'
+    answer: 'Cursos organizados por áreas da Nutrição, aulas gravadas, análises de artigos, conteúdos em áudio e acesso à comunidade Nutriwork. A proposta é reunir, em um só lugar, recursos que ajudam você a estudar com mais direção e profundidade.'
   },
   {
-    question: 'Posso acessar pelo celular?',
-    answer: 'Sim. A plataforma pode ser acessada pelo computador e pelo celular, permitindo estudar de acordo com a sua rotina.'
+    question: 'Preciso ter experiência com artigos científicos?',
+    answer: 'Não. Os conteúdos foram estruturados para desenvolver esse raciocínio de forma progressiva. Você pode começar pelos fundamentos e avançar até uma leitura mais crítica e aplicável das evidências.'
+  },
+  {
+    question: 'Consigo estudar mesmo com uma rotina corrida?',
+    answer: 'Sim. As aulas são gravadas e o acesso funciona pelo computador e pelo celular. Assim, você pode avançar no seu ritmo, retomar conteúdos e encaixar os estudos no tempo que realmente tem disponível.'
   },
   {
     question: 'Qual é o período de acesso?',
-    answer: 'O período acompanha o plano escolhido: mensal, trimestral, semestral ou anual. O plano completo mantém o acesso à plataforma durante um ano.'
+    answer: 'O acesso acompanha o plano escolhido: mensal, trimestral, semestral ou anual. No plano anual em destaque, você permanece com acesso à plataforma por 12 meses.'
   },
   {
-    question: 'O guia Estude está incluído em todos os planos?',
-    answer: 'O guia pode ser adquirido separadamente e também faz parte da oferta anual completa indicada nesta página.'
+    question: 'O livro ESTUDE está incluído em todos os planos?',
+    answer: 'Não. O ESTUDE pode ser adquirido separadamente e está incluído no plano anual em destaque, que reúne a experiência mais completa do Nutriwork.'
   },
   {
     question: 'Como funciona o pagamento?',
-    answer: 'Ao escolher um plano, você é direcionado para o checkout seguro da Kiwify, onde confere as condições e conclui a compra.'
+    answer: 'Ao escolher um plano, você é direcionado ao checkout seguro da Kiwify. Antes de concluir, poderá conferir o valor, as condições disponíveis e todos os dados da compra.'
+  },
+  {
+    question: 'O Nutriwork substitui a graduação?',
+    answer: 'Não. O Nutriwork complementa a formação acadêmica com conteúdos organizados, leitura crítica e contato mais próximo com a prática baseada em evidências.'
   },
   {
     question: 'Ainda tenho uma dúvida. Como falo com a equipe?',
-    answer: 'Você pode entrar em contato pelo WhatsApp (12) 99750-5188 ou pelo e-mail equipenutriwork@gmail.com.'
+    answer: 'Fale com a equipe pelo WhatsApp (12) 99750-5188 ou pelo e-mail equipenutriwork@gmail.com. Você recebe orientação antes de decidir e também conta com suporte para questões de acesso.'
   }
 ];
