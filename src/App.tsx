@@ -830,8 +830,8 @@ function HeroMonitor() {
     const x = (event.clientX - rect.left) / rect.width - 0.5;
     const y = (event.clientY - rect.top) / rect.height - 0.5;
 
-    stage.style.setProperty('--hero-tilt-x', `${y * -1.1}deg`);
-    stage.style.setProperty('--hero-tilt-y', `${x * 2.1}deg`);
+    stage.style.setProperty('--hero-tilt-x', `${y * -1.4}deg`);
+    stage.style.setProperty('--hero-tilt-y', `${x * 2.8}deg`);
     stage.style.setProperty('--hero-shift-x', `${x * 2}px`);
     stage.style.setProperty('--hero-shift-y', `${y * 1.5}px`);
   };
