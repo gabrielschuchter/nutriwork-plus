@@ -892,13 +892,13 @@ function Platform() {
     <section id="sobre" className="section platform-section">
       <div className="page-width">
         <Reveal className="intro-copy">
-          <h3>Um espaço para transformar a forma<br/>como você estuda nutrição.</h3>
-          <p>O Nutriwork é uma comunidade de estudantes e profissionais de Nutrição criada para quem busca:</p>
+          <h3>Estudar Nutrição não deveria parecer tão confuso.</h3>
+          <p>Existe muito conteúdo, opinião demais e pouca ajuda para entender o que realmente importa.<br/><br/>O Nutriwork é uma comunidade de estudantes de Nutrição criada para quem busca:</p>
         </Reveal>
         <div className="promise-grid">
           {promises.map((item) => <Reveal key={item.title} className="glass-card promise-card"><Icon name={item.icon}/><h3>{item.title}</h3></Reveal>)}
         </div>
-        <Reveal><p className="mission">Nosso objetivo é preparar nutricionistas para uma<br/><strong>atuação mais segura, ética e atualizada.</strong></p></Reveal>
+        <Reveal><p className="mission">Se você já teve a sensação de: <strong>“estou estudando bastante, mas será que estou estudando certo?”</strong>, o Nutriwork é para você.</p></Reveal>
       </div>
     </section>
   );
@@ -911,8 +911,8 @@ function JoinCta() {
         <Reveal className="join-cta">
           <div>
             <p className="eyebrow">Seu próximo passo</p>
-            <h2 id="join-cta-title">Estude com mais direção e construa uma formação que sustenta suas decisões.</h2>
-            <p>Escolha o plano que acompanha o seu momento e avance com conteúdo organizado, evidência e comunidade.</p>
+            <h2 id="join-cta-title">Pare de estudar no improviso.</h2>
+            <p>Você não precisa salvar mais 50 posts para sentir que está evoluindo.<br/><br/>Entre no Nutriwork e estude com aulas, materiais e discussões que mostram o que estudar, por que estudar e como usar isso na prática.</p>
           </div>
           <Button href="/#planos" variant="outline">Quero fazer parte</Button>
         </Reveal>
@@ -1017,7 +1017,7 @@ function Courses() {
   return (
     <section className="section courses-section">
       <div className="page-width">
-        <Reveal><SectionHeading>Veja no que você vai se especializar</SectionHeading></Reveal>
+        <Reveal><SectionHeading>Enquanto muitos alunos acumulam conteúdo, você aprende o que realmente importa:</SectionHeading></Reveal>
         <Reveal>
           <div className="courses-carousel" role="region" aria-roledescription="carrossel" aria-label="Especializações Nutriwork" aria-describedby="courses-help">
             <p className="sr-only" id="courses-help">Carrossel automático com nove especializações. Arraste para navegar. Passe o mouse ou mantenha o foco no carrossel para pausar.</p>

@@ -10,8 +10,8 @@ export const navItems = [
 
 export const promises = [
   { icon: 'brain', title: 'Formação de pensamento crítico nos estudos' },
-  { icon: 'structure', title: 'Aprendizado prático e estruturado' },
-  { icon: 'evidence', title: 'Conteúdo fundamentado em evidências científicas' }
+  { icon: 'structure', title: 'Aprendizado prático sobre aquilo que é importante' },
+  { icon: 'evidence', title: 'Conteúdo baseado em evidências, não em opinião' }
 ];
 
 export const courses = [
