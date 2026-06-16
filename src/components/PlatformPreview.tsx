@@ -4,7 +4,7 @@ import './PlatformPreview.css';
 /**
  * Prévia da plataforma Nutriwork Plus exibida no monitor da Home.
  * Reconstrói um dashboard premium (estilo SaaS de estudos): sidebar + header
- * com busca/notificações/perfil, boas-vindas com indicador de progresso, cards
+ * com atalhos/notificações/perfil, boas-vindas com indicador de progresso, cards
  * de métricas, grade de cursos e painel de agenda/tarefas, com animações
  * discretas que dão "vida" à interface (rotação de destaque, barras animadas,
  * hover e transições).
@@ -25,31 +25,31 @@ const navItems: Array<{ id: View; label: string; icon: IconName }> = [
 ];
 
 const kpis: Array<{ label: string; value: string; hint: string; icon: IconName; progress?: number }> = [
-  { label: 'Módulos concluídos', value: '4 / 9', hint: '+1 esta semana', icon: 'trophy' },
-  { label: 'Horas estudadas', value: '28h', hint: 'meta 30h', icon: 'clock' },
-  { label: 'Progresso geral', value: '72%', hint: 'trilha aplicada', icon: 'chart', progress: 72 },
-  { label: 'Ofensiva', value: '12 dias', hint: 'seguidos', icon: 'flame' },
+  { label: 'Aulas aplicadas', value: '12', hint: '+3 na semana', icon: 'trophy' },
+  { label: 'Tempo útil', value: '28h', hint: 'na prática', icon: 'clock' },
+  { label: 'Progresso real', value: '72%', hint: 'trilha ativa', icon: 'chart', progress: 72 },
+  { label: 'Sequência', value: '12 dias', hint: 'sem perder ritmo', icon: 'flame' },
 ];
 
 const courses = [
-  { id: 'evidence', title: 'Nutrição Baseada em Evidências', category: 'Essencial', progress: 68 },
-  { id: 'clinical', title: 'Nutrição Clínica', category: 'Prática clínica', progress: 45 },
-  { id: 'sports', title: 'Nutrição Esportiva', category: 'Performance', progress: 27 },
-  { id: 'behavior', title: 'Nutrição Comportamental', category: 'Comportamento', progress: 12 },
-  { id: 'biochem', title: 'Bioquímica da Nutrição', category: 'Fundamentos', progress: 8 },
-  { id: 'intro', title: 'Introdução à Nutrição', category: 'Trilha inicial', progress: 100 },
+  { id: 'evidence', title: 'Nutrição Baseada em Evidências', category: 'Essencial', progress: 68, image: '/assets/course-evidence.jpg' },
+  { id: 'clinical', title: 'Nutrição Clínica', category: 'Prática clínica', progress: 45, image: '/assets/course-clinical.jpg' },
+  { id: 'sports', title: 'Nutrição Esportiva', category: 'Performance', progress: 27, image: '/assets/course-sports.jpg' },
+  { id: 'behavior', title: 'Nutrição Comportamental', category: 'Adesão', progress: 34, image: '/assets/course-behavior.jpg' },
+  { id: 'biochem', title: 'Bioquímica da Nutrição', category: 'Fundamentos', progress: 18, image: '/assets/course-biochemistry.jpg' },
+  { id: 'intro', title: 'O começo: como estudar Nutrição', category: 'Trilha inicial', progress: 100, image: '/assets/course-intro.jpg' },
 ];
 
 const agenda = [
-  { time: 'Hoje · 19h', title: 'Ao vivo: Tipos de estudos', tag: 'Aula' },
-  { time: 'Qui · 20h', title: 'NWcast #07 — bastidores', tag: 'Podcast' },
-  { time: 'Sáb · 10h', title: 'Mentoria de evidências', tag: 'Mentoria' },
+  { time: 'Hoje · 19h', title: 'Aula ao vivo: decidir conduta sem achismo', tag: 'Aula' },
+  { time: 'Qui · 20h', title: 'NWcast: rotina real de atendimento', tag: 'Podcast' },
+  { time: 'Sáb · 10h', title: 'Mentoria de evidências aplicada', tag: 'Mentoria' },
 ];
 
 const tasks = [
-  { text: 'Concluir “Potenciais de membrana”', done: false },
-  { text: 'Revisar checklist de consulta', done: true },
-  { text: 'Baixar e-book de proteínas', done: false },
+  { text: 'Retomar aula de conduta baseada em evidências', done: false },
+  { text: 'Salvar checklist de primeira consulta', done: true },
+  { text: 'Responder discussão de caso da semana', done: false },
 ];
 
 const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
@@ -114,6 +114,7 @@ function ProgressRing({ value }: { value: number }) {
 export default function PlatformPreview() {
   const [view, setView] = useState<View>('inicio');
   const [spotlight, setSpotlight] = useState(0);
+  const [selectedCourse, setSelectedCourse] = useState(courses[0].id);
   const reduced = useReducedMotion();
   const railRef = useRef<HTMLDivElement>(null);
 
@@ -125,6 +126,10 @@ export default function PlatformPreview() {
   }, [reduced, view]);
 
   const headTitle: Record<View, string> = { inicio: 'Início', cursos: 'Meus cursos', agenda: 'Agenda', suporte: 'Suporte' };
+  const openCourse = (courseId: string) => {
+    setSelectedCourse(courseId);
+    setView('cursos');
+  };
 
   return (
     <div className="platform-preview" role="group" aria-label="Prévia do dashboard do Nutriwork Plus">
@@ -153,9 +158,12 @@ export default function PlatformPreview() {
 
       <div className="pp-shell">
         <header className="pp-header">
-          <span className="pp-search"><PreviewIcon name="search" /><span>Buscar aulas, módulos…</span></span>
+          <button type="button" className="pp-shortcut" onClick={() => openCourse(selectedCourse)}>
+            <PreviewIcon name="play" />
+            <span>Retomar aula prática</span>
+          </button>
           <div className="pp-header__actions">
-            <button type="button" className="pp-iconbtn" aria-label="Notificações"><PreviewIcon name="bell" /><i className="pp-dot" /></button>
+            <button type="button" className="pp-iconbtn" aria-label="Abrir agenda de notificações" onClick={() => setView('agenda')}><PreviewIcon name="bell" /><i className="pp-dot" /></button>
             <span className="pp-profile"><span className="pp-user__avatar">EN</span><span className="pp-profile__name">{headTitle[view]}</span></span>
           </div>
         </header>
@@ -166,8 +174,8 @@ export default function PlatformPreview() {
               <article className="pp-welcome">
                 <div className="pp-welcome__copy">
                   <span className="pp-eyebrow">Bem-vindo(a) de volta</span>
-                  <strong>Olá, Equipe Nutriwork 👋</strong>
-                  <p>Continue de onde parou e mantenha sua trilha de Nutrição Baseada em Evidências avançando.</p>
+                  <strong>Sua evolução continua hoje</strong>
+                  <p>Estudo prático, evidências e decisões clínicas organizadas para caber na rotina.</p>
                   <button type="button" className="pp-btn" onClick={() => setView('cursos')}><PreviewIcon name="play" /> Retomar estudos</button>
                 </div>
                 <div className="pp-welcome__ring"><ProgressRing value={72} /><span>trilha aplicada</span></div>
@@ -191,7 +199,7 @@ export default function PlatformPreview() {
                   <div className="pp-section__head"><h3>Continue assistindo</h3><button type="button" className="pp-link" onClick={() => setView('cursos')}>Ver tudo</button></div>
                   <div className="pp-rail" ref={railRef}>
                     {courses.slice(0, 3).map((course, index) => (
-                      <CourseCard key={course.id} course={course} spotlight={!reduced && index === spotlight} />
+                      <CourseCard key={course.id} course={course} spotlight={!reduced && index === spotlight} active={course.id === selectedCourse} onOpen={() => openCourse(course.id)} />
                     ))}
                   </div>
                 </section>
@@ -208,7 +216,7 @@ export default function PlatformPreview() {
             <section className="pp-view" aria-label="Meus cursos">
               <header className="pp-view__head"><h2>Meus cursos</h2><p>Sua trilha completa de Nutrição.</p></header>
               <div className="pp-grid pp-grid--courses">
-                {courses.map((course) => <CourseCard key={course.id} course={course} />)}
+                {courses.map((course) => <CourseCard key={course.id} course={course} active={course.id === selectedCourse} onOpen={() => setSelectedCourse(course.id)} />)}
               </div>
             </section>
           )}
@@ -241,17 +249,17 @@ export default function PlatformPreview() {
   );
 }
 
-function CourseCard({ course, spotlight = false }: { course: typeof courses[number]; spotlight?: boolean }) {
+function CourseCard({ course, spotlight = false, active = false, onOpen }: { course: typeof courses[number]; spotlight?: boolean; active?: boolean; onOpen: () => void }) {
   return (
-    <article className={`pp-course pp-course--${course.id} ${spotlight ? 'is-spotlight' : ''}`}>
-      <span className="pp-course__cover"><Brand className="pp-course__brand" /></span>
+    <article className={`pp-course pp-course--${course.id} ${spotlight ? 'is-spotlight' : ''} ${active ? 'is-active' : ''}`}>
+      <span className="pp-course__cover" style={{ backgroundImage: `linear-gradient(180deg, rgba(8, 16, 34, .08), rgba(6, 12, 28, .58)), url(${course.image})` }}><Brand className="pp-course__brand" /></span>
       <div className="pp-course__body">
         <span className="pp-course__cat">{course.category}</span>
         <strong className="pp-course__title">{course.title}</strong>
         <span className="pp-bar pp-bar--anim" style={{ ['--p' as string]: `${course.progress}%` }}><i /></span>
         <div className="pp-course__foot">
           <span>{course.progress}%</span>
-          <button type="button" className="pp-btn pp-btn--sm">{course.progress === 100 ? 'Revisar' : 'Continuar'}<PreviewIcon name="arrow" /></button>
+          <button type="button" className="pp-btn pp-btn--sm" onClick={onOpen}>{course.progress === 100 ? 'Revisar' : active ? 'Aberto' : 'Continuar'}<PreviewIcon name="arrow" /></button>
         </div>
       </div>
     </article>
