@@ -15,7 +15,11 @@ import './PlatformPreview.css';
  */
 
 type View = 'inicio' | 'cursos' | 'agenda' | 'suporte';
-type IconName = 'home' | 'book' | 'play' | 'calendar' | 'headset' | 'instagram' | 'search' | 'bell' | 'check' | 'arrow' | 'clock' | 'flame' | 'trophy' | 'chart';
+type IconName = 'home' | 'book' | 'play' | 'calendar' | 'headset' | 'instagram' | 'search' | 'bell' | 'check' | 'arrow' | 'clock' | 'flame' | 'trophy' | 'chart' | 'mail' | 'whatsapp';
+
+const contactEmail = 'equipenutriwork@gmail.com';
+const whatsappContact = `https://wa.me/5512997505188?text=${encodeURIComponent('Olá, equipe Nutriwork! Vim pelo site e gostaria de tirar uma dúvida sobre o Nutriwork Plus.')}`;
+const instagramContact = 'https://www.instagram.com/gruponutriwork';
 
 const navItems: Array<{ id: View; label: string; icon: IconName }> = [
   { id: 'inicio', label: 'Início', icon: 'home' },
@@ -40,12 +44,6 @@ const courses = [
   { id: 'intro', title: 'O começo: como estudar Nutrição', category: 'Trilha inicial', progress: 100, image: '/assets/course-intro.jpg' },
 ];
 
-const agenda = [
-  { time: 'Hoje · 19h', title: 'Aula ao vivo: decidir conduta sem achismo', tag: 'Aula' },
-  { time: 'Qui · 20h', title: 'NWcast: rotina real de atendimento', tag: 'Podcast' },
-  { time: 'Sáb · 10h', title: 'Mentoria de evidências aplicada', tag: 'Mentoria' },
-];
-
 const tasks = [
   { text: 'Retomar aula de conduta baseada em evidências', done: false },
   { text: 'Salvar checklist de primeira consulta', done: true },
@@ -53,10 +51,50 @@ const tasks = [
 ];
 
 const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-const monthDays = Array.from({ length: 30 }, (_, i) => i + 1); // junho/2026
-const monthOffset = new Date(2026, 5, 1).getDay(); // alinha o dia 1
-const today = 16;
-const eventDays = new Set([16, 18, 22, 25]);
+
+function addDays(date: Date, days: number) {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
+}
+
+function capitalize(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function formatShortWeekday(date: Date) {
+  return capitalize(new Intl.DateTimeFormat('pt-BR', { weekday: 'short' }).format(date).replace('.', ''));
+}
+
+function getCalendarData(currentDate: Date) {
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = currentDate.getDate();
+  const eventDays = [today, today + 2, today + 6, today + 9].filter((day) => day <= daysInMonth);
+
+  return {
+    label: capitalize(new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' }).format(currentDate)),
+    monthDays: Array.from({ length: daysInMonth }, (_, i) => i + 1),
+    monthOffset: new Date(year, month, 1).getDay(),
+    today,
+    eventDays: new Set(eventDays),
+  };
+}
+
+function getAgenda(currentDate: Date) {
+  return [
+    { time: 'Hoje · 19h', title: 'Aula ao vivo: decidir conduta sem achismo', tag: 'Aula' },
+    { time: `${formatShortWeekday(addDays(currentDate, 2))} · 20h`, title: 'NWcast: rotina real de atendimento', tag: 'Podcast' },
+    { time: `${formatShortWeekday(addDays(currentDate, 5))} · 10h`, title: 'Mentoria de evidências aplicada', tag: 'Mentoria' },
+  ];
+}
+
+const supportContacts = [
+  { label: 'WhatsApp', value: '(12) 99750-5188', href: whatsappContact, icon: 'whatsapp' as IconName },
+  { label: 'E-mail', value: contactEmail, href: `mailto:${contactEmail}`, icon: 'mail' as IconName },
+  { label: 'Instagram', value: '@gruponutriwork', href: instagramContact, icon: 'instagram' as IconName },
+];
 
 function PreviewIcon({ name }: { name: IconName }) {
   const paths: Record<IconName, JSX.Element> = {
@@ -74,6 +112,8 @@ function PreviewIcon({ name }: { name: IconName }) {
     flame: <><path d="M12 3c1 3-1.5 4-1.5 6.5A1.5 1.5 0 0 0 12 11a3 3 0 0 0 1.5-3C16 9.5 17 12 17 14a5 5 0 0 1-10 0c0-3 2.5-4.5 5-11Z" /></>,
     trophy: <><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z" /><path d="M7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3M9 20h6M12 13v4" /></>,
     chart: <><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></>,
+    mail: <><rect x="4" y="6" width="16" height="12" rx="2" /><path d="m4.5 7 7.5 6 7.5-6" /></>,
+    whatsapp: <><path d="M5.5 19 7 15.7a7 7 0 1 1 2.8 2.4L5.5 19Z" /><path d="M9.4 8.9c.2 2.4 1.9 4.2 4.1 4.9l1.2-1.1 1.8.5c.2 1-.2 1.8-1 2.1-3.7.1-7.2-3.2-7.3-6.9.3-.8 1.1-1.2 2.1-1Z" /></>,
   };
   return (
     <svg className="pp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -98,6 +138,17 @@ function useReducedMotion() {
   return reduced;
 }
 
+function useCurrentDate() {
+  const [currentDate, setCurrentDate] = useState(() => new Date());
+
+  useEffect(() => {
+    const id = window.setInterval(() => setCurrentDate(new Date()), 60 * 1000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  return currentDate;
+}
+
 function ProgressRing({ value }: { value: number }) {
   const r = 15.5;
   const circumference = 2 * Math.PI * r;
@@ -116,6 +167,9 @@ export default function PlatformPreview() {
   const [spotlight, setSpotlight] = useState(0);
   const [selectedCourse, setSelectedCourse] = useState(courses[0].id);
   const reduced = useReducedMotion();
+  const currentDate = useCurrentDate();
+  const calendar = getCalendarData(currentDate);
+  const agenda = getAgenda(currentDate);
   const railRef = useRef<HTMLDivElement>(null);
 
   // "Vida" no sistema: alterna o card de curso em destaque automaticamente.
@@ -205,8 +259,8 @@ export default function PlatformPreview() {
                 </section>
 
                 <aside className="pp-side">
-                  <MiniCalendar />
-                  <AgendaList />
+                  <MiniCalendar calendar={calendar} />
+                  <AgendaList agenda={agenda} />
                 </aside>
               </div>
             </section>
@@ -225,9 +279,9 @@ export default function PlatformPreview() {
             <section className="pp-view" aria-label="Agenda">
               <header className="pp-view__head"><h2>Agenda</h2><p>Próximos eventos e lembretes.</p></header>
               <div className="pp-columns pp-columns--agenda">
-                <MiniCalendar />
+                <MiniCalendar calendar={calendar} />
                 <div className="pp-side">
-                  <AgendaList />
+                  <AgendaList agenda={agenda} />
                   <TaskList />
                 </div>
               </div>
@@ -240,6 +294,14 @@ export default function PlatformPreview() {
               <div className="pp-support__cards">
                 <article><span className="pp-kpi__icon"><PreviewIcon name="headset" /></span><strong>Central de ajuda</strong><p>Dúvidas sobre acesso, módulos e trilhas.</p></article>
                 <article><span className="pp-kpi__icon"><PreviewIcon name="play" /></span><strong>Como começar</strong><p>Siga o módulo “O começo” e ative sua trilha.</p></article>
+              </div>
+              <div className="pp-support__contacts" aria-label="Contatos de suporte">
+                {supportContacts.map((contact) => (
+                  <a key={contact.label} href={contact.href} target={contact.href.startsWith('http') ? '_blank' : undefined} rel={contact.href.startsWith('http') ? 'noreferrer' : undefined}>
+                    <span className="pp-kpi__icon"><PreviewIcon name={contact.icon} /></span>
+                    <span><small>{contact.label}</small><strong>{contact.value}</strong></span>
+                  </a>
+                ))}
               </div>
             </section>
           )}
@@ -266,22 +328,22 @@ function CourseCard({ course, spotlight = false, active = false, onOpen }: { cou
   );
 }
 
-function MiniCalendar() {
+function MiniCalendar({ calendar }: { calendar: ReturnType<typeof getCalendarData> }) {
   return (
     <article className="pp-calendar">
-      <div className="pp-calendar__head"><PreviewIcon name="calendar" /><strong>Junho 2026</strong></div>
+      <div className="pp-calendar__head"><PreviewIcon name="calendar" /><strong>{calendar.label}</strong></div>
       <div className="pp-calendar__grid">
         {weekDays.map((day, index) => <span key={`w${index}`} className="pp-calendar__wd">{day}</span>)}
-        {Array.from({ length: monthOffset }, (_, i) => <span key={`o${i}`} />)}
-        {monthDays.map((day) => (
-          <span key={day} className={`pp-calendar__day ${day === today ? 'is-today' : ''} ${eventDays.has(day) ? 'has-event' : ''}`}>{day}</span>
+        {Array.from({ length: calendar.monthOffset }, (_, i) => <span key={`o${i}`} />)}
+        {calendar.monthDays.map((day) => (
+          <span key={day} className={`pp-calendar__day ${day === calendar.today ? 'is-today' : ''} ${calendar.eventDays.has(day) ? 'has-event' : ''}`}>{day}</span>
         ))}
       </div>
     </article>
   );
 }
 
-function AgendaList() {
+function AgendaList({ agenda }: { agenda: ReturnType<typeof getAgenda> }) {
   return (
     <article className="pp-agenda">
       <div className="pp-section__head"><h3>Próximas aulas</h3></div>

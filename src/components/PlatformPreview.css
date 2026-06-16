@@ -137,15 +137,16 @@ html[data-theme='light'] .platform-preview {
 .pp-kpi__hint { color: var(--pp-muted); font-size: .68em; }
 
 /* ---------- Columns ---------- */
-.pp-columns { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 1em; align-items: start; }
+.pp-columns { display: grid; grid-template-columns: 1fr; gap: 1em; align-items: start; }
 .pp-columns--agenda { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
 .pp-block { min-width: 0; }
-.pp-side { display: grid; gap: 1em; }
+.pp-side { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1em; align-items: start; }
+.pp-columns--agenda .pp-side { grid-template-columns: 1fr; }
 
 /* Rail + course grid */
 .pp-rail { display: flex; gap: .8em; overflow-x: auto; padding-bottom: .3em; scrollbar-width: none; }
 .pp-rail::-webkit-scrollbar { display: none; }
-.pp-rail > * { flex: 0 0 13em; }
+.pp-rail > * { flex: 0 0 min(14em, 72%); }
 .pp-grid { display: grid; gap: .9em; }
 .pp-grid--courses { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
@@ -183,9 +184,9 @@ html[data-theme='light'] .platform-preview {
 /* ---------- Agenda & tasks ---------- */
 .pp-agenda, .pp-tasks { padding: .9em; border: 1px solid var(--pp-border); border-radius: .9em; background: var(--pp-surface); box-shadow: var(--pp-shadow); }
 .pp-agenda ul, .pp-tasks ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .5em; }
-.pp-agenda li { display: grid; grid-template-columns: auto 1fr; gap: .15em .6em; align-items: center; padding: .5em .6em; border-radius: .6em; background: var(--pp-surface-2); }
+.pp-agenda li { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .15em .6em; align-items: center; padding: .55em .65em; border-radius: .6em; background: var(--pp-surface-2); }
 .pp-agenda__time { grid-column: 1; color: var(--pp-accent); font-size: .66em; font-weight: 700; }
-.pp-agenda__tag { grid-column: 2; grid-row: 1; justify-self: end; padding: .12em .5em; border-radius: 999px; color: var(--pp-muted); background: var(--pp-surface); font-size: .58em; font-weight: 700; }
+.pp-agenda__tag { grid-column: 2; grid-row: 1; justify-self: end; max-width: 100%; padding: .12em .5em; border-radius: 999px; color: var(--pp-muted); background: var(--pp-surface); font-size: .58em; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pp-agenda__title { grid-column: 1 / -1; color: var(--pp-text); font-size: .76em; font-weight: 600; }
 .pp-tasks li { display: flex; align-items: center; gap: .55em; color: var(--pp-text); font-size: .76em; }
 .pp-tasks li.is-done { color: var(--pp-muted); text-decoration: line-through; }
@@ -194,10 +195,17 @@ html[data-theme='light'] .platform-preview {
 .pp-tasks__check .pp-icon { width: .8em; height: .8em; color: #fff; }
 
 /* ---------- Support ---------- */
+.pp-support { gap: .9em; }
 .pp-support__cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9em; }
 .pp-support__cards article { padding: 1em; border: 1px solid var(--pp-border); border-radius: 1em; background: var(--pp-surface); box-shadow: var(--pp-shadow); }
 .pp-support__cards strong { display: block; margin-top: .5em; color: var(--pp-heading); font-size: .92em; }
 .pp-support__cards p { margin: .3em 0 0; color: var(--pp-muted); font-size: .78em; line-height: 1.4; }
+.pp-support__contacts { display: grid; gap: .65em; }
+.pp-support__contacts a { min-width: 0; display: flex; align-items: center; gap: .7em; padding: .75em; border: 1px solid var(--pp-border); border-radius: .9em; color: var(--pp-text); background: var(--pp-surface); box-shadow: var(--pp-shadow); text-decoration: none; transition: transform .2s ease, border-color .2s ease, background .2s ease; }
+.pp-support__contacts a:hover, .pp-support__contacts a:focus-visible { transform: translateY(-.12em); border-color: var(--pp-accent); background: var(--pp-surface-2); }
+.pp-support__contacts a > span:last-child { min-width: 0; display: grid; gap: .12em; }
+.pp-support__contacts small { color: var(--pp-muted); font-size: .62em; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.pp-support__contacts strong { color: var(--pp-heading); font-size: .8em; line-height: 1.15; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ---------- Container compacto (monitor estreito) ---------- */
 @container (max-width: 520px) {
@@ -210,7 +218,9 @@ html[data-theme='light'] .platform-preview {
   .pp-brand, .pp-user { justify-content: center; }
   .pp-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pp-columns, .pp-columns--agenda { grid-template-columns: 1fr; }
+  .pp-side { grid-template-columns: 1fr; }
   .pp-grid--courses { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pp-support__cards { grid-template-columns: 1fr; }
   .pp-shortcut span { display: none; }
   .pp-shortcut { flex: 0 0 auto; width: 2.35em; padding: 0; justify-content: center; }
 }
