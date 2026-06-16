@@ -640,7 +640,7 @@ function HeroMonitor() {
   );
 }
 
-function useCountUp(target: number, duration = 1500) {
+function useCountUp(target: number, duration = 3000) {
   const [value, setValue] = useState(0);
   const ref = useRef<HTMLElement>(null);
   const startedRef = useRef(false);
@@ -661,7 +661,10 @@ function useCountUp(target: number, duration = 1500) {
       const start = performance.now();
       const step = (now: number) => {
         const progress = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
+        // easeInOutCubic: aceleração e desaceleração suaves, sem contagem brusca.
+        const eased = progress < 0.5
+          ? 4 * progress * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
         setValue(Math.round(eased * target));
         if (progress < 1) window.requestAnimationFrame(step);
       };
