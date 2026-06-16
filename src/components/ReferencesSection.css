@@ -1,4 +1,10 @@
 .references-section {
+  /* Identidade fotográfica unificada: grade de luz/contraste consistente e
+     sombras levemente azuladas alinhadas à paleta NutriWork. */
+  --reference-grade: saturate(.96) contrast(1.06) brightness(1.03);
+  --reference-photo-shadow: rgba(14, 38, 88, .34);
+  --reference-floor-shadow: rgba(12, 33, 78, .34);
+  --reference-cool-wash: linear-gradient(180deg, rgba(150, 190, 255, .12), transparent 32%, transparent 70%, rgba(16, 42, 92, .16));
   position: relative;
   padding: clamp(76px, 7vw, 108px) 0 clamp(80px, 7.2vw, 112px);
   border-block: 1px solid var(--section-divider);
@@ -147,7 +153,7 @@
   background:
     radial-gradient(circle at 50% 22%, rgba(129, 179, 255, .18), transparent 34%),
     linear-gradient(180deg, color-mix(in srgb, var(--surface) 94%, #1263ff 6%), color-mix(in srgb, var(--background) 90%, #1263ff 10%));
-  box-shadow: inset 0 1px rgba(255, 255, 255, .07), 0 15px 34px rgba(0, 0, 0, .14);
+  box-shadow: inset 0 1px rgba(255, 255, 255, .07), 0 18px 38px var(--reference-photo-shadow);
 }
 
 .reference-card__photo::before {
@@ -158,15 +164,18 @@
   left: 11%;
   height: 24%;
   border-radius: 999px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, .2), transparent 68%);
+  background: radial-gradient(ellipse at center, var(--reference-floor-shadow), transparent 68%);
   pointer-events: none;
 }
 
 .reference-card__photo::after {
   content: '';
   position: absolute;
+  z-index: 2;
   inset: 0;
   border-radius: inherit;
+  background: var(--reference-cool-wash);
+  mix-blend-mode: soft-light;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .11);
   pointer-events: none;
 }
@@ -180,7 +189,7 @@
   object-fit: contain;
   object-position: center bottom;
   transform: translateY(2px);
-  filter: saturate(.98) contrast(1.02) drop-shadow(0 13px 16px rgba(0, 0, 0, .13));
+  filter: var(--reference-grade) drop-shadow(0 14px 22px var(--reference-photo-shadow));
 }
 
 .reference-card__content {
@@ -204,6 +213,10 @@
 }
 
 html[data-theme='light'] .references-section {
+  --reference-grade: saturate(1) contrast(1.04) brightness(1.02);
+  --reference-photo-shadow: rgba(36, 72, 126, .2);
+  --reference-floor-shadow: rgba(46, 74, 122, .22);
+  --reference-cool-wash: linear-gradient(180deg, rgba(120, 165, 240, .1), transparent 34%, transparent 72%, rgba(38, 72, 126, .1));
   background:
     radial-gradient(circle at 14% 4%, rgba(18, 99, 255, .1), transparent 30%),
     radial-gradient(circle at 88% 90%, rgba(41, 168, 255, .08), transparent 32%),
