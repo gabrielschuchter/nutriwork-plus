@@ -1293,16 +1293,18 @@ function FAQ() {
   );
 }
 
-function Footer() {
+function Footer({ showStatement = true }: { showStatement?: boolean }) {
   return (
     <footer id="contatos" className="footer">
       <div className="footer-orbit" aria-hidden="true" />
       <div className="page-width">
-        <Reveal className="footer-statement">
-          <h2 aria-label="A plataforma feita para você, estudante de Nutrição.">
-            <span aria-hidden="true">A plataforma feita para <span className="footer-word-swap"><span className="footer-word-swap__strike">todo</span><span className="footer-word-swap__insert">você,</span></span> estudante de Nutrição.</span>
-          </h2>
-        </Reveal>
+        {showStatement && (
+          <Reveal className="footer-statement">
+            <h2 aria-label="A plataforma feita para você, estudante de Nutrição.">
+              <span aria-hidden="true">A plataforma feita para <span className="footer-word-swap"><span className="footer-word-swap__strike">todo</span><span className="footer-word-swap__insert">você,</span></span> estudante de Nutrição.</span>
+            </h2>
+          </Reveal>
+        )}
         <div className="footer-grid">
           <div className="footer-social">
             <p className="footer-label">Acompanhe de perto</p>
@@ -1371,7 +1373,7 @@ export default function App() {
       <div className={`app-shell ${loading.active ? 'app-shell--loading' : ''}`}>
         <Header/>
         {renderedPage === 'estude' ? <EstudePage/> : renderedPage === 'partners' ? <PartnersPage/> : <HomePage/>}
-        <Footer/>
+        <Footer showStatement={renderedPage !== 'partners'} />
         {renderedPage === 'home' && <Button href="/#planos" className="mobile-cta">Ver planos</Button>}
       </div>
     </>
