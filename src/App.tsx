@@ -640,6 +640,59 @@ function HeroMonitor() {
   );
 }
 
+function useCountUp(target: number, duration = 1500) {
+  const [value, setValue] = useState(0);
+  const ref = useRef<HTMLElement>(null);
+  const startedRef = useRef(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+
+    const animate = () => {
+      if (startedRef.current) return;
+      startedRef.current = true;
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        setValue(target);
+        return;
+      }
+
+      const start = performance.now();
+      const step = (now: number) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setValue(Math.round(eased * target));
+        if (progress < 1) window.requestAnimationFrame(step);
+      };
+      window.requestAnimationFrame(step);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animate();
+          observer.disconnect();
+        }
+      }),
+      { threshold: 0.4 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [target, duration]);
+
+  return { value, ref };
+}
+
+function HeroSocialProof() {
+  const { value, ref } = useCountUp(300);
+  return (
+    <small className="hero__proof" ref={ref} aria-label="Mais de 300 alunos">
+      <b>+{value}</b> alunos
+    </small>
+  );
+}
+
 function Hero() {
   return (
     <section id="inicio" className="hero">
@@ -647,7 +700,7 @@ function Hero() {
       <div className="hero__glow" aria-hidden="true" />
       <Reveal className="hero__layout">
         <div className="hero__content">
-          <h1>Nutriwork<span>plus.</span></h1>
+          <h1>Nutriwork<span>plus.<HeroSocialProof /></span></h1>
           <p>A plataforma feita para todo estudante de Nutrição.</p>
           <div className="hero-actions">
             <Button href="/#planos" variant="outline">Venha fazer parte</Button>
@@ -1071,7 +1124,7 @@ function Footer({ showStatement = true }: { showStatement?: boolean }) {
             <h3>Dúvidas, acesso ou próximos passos? Fale com a equipe.</h3>
             <div className="footer-contact__links">
               <a className="contact-link" href={whatsappContact} target="_blank" rel="noreferrer"><Icon name="whatsapp"/><span><small>WhatsApp</small>(12) 99750-5188</span></a>
-              <a className="contact-link" href={`mailto:${contactEmail}`}><Icon name="mail"/><span><small>E-mail</small>{contactEmail}</span></a>
+              <a className="contact-link" href={`mailto:${contactEmail}`} aria-label={`Enviar e-mail para ${contactEmail}`}><Icon name="mail"/><span><small>E-mail</small>{contactEmail}</span></a>
             </div>
           </div>
         </div>
@@ -1103,7 +1156,7 @@ function PartnersPage() {
               <p>Projetos, marcas e instituições que compartilham uma visão séria de educação em saúde podem conversar com o Nutriwork para criar iniciativas consistentes e relevantes.</p>
               <div className="partners-hero__actions">
                 <Button href={partnerForm} external>Quero ser parceiro</Button>
-                <a className="partners-hero__contact" href={`mailto:${contactEmail}`}>{contactEmail}</a>
+                <a className="partners-hero__contact" href={`mailto:${contactEmail}`} aria-label={`Enviar e-mail para ${contactEmail}`}>{contactEmail}</a>
               </div>
             </div>
             <Suspense fallback={<div className="partners-map-card partners-map-card--fallback" aria-hidden="true" />}>
