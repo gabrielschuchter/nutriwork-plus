@@ -1105,6 +1105,9 @@ html[data-theme='light'] .hero-monitor-stage__glow { opacity: 0; }
 html[data-theme='light'] .hero__glow { display: none; }
 html[data-theme='light'] .hero-monitor__frame { box-shadow: inset 0 1px rgba(255,255,255,.38), inset 0 -1px rgba(255,255,255,.07), 10px 18px 30px rgba(36,75,135,.12), 4px 6px 12px rgba(25,42,70,.09); }
 html[data-theme='light'] .hero-monitor__shadow { background: radial-gradient(ellipse at center, rgba(36,75,135,.26), transparent 70%); }
+html[data-theme='light'] .hero-monitor__screen { border-color: rgba(40,80,150,.18); background: linear-gradient(145deg, #eef3fb 0%, #e6edf8 100%); box-shadow: inset 8px 0 18px -20px rgba(36,75,135,.4), inset -8px 0 18px -20px rgba(36,75,135,.34), inset 0 -14px 40px rgba(36,75,135,.12); }
+html[data-theme='light'] .hero-monitor__screen::before { background: radial-gradient(ellipse at 50% 48%, transparent 60%, rgba(36,75,135,.05) 82%, rgba(36,75,135,.12) 100%); }
+html[data-theme='light'] .hero-monitor__screen::after { opacity: .4; }
 
 
 .platform-section { padding-top: 20px; }
