@@ -40,18 +40,6 @@ const loaderMinimumDuration: Record<LoadingVariant, number> = {
   route: 1100
 };
 const loaderContentSwapDelay = 260;
-const spiralConfig = {
-  particleCount: 86,
-  trailSpan: 0.28,
-  durationMs: 3200,
-  pulseDurationMs: 3600,
-  strokeWidth: 4.3,
-  searchTurns: 4,
-  searchBaseRadius: 8,
-  searchRadiusAmp: 8.5,
-  searchPulse: 2.4,
-  searchScale: 1
-};
 
 const PartnersMapCard = lazy(() => import('./components/PartnersMapCard'));
 
@@ -281,95 +269,6 @@ function useLoadingExperience(page: Page) {
   return { loading, renderedPage };
 }
 
-function normalizeProgress(progress: number) {
-  return ((progress % 1) + 1) % 1;
-}
-
-function getSpiralPoint(progress: number, detailScale: number) {
-  const t = progress * Math.PI * 2;
-  const angle = t * spiralConfig.searchTurns;
-  const radius = spiralConfig.searchBaseRadius + (1 - Math.cos(t)) * (spiralConfig.searchRadiusAmp + detailScale * spiralConfig.searchPulse);
-
-  return {
-    x: 50 + Math.cos(angle) * radius * spiralConfig.searchScale,
-    y: 50 + Math.sin(angle) * radius * spiralConfig.searchScale
-  };
-}
-
-function getSpiralDetailScale(time: number) {
-  const pulseProgress = (time % spiralConfig.pulseDurationMs) / spiralConfig.pulseDurationMs;
-  const pulseAngle = pulseProgress * Math.PI * 2;
-  return 0.52 + ((Math.sin(pulseAngle + 0.55) + 1) / 2) * 0.48;
-}
-
-function buildSpiralPath(detailScale: number, steps = 360) {
-  return Array.from({ length: steps + 1 }, (_, index) => {
-    const point = getSpiralPoint(index / steps, detailScale);
-    return `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`;
-  }).join(' ');
-}
-
-function SpiralSearchLoader({ active, compact = false }: { active: boolean; compact?: boolean }) {
-  const pathRef = useRef<SVGPathElement>(null);
-  const groupRef = useRef<SVGGElement>(null);
-  const particlesRef = useRef<SVGCircleElement[]>([]);
-  const particleCount = compact ? 58 : spiralConfig.particleCount;
-
-  useEffect(() => {
-    if (!active) return;
-
-    const path = pathRef.current;
-    const group = groupRef.current;
-    if (!path || !group) return;
-
-    particlesRef.current = particlesRef.current.slice(0, particleCount);
-    path.setAttribute('stroke-width', String(compact ? 3.7 : spiralConfig.strokeWidth));
-
-    let frame = 0;
-    const startedAt = performance.now();
-    const render = (now: number) => {
-      const time = now - startedAt + (compact ? 1850 : 0);
-      const progress = (time % spiralConfig.durationMs) / spiralConfig.durationMs;
-      const detailScale = getSpiralDetailScale(time);
-
-      path.setAttribute('d', buildSpiralPath(detailScale, compact ? 260 : 360));
-      group.setAttribute('transform', `rotate(${compact ? -8 : 0} 50 50)`);
-
-      particlesRef.current.forEach((node, index) => {
-        const tailOffset = index / Math.max(particleCount - 1, 1);
-        const point = getSpiralPoint(normalizeProgress(progress - tailOffset * spiralConfig.trailSpan), detailScale);
-        const fade = Math.pow(1 - tailOffset, 0.56);
-
-        node.setAttribute('cx', point.x.toFixed(2));
-        node.setAttribute('cy', point.y.toFixed(2));
-        node.setAttribute('r', (0.9 + fade * (compact ? 2.1 : 2.7)).toFixed(2));
-        node.setAttribute('opacity', (0.05 + fade * 0.9).toFixed(3));
-      });
-
-      frame = window.requestAnimationFrame(render);
-    };
-
-    render(startedAt);
-    return () => window.cancelAnimationFrame(frame);
-  }, [active, compact, particleCount]);
-
-  return (
-    <svg className={`spiral-loader ${compact ? 'spiral-loader--compact' : ''}`} viewBox="0 0 100 100" fill="none" aria-hidden="true">
-      <g ref={groupRef}>
-        <path ref={pathRef} className="spiral-loader__path" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" opacity="0.12" />
-        {Array.from({ length: particleCount }, (_, index) => (
-          <circle
-            key={index}
-            ref={(node) => {
-              if (node) particlesRef.current[index] = node;
-            }}
-            fill="currentColor"
-          />
-        ))}
-      </g>
-    </svg>
-  );
-}
 
 function SkeletonBlock({ className = '' }: { className?: string }) {
   return <span className={`skeleton-block ${className}`} />;
@@ -486,7 +385,10 @@ function LoadingExperience({ state }: { state: LoadingExperienceState }) {
       <div className="loading-experience__brand">
         <div className="loading-experience__mark">N<span>+</span></div>
         <div className={`loading-experience__process ${compact ? 'loading-experience__process--compact' : ''}`}>
-          <SpiralSearchLoader active={present} compact={compact} />
+          <svg className="nw-spinner" viewBox="25 25 50 50" aria-hidden="true">
+            <circle className="nw-spinner__track" cx="50" cy="50" r="20" />
+            <circle className="nw-spinner__arc" cx="50" cy="50" r="20" />
+          </svg>
         </div>
       </div>
       <LoadingSkeleton page={state.page} compact={compact} />

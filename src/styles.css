@@ -471,56 +471,60 @@ html.route-transition main {
 
 .loading-experience__mark span { margin-left: 1px; color: var(--accent); }
 
+/* Spinner circular (inspirado no Uiverse "Light Rat 32" de barisdogansutcu, MIT):
+   arco que gira enquanto cresce/encolhe, como camada externa ao N+. */
 .loading-experience__process {
   position: absolute;
   z-index: 1;
-  top: 50%;
+  top: calc(50% - var(--loader-brand-offset));
   left: 50%;
-  width: clamp(106px, 11vw, 148px);
+  width: clamp(132px, 13vw, 176px);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
 }
 
-.loading-experience__process::before,
-.loading-experience__process::after {
-  content: '';
-  position: absolute;
-  inset: 3%;
-  border: 1px solid var(--loader-line-strong);
-  border-radius: 50%;
-  opacity: .22;
-  animation: loader-process-ring 2.4s cubic-bezier(.45, 0, .2, 1) infinite;
+.loading-experience__process--compact {
+  width: clamp(112px, 10vw, 150px);
 }
 
-.loading-experience__process::after {
-  inset: 16%;
-  border-color: var(--loader-line);
-  animation-delay: -1.2s;
-}
-
-.spiral-loader {
-  position: absolute;
-  inset: 0;
+.nw-spinner {
   width: 100%;
   height: 100%;
-  color: var(--blue-soft);
-  opacity: .96;
-  overflow: hidden;
-  filter: drop-shadow(0 0 18px rgba(18,99,255,.52)) drop-shadow(0 22px 40px rgba(0,0,0,.2));
   transform-origin: center;
-  animation: loader-spiral-orbit 8s linear infinite;
+  animation: nw-spinner-rotate 2s linear infinite;
 }
 
-.loading-experience__process--compact {
-  width: clamp(82px, 8vw, 112px);
+.nw-spinner__track {
+  fill: none;
+  stroke: var(--loader-line);
+  stroke-width: 2;
+  opacity: .4;
 }
 
-.spiral-loader--compact {
-  opacity: .84;
+.nw-spinner__arc {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  filter: drop-shadow(0 0 6px var(--glow));
+  animation: nw-spinner-dash 1.5s ease-in-out infinite;
 }
 
-.spiral-loader__path {
-  color: var(--blue-soft);
+@keyframes nw-spinner-rotate {
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes nw-spinner-dash {
+  0% { stroke-dasharray: 1, 200; stroke-dashoffset: 0; }
+  50% { stroke-dasharray: 90, 200; stroke-dashoffset: -35px; }
+  100% { stroke-dasharray: 90, 200; stroke-dashoffset: -125px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nw-spinner, .nw-spinner__arc { animation: none; }
+  .nw-spinner__arc { stroke-dasharray: 90, 200; stroke-dashoffset: -35px; }
 }
 
 .loading-skeleton {
@@ -816,19 +820,9 @@ html.route-transition main {
   50% { transform: translate(-50%, -50%) scale(1.035); filter: brightness(1.12); }
 }
 
-@keyframes loader-process-ring {
-  0% { opacity: .08; transform: scale(.78) rotate(0deg); }
-  45% { opacity: .3; }
-  100% { opacity: 0; transform: scale(1.2) rotate(42deg); }
-}
-
 @keyframes loader-ambient-breathe {
   0%, 100% { opacity: .48; transform: translate(-50%, -50%) scale(.92); }
   50% { opacity: .78; transform: translate(-50%, -50%) scale(1.08); }
-}
-
-@keyframes loader-spiral-orbit {
-  to { transform: rotate(360deg); }
 }
 
 @media (max-width: 1024px) {
@@ -858,8 +852,8 @@ html.route-transition main {
   .loading-experience::before { opacity: .24; }
   .loading-experience__brand { --loader-brand-offset: clamp(82px, 11vh, 104px); }
   .loading-experience__mark { min-width: 68px; height: 42px; padding-inline: 14px; font-size: 21px; }
-  .loading-experience__process { width: 94px; }
-  .loading-experience__process--compact { width: 78px; }
+  .loading-experience__process { width: 132px; }
+  .loading-experience__process--compact { width: 116px; }
   .loading-skeleton {
     width: min(100% - 28px, 560px);
     padding-top: 105px;
@@ -1019,7 +1013,7 @@ html.route-transition main {
 
 @media (max-width: 390px) {
   .loading-experience__brand { --loader-brand-offset: 82px; }
-  .loading-experience__process { width: 84px; }
+  .loading-experience__process { width: 120px; }
   .loading-experience__mark { min-width: 62px; height: 38px; padding-inline: 12px; font-size: 19px; }
   .skeleton-title--home { height: 96px; width: min(250px, 78vw); }
   .loading-hero-stage { min-height: 330px; }
