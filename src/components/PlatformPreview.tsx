@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './PlatformPreview.css';
 
 /**
@@ -28,12 +28,6 @@ const navItems: Array<{ id: View; label: string; icon: IconName }> = [
   { id: 'suporte', label: 'Suporte', icon: 'headset' },
 ];
 
-const kpis: Array<{ label: string; value: string; hint: string; icon: IconName; progress?: number }> = [
-  { label: 'Aulas aplicadas', value: '12', hint: '+3 na semana', icon: 'trophy' },
-  { label: 'Tempo útil', value: '28h', hint: 'na prática', icon: 'clock' },
-  { label: 'Progresso real', value: '72%', hint: 'trilha ativa', icon: 'chart', progress: 72 },
-  { label: 'Sequência', value: '12 dias', hint: 'sem perder ritmo', icon: 'flame' },
-];
 
 const courses = [
   { id: 'evidence', title: 'Nutrição Baseada em Evidências', category: 'Essencial', progress: 68, image: '/assets/course-evidence.jpg' },
@@ -126,18 +120,6 @@ function Brand({ className = '' }: { className?: string }) {
   return <span className={`pp-wordmark ${className}`.trim()}>NUTRIWORK<i>+</i></span>;
 }
 
-function useReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const sync = () => setReduced(query.matches);
-    sync();
-    query.addEventListener('change', sync);
-    return () => query.removeEventListener('change', sync);
-  }, []);
-  return reduced;
-}
-
 function useCurrentDate() {
   const [currentDate, setCurrentDate] = useState(() => new Date());
 
@@ -149,35 +131,21 @@ function useCurrentDate() {
   return currentDate;
 }
 
-function ProgressRing({ value }: { value: number }) {
-  const r = 15.5;
-  const circumference = 2 * Math.PI * r;
-  const dash = (value / 100) * circumference;
-  return (
-    <svg className="pp-ring" viewBox="0 0 36 36" role="img" aria-label={`Progresso geral ${value}%`}>
-      <circle className="pp-ring__track" cx="18" cy="18" r={r} />
-      <circle className="pp-ring__value" cx="18" cy="18" r={r} strokeDasharray={`${dash} ${circumference}`} transform="rotate(-90 18 18)" />
-      <text className="pp-ring__text" x="18" y="19.5">{value}%</text>
-    </svg>
-  );
-}
 
 export default function PlatformPreview() {
   const [view, setView] = useState<View>('inicio');
   const [spotlight, setSpotlight] = useState(0);
   const [selectedCourse, setSelectedCourse] = useState(courses[0].id);
-  const reduced = useReducedMotion();
   const currentDate = useCurrentDate();
   const calendar = getCalendarData(currentDate);
   const agenda = getAgenda(currentDate);
-  const railRef = useRef<HTMLDivElement>(null);
 
   // "Vida" no sistema: alterna o card de curso em destaque automaticamente.
   useEffect(() => {
-    if (reduced || view !== 'inicio') return;
+    if (view !== 'inicio') return;
     const id = window.setInterval(() => setSpotlight((value) => (value + 1) % Math.min(courses.length, 3)), 3000);
     return () => window.clearInterval(id);
-  }, [reduced, view]);
+  }, [view]);
 
   const headTitle: Record<View, string> = { inicio: 'Início', cursos: 'Meus cursos', agenda: 'Agenda', suporte: 'Suporte' };
   const openCourse = (courseId: string) => {
@@ -229,28 +197,14 @@ export default function PlatformPreview() {
                 <img src="/assets/nutriwork-banner-pc.png" alt="" />
                 <span className="pp-banner__shade" aria-hidden="true" />
                 <span className="pp-banner__action"><PreviewIcon name="play" /> Retomar estudos</span>
-                <span className="pp-banner__progress"><ProgressRing value={72} /><small>trilha aplicada</small></span>
               </button>
-
-              <div className="pp-kpis">
-                {kpis.map((kpi) => (
-                  <article className="pp-kpi" key={kpi.label}>
-                    <span className="pp-kpi__icon"><PreviewIcon name={kpi.icon} /></span>
-                    <span className="pp-kpi__label">{kpi.label}</span>
-                    <strong className="pp-kpi__value">{kpi.value}</strong>
-                    {kpi.progress != null
-                      ? <span className="pp-bar pp-bar--anim" style={{ ['--p' as string]: `${kpi.progress}%` }}><i /></span>
-                      : <span className="pp-kpi__hint">{kpi.hint}</span>}
-                  </article>
-                ))}
-              </div>
 
               <div className="pp-columns">
                 <section className="pp-block">
                   <div className="pp-section__head"><h3>Continue assistindo</h3><button type="button" className="pp-link" onClick={() => setView('cursos')}>Ver tudo</button></div>
-                  <div className="pp-rail" ref={railRef}>
+                  <div className="pp-rail">
                     {courses.slice(0, 3).map((course, index) => (
-                      <CourseCard key={course.id} course={course} spotlight={!reduced && index === spotlight} active={course.id === selectedCourse} onOpen={() => openCourse(course.id)} />
+                      <CourseCard key={course.id} course={course} spotlight={index === spotlight} active={course.id === selectedCourse} onOpen={() => openCourse(course.id)} />
                     ))}
                   </div>
                 </section>

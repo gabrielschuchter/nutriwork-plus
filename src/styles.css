@@ -522,11 +522,6 @@ html.route-transition main {
   100% { stroke-dasharray: 90, 200; stroke-dashoffset: -125px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .nw-spinner, .nw-spinner__arc { animation: none; }
-  .nw-spinner__arc { stroke-dasharray: 90, 200; stroke-dashoffset: -35px; }
-}
-
 .loading-skeleton {
   position: relative;
   z-index: 2;

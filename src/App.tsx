@@ -558,11 +558,6 @@ function useCountUp(target: number, duration = 3000) {
       startedRef.current = true;
       window.clearTimeout(fallbackTimer);
 
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        setValue(target);
-        return;
-      }
-
       const start = performance.now();
       const step = (now: number) => {
         const progress = Math.min((now - start) / duration, 1);

@@ -50,7 +50,6 @@ export default function ReferencesSection() {
   const groupWidthRef = useRef(0);
   const offsetRef = useRef(0);
   const nudgeRemainingRef = useRef(0);
-  const reduceMotionRef = useRef(false);
 
   const applyPosition = useCallback(() => {
     const track = trackRef.current;
@@ -65,13 +64,6 @@ export default function ReferencesSection() {
     const viewport = viewportRef.current;
     const firstGroup = firstGroupRef.current;
     if (!viewport || !firstGroup) return;
-
-    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const syncMotionPreference = () => {
-      reduceMotionRef.current = motionQuery.matches;
-    };
-    syncMotionPreference();
-    motionQuery.addEventListener('change', syncMotionPreference);
 
     const measure = () => {
       const previousWidth = groupWidthRef.current;
@@ -96,8 +88,7 @@ export default function ReferencesSection() {
 
       if (groupWidthRef.current > 0) {
         const standardSpeed = viewport.clientWidth <= 720 ? 17 : 21;
-        const autoplaySpeed = reduceMotionRef.current ? 8 : standardSpeed;
-        const autoplayDelta = autoplaySpeed * elapsed;
+        const autoplayDelta = standardSpeed * elapsed;
         const easing = 1 - Math.exp(-7 * elapsed);
         const manualDelta = nudgeRemainingRef.current * easing;
 
@@ -116,7 +107,6 @@ export default function ReferencesSection() {
     return () => {
       cancelAnimationFrame(frame);
       resizeObserver.disconnect();
-      motionQuery.removeEventListener('change', syncMotionPreference);
     };
   }, [applyPosition]);
 
@@ -126,12 +116,6 @@ export default function ReferencesSection() {
 
     const viewportWidth = viewportRef.current?.clientWidth ?? 360;
     const step = Math.min(Math.max(viewportWidth * 0.48, 220), 560);
-
-    if (reduceMotionRef.current) {
-      offsetRef.current += direction * step;
-      applyPosition();
-      return;
-    }
 
     nudgeRemainingRef.current += direction * step;
   };

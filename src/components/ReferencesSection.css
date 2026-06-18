@@ -313,8 +313,3 @@ html[data-theme='light'] .reference-card__photo::before {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .references-track {
-    will-change: auto;
-  }
-}
