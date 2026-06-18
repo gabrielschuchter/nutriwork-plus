@@ -225,15 +225,12 @@ export default function PlatformPreview() {
         <main className="pp-main" key={view}>
           {view === 'inicio' && (
             <section className="pp-view" aria-label="Início">
-              <article className="pp-welcome">
-                <div className="pp-welcome__copy">
-                  <span className="pp-eyebrow">Bem-vindo(a) de volta</span>
-                  <strong>Sua evolução continua hoje</strong>
-                  <p>Estudo prático, evidências e decisões clínicas organizadas para caber na rotina.</p>
-                  <button type="button" className="pp-btn" onClick={() => setView('cursos')}><PreviewIcon name="play" /> Retomar estudos</button>
-                </div>
-                <div className="pp-welcome__ring"><ProgressRing value={72} /><span>trilha aplicada</span></div>
-              </article>
+              <button type="button" className="pp-banner" aria-label="Retomar estudos no Nutriwork Plus" onClick={() => setView('cursos')}>
+                <img src="/assets/nutriwork-banner-pc.png" alt="" />
+                <span className="pp-banner__shade" aria-hidden="true" />
+                <span className="pp-banner__action"><PreviewIcon name="play" /> Retomar estudos</span>
+                <span className="pp-banner__progress"><ProgressRing value={72} /><small>trilha aplicada</small></span>
+              </button>
 
               <div className="pp-kpis">
                 {kpis.map((kpi) => (

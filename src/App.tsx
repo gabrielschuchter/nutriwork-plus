@@ -550,10 +550,13 @@ function useCountUp(target: number, duration = 3000) {
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
+    let frame = 0;
+    let fallbackTimer = 0;
 
     const animate = () => {
       if (startedRef.current) return;
       startedRef.current = true;
+      window.clearTimeout(fallbackTimer);
 
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         setValue(target);
@@ -568,10 +571,21 @@ function useCountUp(target: number, duration = 3000) {
           ? 4 * progress * progress * progress
           : 1 - Math.pow(-2 * progress + 2, 3) / 2;
         setValue(Math.round(eased * target));
-        if (progress < 1) window.requestAnimationFrame(step);
+        if (progress < 1) frame = window.requestAnimationFrame(step);
       };
-      window.requestAnimationFrame(step);
+      frame = window.requestAnimationFrame(step);
     };
+
+    const rect = node.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      animate();
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      animate();
+      return () => window.cancelAnimationFrame(frame);
+    }
 
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((entry) => {
@@ -580,10 +594,16 @@ function useCountUp(target: number, duration = 3000) {
           observer.disconnect();
         }
       }),
-      { threshold: 0.4 }
+      { threshold: 0.08, rootMargin: '0px 0px -8% 0px' }
     );
     observer.observe(node);
-    return () => observer.disconnect();
+    fallbackTimer = window.setTimeout(animate, 1200);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(fallbackTimer);
+      window.cancelAnimationFrame(frame);
+    };
   }, [target, duration]);
 
   return { value, ref };
@@ -890,7 +910,6 @@ function Estude() {
         <Reveal className="estude-hero">
           <div className="estude-hero__copy"><p>Para transformar intenção<br/>em uma rotina possível</p><h2>Estude</h2></div>
           <img className="estude-cover" src="/assets/estude-cover.webp" alt="Capa do guia Estude" />
-          <EstudeBookMockup variant="scene" />
           <span className="note note--one">Organização<br/>eficiente</span><span className="note note--two">Aplicação prática<br/>na rotina</span><span className="note note--three">Planejamento<br/>consciente</span><span className="note note--four">Constância sem<br/>sobrecarga</span>
           <p className="estude-description">Um livro prático para você estruturar uma rotina <strong>clara, eficiente e sustentável</strong>, sem depender de motivação constante para continuar avançando.</p>
         </Reveal>
