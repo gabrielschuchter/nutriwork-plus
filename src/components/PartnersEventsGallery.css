@@ -1,10 +1,13 @@
 .partners-events {
   position: relative;
   overflow: hidden;
-  padding-top: 32px;
+  padding-top: clamp(82px, 8vw, 118px);
+  padding-bottom: clamp(92px, 9vw, 132px);
   background:
-    radial-gradient(circle at 18% 8%, rgba(18, 99, 255, .18), transparent 34%),
-    radial-gradient(circle at 88% 42%, rgba(30, 118, 255, .11), transparent 32%);
+    linear-gradient(180deg, var(--background) 0%, transparent 18%, transparent 78%, var(--background) 100%),
+    radial-gradient(circle at 18% 18%, rgba(18, 99, 255, .16), transparent 34%),
+    radial-gradient(circle at 88% 42%, rgba(30, 118, 255, .11), transparent 32%),
+    linear-gradient(180deg, transparent 0%, var(--background) 96%);
 }
 
 .partners-events::before {
@@ -129,22 +132,29 @@
   left: 15px;
   right: 15px;
   bottom: 10px;
-  color: #17243a;
-  font-size: 12px;
+  color: #f7fbff;
+  font-size: 12.5px;
   font-weight: 400;
-  line-height: 1.28;
-  text-shadow: none;
+  line-height: 1.24;
+  text-shadow: 0 1px 8px rgba(0, 16, 42, .18);
 }
 
 html[data-theme='light'] .partners-events {
   background:
-    radial-gradient(circle at 18% 8%, rgba(18, 99, 255, .1), transparent 34%),
-    radial-gradient(circle at 88% 42%, rgba(30, 118, 255, .08), transparent 32%);
+    linear-gradient(180deg, var(--background) 0%, transparent 18%, transparent 78%, var(--background) 100%),
+    radial-gradient(circle at 18% 18%, rgba(18, 99, 255, .1), transparent 34%),
+    radial-gradient(circle at 88% 42%, rgba(30, 118, 255, .08), transparent 32%),
+    linear-gradient(180deg, transparent 0%, var(--background) 96%);
 }
 
 html[data-theme='light'] .partners-events__item {
   border-color: rgba(255, 255, 255, .62);
   box-shadow: 0 24px 70px rgba(36, 75, 135, .11), inset 0 1px rgba(255, 255, 255, .28);
+}
+
+html[data-theme='light'] .partners-events__item figcaption {
+  color: #17243a;
+  text-shadow: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -182,7 +192,8 @@ html[data-theme='light'] .partners-events__item {
 
 @media (max-width: 760px) {
   .partners-events {
-    padding-top: 48px;
+    padding-top: 74px;
+    padding-bottom: 82px;
   }
 
   .partners-events__heading {
@@ -247,6 +258,6 @@ html[data-theme='light'] .partners-events__item {
     left: 14px;
     right: 14px;
     bottom: 10px;
-    font-size: 12px;
+    font-size: 12.5px;
   }
 }
