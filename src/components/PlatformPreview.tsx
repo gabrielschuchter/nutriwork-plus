@@ -143,7 +143,10 @@ export default function PlatformPreview() {
   // "Vida" no sistema: alterna o card de curso em destaque automaticamente.
   useEffect(() => {
     if (view !== 'inicio') return;
-    const id = window.setInterval(() => setSpotlight((value) => (value + 1) % Math.min(courses.length, 3)), 3000);
+    const id = window.setInterval(() => {
+      if (document.hidden) return;
+      setSpotlight((value) => (value + 1) % Math.min(courses.length, 3));
+    }, 3000);
     return () => window.clearInterval(id);
   }, [view]);
 
@@ -194,7 +197,7 @@ export default function PlatformPreview() {
           {view === 'inicio' && (
             <section className="pp-view" aria-label="Início">
               <button type="button" className="pp-banner" aria-label="Retomar estudos no Nutriwork Plus" onClick={() => setView('cursos')}>
-                <img src="/assets/nutriwork-banner-pc.png" alt="" />
+                <img src="/assets/nutriwork-banner-pc.webp" alt="" width="2000" height="590" decoding="async" />
                 <span className="pp-banner__shade" aria-hidden="true" />
                 <span className="pp-banner__action"><PreviewIcon name="play" /> Retomar estudos</span>
               </button>

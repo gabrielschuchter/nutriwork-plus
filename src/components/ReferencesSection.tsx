@@ -20,7 +20,7 @@ function ReferenceGroup({ duplicate, groupRef }: { duplicate: boolean; groupRef?
       role={duplicate ? undefined : 'list'}
       aria-hidden={duplicate ? 'true' : undefined}
     >
-      {referenceProfiles.map((profile, index) => (
+      {referenceProfiles.map((profile) => (
         <article className="reference-card" role={duplicate ? undefined : 'listitem'} key={`${duplicate ? 'copy' : 'original'}-${profile.name}`}>
           <div className="reference-card__photo">
             <img
@@ -28,7 +28,7 @@ function ReferenceGroup({ duplicate, groupRef }: { duplicate: boolean; groupRef?
               alt={duplicate ? '' : profile.name}
               width="1080"
               height="1350"
-              loading={!duplicate && index < 3 ? 'eager' : 'lazy'}
+              loading="lazy"
               decoding="async"
               draggable="false"
             />
@@ -50,6 +50,7 @@ export default function ReferencesSection() {
   const groupWidthRef = useRef(0);
   const offsetRef = useRef(0);
   const nudgeRemainingRef = useRef(0);
+  const carouselVisibleRef = useRef(true);
 
   const applyPosition = useCallback(() => {
     const track = trackRef.current;
@@ -80,13 +81,25 @@ export default function ReferencesSection() {
     resizeObserver.observe(viewport);
     measure();
 
+    let visibilityObserver: IntersectionObserver | undefined;
+    if ('IntersectionObserver' in window) {
+      carouselVisibleRef.current = false;
+      visibilityObserver = new IntersectionObserver(
+        ([entry]) => {
+          carouselVisibleRef.current = entry.isIntersecting;
+        },
+        { rootMargin: '320px 0px', threshold: 0.01 }
+      );
+      visibilityObserver.observe(viewport);
+    }
+
     let frame = 0;
     let previousTime = performance.now();
     const animate = (time: number) => {
       const elapsed = Math.min((time - previousTime) / 1000, 0.05);
       previousTime = time;
 
-      if (groupWidthRef.current > 0) {
+      if (carouselVisibleRef.current && groupWidthRef.current > 0) {
         const standardSpeed = viewport.clientWidth <= 720 ? 17 : 21;
         const autoplayDelta = standardSpeed * elapsed;
         const easing = 1 - Math.exp(-7 * elapsed);
@@ -106,6 +119,7 @@ export default function ReferencesSection() {
 
     return () => {
       cancelAnimationFrame(frame);
+      visibilityObserver?.disconnect();
       resizeObserver.disconnect();
     };
   }, [applyPosition]);

@@ -16,7 +16,6 @@ import {
 } from './data';
 import ReferencesSection from './components/ReferencesSection';
 import PlatformPreview from './components/PlatformPreview';
-import PartnersEventsGallery from './components/PartnersEventsGallery';
 
 const checkout = {
   complete: 'https://pay.kiwify.com.br/nyBH9vq',
@@ -43,6 +42,7 @@ const loaderMinimumDuration: Record<LoadingVariant, number> = {
 const loaderContentSwapDelay = 260;
 
 const PartnersMapCard = lazy(() => import('./components/PartnersMapCard'));
+const PartnersEventsGallery = lazy(() => import('./components/PartnersEventsGallery'));
 
 function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <div className={`reveal ${className}`}>{children}</div>;
@@ -675,6 +675,7 @@ function JoinCta() {
 function Courses() {
   const trackRef = useRef<HTMLDivElement>(null);
   const firstGroupRef = useRef<HTMLDivElement>(null);
+  const carouselVisibleRef = useRef(true);
   const offsetRef = useRef(0);
   const groupWidthRef = useRef(0);
   const draggingRef = useRef(false);
@@ -709,6 +710,18 @@ function Courses() {
     resizeObserver.observe(firstGroup);
     measure();
 
+    let visibilityObserver: IntersectionObserver | undefined;
+    if ('IntersectionObserver' in window) {
+      carouselVisibleRef.current = false;
+      visibilityObserver = new IntersectionObserver(
+        ([entry]) => {
+          carouselVisibleRef.current = entry.isIntersecting;
+        },
+        { rootMargin: '320px 0px', threshold: 0.01 }
+      );
+      visibilityObserver.observe(track);
+    }
+
     let frame = 0;
     let previousTime = performance.now();
     const animate = (time: number) => {
@@ -716,7 +729,7 @@ function Courses() {
       previousTime = time;
       const paused = draggingRef.current || hoverPausedRef.current || focusPausedRef.current;
 
-      if (!paused && groupWidthRef.current > 0) {
+      if (carouselVisibleRef.current && !paused && groupWidthRef.current > 0) {
         const cycleDuration = window.innerWidth <= 720 ? 44 : 54;
         const autoSpeed = groupWidthRef.current / cycleDuration;
         applyOffset(offsetRef.current + momentumRef.current * elapsed - autoSpeed * elapsed);
@@ -730,6 +743,7 @@ function Courses() {
 
     return () => {
       cancelAnimationFrame(frame);
+      visibilityObserver?.disconnect();
       resizeObserver.disconnect();
     };
   }, []);
@@ -850,7 +864,7 @@ function Testimonials() {
     <section className="section testimonials-section">
       <div className="page-width page-width--narrow">
         <div className="testimonials-grid">
-          {testimonials.map((item) => <Reveal key={item.name}><article className="testimonial-card"><header><img src={item.image} alt={`Foto de ${item.name}`}/><div><h3>{item.name}</h3><p>{item.role}</p></div></header><blockquote>“{item.quote}”</blockquote><div className="stars" aria-label="5 de 5 estrelas">★★★★★</div></article></Reveal>)}
+          {testimonials.map((item) => <Reveal key={item.name}><article className="testimonial-card"><header><img src={item.image} alt={`Foto de ${item.name}`} width="400" height="400" loading="lazy" decoding="async"/><div><h3>{item.name}</h3><p>{item.role}</p></div></header><blockquote>“{item.quote}”</blockquote><div className="stars" aria-label="5 de 5 estrelas">★★★★★</div></article></Reveal>)}
         </div>
         <Reveal className="testimonial-cta"><p>Se você acredita em nutrição com fundamento científico e<br/>troca genuína de conhecimento, <strong>aqui é o seu lugar.</strong></p><Button href="/#planos">Quero evoluir meus estudos!</Button></Reveal>
       </div>
@@ -869,7 +883,7 @@ function EstudeBookMockup({ variant, decorative = false }: { variant: 'hero' | '
       <div className="estude-book-mockup__body">
         <div className="estude-book-mockup__pages" aria-hidden="true" />
         <div className="estude-book-mockup__spine" aria-hidden="true" />
-        <div className="estude-book-mockup__front"><img src="/assets/estude-cover.webp" alt="" /></div>
+        <div className="estude-book-mockup__front"><img src="/assets/estude-cover.webp" alt="" width="1200" height="1600" decoding="async" /></div>
       </div>
     </div>
   );
@@ -908,7 +922,7 @@ function Estude() {
         <Reveal><p className="method-copy">O problema nem sempre é falta de esforço. <strong>Muitas vezes,<br/>é a ausência de um método que funcione na vida real.</strong></p></Reveal>
         <Reveal className="estude-hero">
           <div className="estude-hero__copy"><p>Para transformar intenção<br/>em uma rotina possível</p><h2>Estude</h2></div>
-          <img className="estude-cover" src="/assets/estude-cover.webp" alt="Capa do guia Estude" />
+          <img className="estude-cover" src="/assets/estude-cover.webp" alt="Capa do guia Estude" width="1200" height="1600" loading="lazy" decoding="async" />
           <span className="note note--one">Organização<br/>eficiente</span><span className="note note--two">Aplicação prática<br/>na rotina</span><span className="note note--three">Planejamento<br/>consciente</span><span className="note note--four">Constância sem<br/>sobrecarga</span>
           <p className="estude-description">Um livro digital prático para você estruturar uma rotina <strong>clara, eficiente e sustentável</strong>, sem depender de motivação constante para continuar avançando.</p>
         </Reveal>
@@ -951,7 +965,7 @@ function Evidence() {
   return (
     <section className="section evidence-section">
       <div className="evidence-glow" aria-hidden="true" />
-      <img className="evidence-shape" src="/assets/evidence-shape.webp" alt="" aria-hidden="true" />
+      <img className="evidence-shape" src="/assets/evidence-shape.webp" alt="" aria-hidden="true" width="1185" height="1248" loading="lazy" decoding="async" />
       <div className="page-width page-width--narrow">
         <Reveal className="evidence-heading"><h2>Aprenda a usar evidências sem se perder em termos difíceis.</h2><p>No módulo de Nutrição Baseada em Evidências, você aprende a:</p></Reveal>
         <div className="evidence-list">{evidenceLearning.map((item) => <Reveal key={item}><p>{item}</p></Reveal>)}</div>
@@ -967,7 +981,7 @@ function Mentor() {
         <Reveal><p className="mentor-kicker">Com acompanhamento especial e <strong>direto</strong> de</p></Reveal>
         <Reveal className="mentor-card">
           <div className="mentor-copy"><h2>Gabriel Schuchter</h2><h3>Fundador e professor do Nutriwork</h3><p>Bacharel em Nutrição pela Universidade Federal de Uberlândia (UFU), pesquisador com atuação em revisões sistemáticas e meta-análises, dois dos métodos mais importantes para sintetizar evidências na área da saúde.</p><p>É analista do Reviews, plataforma especializada em análise crítica e interpretação técnica de artigos científicos para profissionais da saúde. Também atua como mentor em Prática Baseada em Evidências, orientando estudantes e profissionais na leitura crítica da literatura, construção de raciocínio científico e tomada de decisão clínica.</p><p>Ao longo da sua trajetória, já ministrou aulas e formações para cursos e profissionais de Nutrição, Medicina, Psicologia, Fisioterapia e Enfermagem, levando a Prática Baseada em Evidências para diferentes áreas da saúde.</p><p>No Nutriwork, Gabriel aproxima a ciência da rotina real de quem estuda Nutrição. Ele mostra como olhar para um artigo sem medo, entender o peso de uma evidência e pensar antes de repetir uma conduta pronta.</p></div>
-          <figure className="mentor-photo"><img src="/assets/mentor-gabriel.webp" alt="Gabriel Schuchter, fundador e professor do Nutriwork" width="1070" height="1600" /></figure>
+          <figure className="mentor-photo"><img src="/assets/mentor-gabriel.webp" alt="Gabriel Schuchter, fundador e professor do Nutriwork" width="1070" height="1600" loading="lazy" decoding="async" /></figure>
         </Reveal>
       </div>
     </section>
@@ -985,7 +999,7 @@ function Pricing() {
     <section id="planos" className="section pricing-section">
       <div className="page-width page-width--narrow">
         <Reveal><SectionHeading>Planos pensados para se adaptar à sua<br/>rotina de estudos</SectionHeading></Reveal>
-        <Reveal className="pricing-card pricing-card--featured"><img className="featured-badge" src="/assets/featured-badge-labeled.webp" alt="Plano destaque"/><h2>Nutriwork Plus Anual +<br/><span>livro ESTUDE!</span></h2><h3>Acesso completo à formação que você sempre quis.</h3><Price value="24,90" monthly/><ul>{['Cursos de todas as áreas da Nutrição.','E-book ESTUDE para resolver sua rotina de estudos.','Aulas ao vivo com especialistas.','Comunidade ativa para trocar dúvidas e obter oportunidades de trabalho.','Análises de artigo, podcasts, Espaço de Conforto e outros recursos.'].map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul><div className="pricing-actions"><Button href={checkout.complete} external>QUERO A EXPERIÊNCIA COMPLETA</Button><Button href="/#/estude" variant="outline" className="pricing-card__secondary">CONHECER O ESTUDE</Button></div><div className="scarcity">🔥 últimas vagas restantes!</div></Reveal>
+        <Reveal className="pricing-card pricing-card--featured"><img className="featured-badge" src="/assets/featured-badge-labeled.webp" alt="Plano destaque" width="790" height="1000" loading="lazy" decoding="async"/><h2>Nutriwork Plus Anual +<br/><span>livro ESTUDE!</span></h2><h3>Acesso completo à formação que você sempre quis.</h3><Price value="24,90" monthly/><ul>{['Cursos de todas as áreas da Nutrição.','E-book ESTUDE para resolver sua rotina de estudos.','Aulas ao vivo com especialistas.','Comunidade ativa para trocar dúvidas e obter oportunidades de trabalho.','Análises de artigo, podcasts, Espaço de Conforto e outros recursos.'].map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul><div className="pricing-actions"><Button href={checkout.complete} external>QUERO A EXPERIÊNCIA COMPLETA</Button><Button href="/#/estude" variant="outline" className="pricing-card__secondary">CONHECER O ESTUDE</Button></div><div className="scarcity">🔥 últimas vagas restantes!</div></Reveal>
         <Reveal className="platform-pricing"><header><div><h2>Planos Nutriwork Plus</h2><p>Opções flexíveis para acessar a plataforma no seu ritmo.</p></div><span>À vista</span></header><div className="mini-plans">{platformPlans.map((plan, index) => <article key={plan.title}><h3>{plan.title}</h3><Price value={plan.price}/><p>por mês.</p><Button href={planLinks[index]} external>Quero assinar</Button></article>)}</div><ul>{platformBenefits.map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul></Reveal>
       </div>
     </section>
@@ -1087,7 +1101,9 @@ function PartnersPage() {
           </Reveal>
         </div>
       </section>
-      <PartnersEventsGallery />
+      <Suspense fallback={null}>
+        <PartnersEventsGallery />
+      </Suspense>
     </main>
   );
 }
