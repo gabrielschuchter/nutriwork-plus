@@ -16,6 +16,7 @@ import {
 } from './data';
 import ReferencesSection from './components/ReferencesSection';
 import PlatformPreview from './components/PlatformPreview';
+import PartnersEventsGallery from './components/PartnersEventsGallery';
 
 const checkout = {
   complete: 'https://pay.kiwify.com.br/nyBH9vq',
@@ -425,6 +426,10 @@ function Icon({ name }: { name: string }) {
   return <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>;
 }
 
+function PricingCheck() {
+  return <span className="pricing-check" aria-hidden="true" />;
+}
+
 function Button({ href, children, variant = 'primary', className = '', external = false }: { href: string; children: ReactNode; variant?: 'primary' | 'outline'; className?: string; external?: boolean }) {
   return <a className={`button button--${variant} ${className}`} href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>{children}</a>;
 }
@@ -639,7 +644,7 @@ function Platform() {
       <div className="page-width">
         <Reveal className="intro-copy">
           <h3>Estudar Nutrição não deveria parecer tão confuso.</h3>
-          <p>Existe muito conteúdo, opinião demais e pouca ajuda para entender o que realmente importa.<br/><br/>O Nutriwork é uma comunidade de estudantes de Nutrição criada para quem busca:</p>
+          <p>Existem muitos conteúdos, muitas opiniões e pouca clareza sobre o que realmente merece sua atenção.<br/><br/>O Nutriwork é uma comunidade de estudantes de Nutrição criada para quem busca:</p>
         </Reveal>
         <div className="promise-grid">
           {promises.map((item) => <Reveal key={item.title} className="glass-card promise-card"><Icon name={item.icon}/><h3>{item.title}</h3></Reveal>)}
@@ -658,7 +663,7 @@ function JoinCta() {
           <div>
             <p className="eyebrow">Seu próximo passo</p>
             <h2 id="join-cta-title">Pare de estudar no improviso.</h2>
-            <p>Você não precisa salvar mais 50 posts para sentir que está evoluindo.<br/><br/>Entre no Nutriwork e estude com aulas, materiais e discussões que mostram o que estudar, por que estudar e como usar isso na prática.</p>
+            <p className="join-cta__copy">Você não precisa salvar mais 50 posts para sentir que está evoluindo.<br/><br/>Entre no Nutriwork e estude com aulas, materiais e discussões que mostram <strong>o que estudar</strong>, <strong>por que estudar</strong> e <strong>como usar isso na prática</strong>.</p>
           </div>
           <Button href="/#planos" variant="outline">Quero fazer parte</Button>
         </Reveal>
@@ -763,7 +768,7 @@ function Courses() {
   return (
     <section className="section courses-section">
       <div className="page-width">
-        <Reveal><SectionHeading>Enquanto muitos alunos acumulam conteúdo, você aprende o que realmente importa:</SectionHeading></Reveal>
+        <Reveal><SectionHeading>Enquanto muitos alunos acumulam conteúdo, <strong className="section-heading__soft-strong">você aprende o que realmente importa</strong>:</SectionHeading></Reveal>
         <Reveal>
           <div className="courses-carousel" role="region" aria-roledescription="carrossel" aria-label="Especializações Nutriwork" aria-describedby="courses-help">
             <p className="sr-only" id="courses-help">Carrossel automático com nove especializações. Arraste para navegar. Passe o mouse ou mantenha o foco no carrossel para pausar.</p>
@@ -876,9 +881,8 @@ function EstudeLandingHero() {
       <div className="page-width">
         <Reveal className="estude-page-hero__grid">
           <div className="estude-page-hero__copy">
-            <p className="eyebrow">Método de estudos</p>
-            <h1>Pare de estudar no improviso. Construa uma rotina que sustenta sua evolução.</h1>
-            <p>O ESTUDE ajuda você a decidir prioridades, organizar o tempo disponível e transformar esforço em progresso, com estratégias fundamentadas em evidências.</p>
+            <h1>Pare de estudar no improviso. Construa sua rotina de estudos baseada em evidências.</h1>
+            <p>O ESTUDE ajuda você a decidir prioridades, organizar o tempo disponível e transformar esforço em progresso, com estratégias fundamentadas na ciência.</p>
             <div className="estude-page-hero__actions">
               <Button href={checkout.guide} external>Quero organizar meus estudos</Button>
             </div>
@@ -906,7 +910,7 @@ function Estude() {
           <div className="estude-hero__copy"><p>Para transformar intenção<br/>em uma rotina possível</p><h2>Estude</h2></div>
           <img className="estude-cover" src="/assets/estude-cover.webp" alt="Capa do guia Estude" />
           <span className="note note--one">Organização<br/>eficiente</span><span className="note note--two">Aplicação prática<br/>na rotina</span><span className="note note--three">Planejamento<br/>consciente</span><span className="note note--four">Constância sem<br/>sobrecarga</span>
-          <p className="estude-description">Um livro prático para você estruturar uma rotina <strong>clara, eficiente e sustentável</strong>, sem depender de motivação constante para continuar avançando.</p>
+          <p className="estude-description">Um livro digital prático para você estruturar uma rotina <strong>clara, eficiente e sustentável</strong>, sem depender de motivação constante para continuar avançando.</p>
         </Reveal>
         <Reveal><p className="estude-detail">Você entende como se preparar melhor para provas e como sono, ambiente, exercício, nutrição, cafeína, suplementos e redes sociais interferem no desempenho. Assim, suas escolhas deixam de ser tentativas isoladas e passam a seguir critérios mais conscientes.</p></Reveal>
         <Reveal className="audience"><h2>O ESTUDE foi pensado para quem:</h2>{estudeAudience.map((item, index) => <div key={item}><Icon name={audienceIcons[index]}/><p>{item}</p></div>)}</Reveal>
@@ -932,10 +936,10 @@ function EstudePlan() {
       <div className="page-width page-width--narrow">
         <Reveal className="pricing-card pricing-card--estude">
           <span className="corner-badge">À vista</span>
-          <h2>Livro ESTUDE</h2>
+          <h2>Livro Digital ESTUDE!</h2>
           <h3>Um método prático para organizar sua rotina<br/>e estudar com mais direção.</h3>
           <Price value="77,90"/>
-          <ul>{['Critérios para definir prioridades sem tentar estudar tudo','Estratégias para construir uma rotina possível de manter','Checklists e planners para aplicar o método no dia a dia','Conteúdo completo sobre fatores que influenciam o rendimento'].map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul>
+          <ul>{['Conteúdo completo sobre fatores que influenciam o rendimento nos estudos;','Critérios para definir prioridades, invés de tentar estudar tudo;','Estratégias para construir uma rotina de estudos possível de ser mantida;','Tudo isso de forma prática, direta e baseada em evidências.'].map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul>
           <Button href={checkout.guide} external>Quero o livro ESTUDE</Button>
         </Reveal>
       </div>
@@ -981,8 +985,8 @@ function Pricing() {
     <section id="planos" className="section pricing-section">
       <div className="page-width page-width--narrow">
         <Reveal><SectionHeading>Planos pensados para se adaptar à sua<br/>rotina de estudos</SectionHeading></Reveal>
-        <Reveal className="pricing-card pricing-card--featured"><img className="featured-badge" src="/assets/featured-badge.webp" alt="Plano destaque"/><h2>Nutriwork Plus Anual + ESTUDE</h2><h3>Doze meses de formação e um método para organizar seus estudos.</h3><Price value="24,90" monthly/><span className="payment-note">12 meses de acesso • pagamento anual</span><ul>{['Acesso completo aos cursos e recursos do Nutriwork Plus.','12 meses para aprofundar conteúdos e revisar quando precisar.','Livro ESTUDE incluído para organizar prioridades e rotina.','Atualizações contínuas durante o período de acesso.','Comunidade para trocar dúvidas e continuar evoluindo.'].map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul><div className="pricing-actions"><Button href={checkout.complete} external>Escolher o plano anual</Button><Button href="/#/estude" variant="outline" className="pricing-card__secondary">Conhecer o ESTUDE</Button></div><div className="scarcity">🔥 últimas vagas restantes!</div></Reveal>
-        <Reveal className="platform-pricing"><header><div><h2>Planos nutriwork</h2><p>Acesso à plataforma Nutriwork.</p></div><span>À vista</span></header><div className="mini-plans">{platformPlans.map((plan, index) => <article key={plan.title}><h3>{plan.title}</h3><Price value={plan.price}/><p>por mês.</p><Button href={planLinks[index]} external>Quero assinar</Button></article>)}</div><ul>{platformBenefits.map((item) => <li key={item}><Icon name="check"/>{item}</li>)}</ul></Reveal>
+        <Reveal className="pricing-card pricing-card--featured"><img className="featured-badge" src="/assets/featured-badge-labeled.webp" alt="Plano destaque"/><h2>Nutriwork Plus Anual +<br/><span>livro ESTUDE!</span></h2><h3>Acesso completo à formação que você sempre quis.</h3><Price value="24,90" monthly/><ul>{['Cursos de todas as áreas da Nutrição.','E-book ESTUDE para resolver sua rotina de estudos.','Aulas ao vivo com especialistas.','Comunidade ativa para trocar dúvidas e obter oportunidades de trabalho.','Análises de artigo, podcasts, Espaço de Conforto e outros recursos.'].map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul><div className="pricing-actions"><Button href={checkout.complete} external>QUERO A EXPERIÊNCIA COMPLETA</Button><Button href="/#/estude" variant="outline" className="pricing-card__secondary">CONHECER O ESTUDE</Button></div><div className="scarcity">🔥 últimas vagas restantes!</div></Reveal>
+        <Reveal className="platform-pricing"><header><div><h2>Planos Nutriwork Plus</h2><p>Opções flexíveis para acessar a plataforma no seu ritmo.</p></div><span>À vista</span></header><div className="mini-plans">{platformPlans.map((plan, index) => <article key={plan.title}><h3>{plan.title}</h3><Price value={plan.price}/><p>por mês.</p><Button href={planLinks[index]} external>Quero assinar</Button></article>)}</div><ul>{platformBenefits.map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul></Reveal>
       </div>
     </section>
   );
@@ -1070,9 +1074,8 @@ function PartnersPage() {
         <div className="page-width">
           <Reveal className="partners-hero__grid">
             <div className="partners-hero__copy">
-              <p className="eyebrow">Parcerias Nutriwork</p>
-              <h1>Construa uma parceria com uma comunidade que valoriza ciência, formação e impacto real.</h1>
-              <p>Projetos, marcas e instituições que compartilham uma visão séria de educação em saúde podem conversar com o Nutriwork para criar iniciativas consistentes e relevantes.</p>
+              <h1>Construa uma parceria com uma comunidade que valoriza a Nutrição Baseada em Evidências.</h1>
+              <p>Projetos, marcas e instituições que compartilham uma visão séria de educação em saúde são bem-vindas para conversar com o Nutriwork com o intuito de criar iniciativas relevantes.</p>
               <div className="partners-hero__actions">
                 <Button href={partnerForm} external>Quero ser parceiro</Button>
                 <a className="partners-hero__contact" href={`mailto:${contactEmail}`} aria-label={`Enviar e-mail para ${contactEmail}`}>{contactEmail}</a>
@@ -1084,6 +1087,7 @@ function PartnersPage() {
           </Reveal>
         </div>
       </section>
+      <PartnersEventsGallery />
     </main>
   );
 }

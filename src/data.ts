@@ -84,15 +84,15 @@ export const estudeObjections = [
 
 export const estudeBenefits = [
   { title: 'Decisões mais claras para a sua rotina', text: 'Defina prioridades e organize cada etapa do cronograma com estratégias baseadas em evidências.' },
-  { title: 'Ferramentas para sair da intenção e aplicar', text: 'Use checklists e planners prontos para imprimir ou preencher no digital.' },
-  { title: 'Um método que cabe na vida real', text: 'Adapte os estudos à sua carga horária e aos fatores que influenciam o desempenho cognitivo.' }
+  { title: 'Ferramentas para sair da intenção e aplicar', text: 'Use das orientações práticas presentes no ESTUDE para organizar já sua rotina.' },
+  { title: 'Um método que cabe na vida real', text: 'Adapte os seus estudos à sua carga horária, tornando possível aprender mesmo nos dias difíceis.' }
 ];
 
 export const evidenceLearning = [
   'Construir perguntas clínicas antes de procurar respostas.',
   'Encontrar evidências científicas de forma mais rápida e organizada.',
   'Entender resultados sem travar nos termos técnicos.',
-  'Avaliar se um estudo é forte ou fraco.',
+  'Analisar um estudo criticamente, avaliando se ele é forte ou fraco.',
   'Transformar resultados de estudos em decisões para a prática clínica.'
 ];
 
@@ -103,24 +103,20 @@ export const platformPlans = [
 ];
 
 export const platformBenefits = [
-  'Acesso à plataforma Nutriwork',
-  'Conteúdos organizados por área e atualizações contínuas',
-  'Acesso via computador e celular',
-  'Comunidade Nutriwork'
+  'Acesso ao Nutriwork Plus pelo período escolhido',
+  'Cursos, aulas e recursos da plataforma em um só lugar',
+  'Comunidade Nutriwork para dúvidas e trocas',
+  'Acesso pelo computador e celular'
 ];
 
 export const faqItems = [
   {
     question: 'Para quem é o Nutriwork Plus?',
-    answer: 'Para estudantes de Nutrição que querem construir uma base mais segura e para profissionais que desejam revisar fundamentos, atualizar conhecimentos e tomar decisões com maior respaldo científico.'
+    answer: 'Para estudantes que querem aprender Nutrição de forma prática, didática e baseada em evidências. Se você quer construir uma base mais segura, revisando fundamentos, atualizando conhecimentos e deseja tomar decisões com maior respaldo científico, o Nutriwork é para você.'
   },
   {
     question: 'O que encontro dentro da plataforma?',
     answer: 'Cursos organizados por áreas da Nutrição, aulas gravadas, análises de artigos, conteúdos em áudio e acesso à comunidade Nutriwork. A proposta é reunir, em um só lugar, recursos que ajudam você a estudar com mais direção e profundidade.'
-  },
-  {
-    question: 'Preciso ter experiência com artigos científicos?',
-    answer: 'Não. Os conteúdos foram estruturados para desenvolver esse raciocínio de forma progressiva. Você pode começar pelos fundamentos e avançar até uma leitura mais crítica e aplicável das evidências.'
   },
   {
     question: 'Consigo estudar mesmo com uma rotina corrida?',
