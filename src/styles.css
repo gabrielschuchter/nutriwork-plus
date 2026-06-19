@@ -1633,11 +1633,11 @@ html[data-theme='light'] .scarcity { color: #795000; background: linear-gradient
   .mentor-photo img { left: 50%; bottom: -4%; width: auto; height: 125%; transform: translateX(-51%); object-fit: contain; object-position: center bottom; }
   .mentor-card p { font-size: 13px; }
   .pricing-card { margin-top: 60px; padding: 52px 25px 38px; border-radius: 28px; }
-  .pricing-card--featured { padding-top: 72px; }
-  .pricing-card--featured h2 { max-width: 100%; }
+  .pricing-card--featured { padding-top: 100px; }
+  .pricing-card--featured h2 { max-width: calc(100% - 92px); }
   .pricing-card--estude { margin-top: 120px; }
   .pricing-card--estude::before { top: -62px; left: 10%; right: 10%; }
-  .featured-badge { top: -42px; right: 8px; width: 124px; }
+  .featured-badge { top: -28px; right: 8px; width: 112px; }
   .corner-badge { top: -15px; right: 20px; padding: 12px 19px; font-size: 17px; }
   .price { font-size: clamp(68px, 21vw, 100px); }
   .pricing-card li { gap: 12px; font-size: 14px; }
