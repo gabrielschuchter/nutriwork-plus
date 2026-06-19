@@ -108,7 +108,7 @@
   display: block;
   object-fit: cover;
   object-position: var(--focus, center center);
-  transform: scale(1.005);
+  transform: scale(1.012);
   transform-origin: center;
   transition: transform .48s cubic-bezier(.22, 1, .36, 1), filter .48s cubic-bezier(.22, 1, .36, 1);
 }
@@ -211,13 +211,19 @@ html[data-theme='light'] .partners-events__item {
 
   .partners-events__item {
     margin: 14px 0;
-    padding: 5px 5px 58px;
+    padding: 3px 3px 56px;
     border-radius: 20px;
   }
 
   .partners-events__media {
     height: auto;
     aspect-ratio: 4 / 3;
+    border-radius: 16px;
+  }
+
+  .partners-events__item::after {
+    inset: 3px 3px 56px;
+    border-radius: 16px;
   }
 
   .partners-events__item--tall {
