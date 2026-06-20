@@ -1417,6 +1417,72 @@ html[data-theme='light'] .scarcity { color: #795000; background: linear-gradient
 .brazil-map__state { fill: var(--brazil-state-fill); stroke: var(--brazil-state-stroke); stroke-width: 1; stroke-linejoin: round; vector-effect: non-scaling-stroke; transition: fill .25s ease, stroke .25s ease; }
 .brazil-map__state:hover { fill: var(--brazil-state-hover); stroke: var(--brazil-state-stroke-strong); }
 .brazil-map__markers { pointer-events: none; }
+.partners-network {
+  --route-stroke: rgba(93, 204, 255, .82);
+  --route-glow: rgba(18, 164, 255, .34);
+  --pin-fill: #f8fcff;
+  --pin-accent: #2bbdff;
+}
+.partners-network__route {
+  fill: none;
+  stroke: var(--route-stroke);
+  stroke-width: 1.45;
+  stroke-linecap: round;
+  stroke-dasharray: 4 8;
+  vector-effect: non-scaling-stroke;
+  opacity: .72;
+  filter: drop-shadow(0 0 5px var(--route-glow));
+  animation: partners-route-flow 5.8s linear infinite;
+  animation-delay: calc(var(--route-index) * -.42s);
+}
+.partners-network__pin {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.partners-network__pin-glow {
+  fill: var(--pin-accent);
+  opacity: .16;
+  filter: drop-shadow(0 0 8px rgba(43, 189, 255, .52));
+}
+.partners-network__pin-core {
+  fill: var(--pin-fill);
+  stroke: rgba(43, 189, 255, .9);
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 2px 5px rgba(2, 8, 22, .32)) drop-shadow(0 0 7px rgba(43, 189, 255, .32));
+}
+.partners-network__pin-dot { fill: var(--pin-accent); }
+.partners-network__pin--hub .partners-network__pin-glow { opacity: .24; filter: drop-shadow(0 0 12px rgba(43, 189, 255, .72)); }
+.partners-network__pin--hub .partners-network__pin-core { stroke-width: 1.6; }
+.partners-network__hub-pulse {
+  fill: none;
+  stroke: rgba(43, 189, 255, .62);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: partners-hub-pulse 2.9s ease-out infinite;
+}
+@keyframes partners-route-flow {
+  to { stroke-dashoffset: -48; }
+}
+@keyframes partners-hub-pulse {
+  0% { opacity: .72; transform: scale(.72); }
+  72%, 100% { opacity: 0; transform: scale(1.55); }
+}
+html[data-theme='light'] .partners-network {
+  --route-stroke: rgba(18, 122, 255, .58);
+  --route-glow: rgba(18, 99, 255, .16);
+  --pin-fill: #ffffff;
+  --pin-accent: #1263ff;
+}
+html[data-theme='light'] .partners-network__route { opacity: .58; }
+html[data-theme='light'] .partners-network__pin-glow { opacity: .12; }
+html[data-theme='light'] .partners-network__pin-core {
+  stroke: rgba(18, 99, 255, .72);
+  filter: drop-shadow(0 2px 5px rgba(36, 75, 135, .18)) drop-shadow(0 0 5px rgba(18, 99, 255, .16));
+}
+html[data-theme='light'] .partners-network__hub-pulse { stroke: rgba(18, 99, 255, .38); }
 .partners-map-card__meta { position: absolute; z-index: 3; left: 28px; bottom: 18px; margin: 0; padding: 5px 8px; border-radius: 999px; color: var(--partners-map-meta-text); background: var(--partners-map-meta-bg); backdrop-filter: blur(8px); font-size: 9px; letter-spacing: .035em; }
 .partners-map-card__meta span { margin-right: 4px; color: rgba(132,180,255,.86); font-size: 11px; font-weight: 700; }
 .partners-map-card--fallback::after { content: ''; position: absolute; left: 50%; top: 58%; width: 220px; height: 220px; border: 1px solid rgba(79,145,255,.2); border-top-color: rgba(79,145,255,.62); border-radius: 50%; transform: translate(-50%, -50%); animation: partners-map-fallback 1.8s linear infinite; }
@@ -1660,6 +1726,11 @@ html[data-theme='light'] .scarcity { color: #795000; background: linear-gradient
   .partners-map-card { min-height: 470px; border-radius: 24px; }
   .partners-map-card__copy { padding: 28px 24px 0; }
   .partners-map-card__visual { bottom: -2%; height: 68%; }
+  .partners-network__route { stroke-width: 1.15; opacity: .56; stroke-dasharray: 3 9; }
+  .partners-network__pin--destination { opacity: .9; }
+  .partners-network__pin--destination .partners-network__pin-glow { opacity: .1; }
+  .partners-network__pin--destination .partners-network__pin-core { r: 3.8; }
+  .partners-network__hub-pulse { animation-duration: 3.4s; }
   .partners-map-card__meta { left: 18px; bottom: 14px; }
   .faq-intro { margin-top: -22px; margin-bottom: 38px; font-size: 14px; }
   .faq-item button { min-height: 64px; padding: 17px 18px; font-size: 15px; }
