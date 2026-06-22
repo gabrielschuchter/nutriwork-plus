@@ -11,8 +11,7 @@ import {
   navItems,
   platformBenefits,
   platformPlans,
-  promises,
-  testimonials
+  promises
 } from './data';
 import ReferencesSection from './components/ReferencesSection';
 import PlatformPreview from './components/PlatformPreview';
@@ -275,24 +274,6 @@ function SkeletonBlock({ className = '' }: { className?: string }) {
   return <span className={`skeleton-block ${className}`} />;
 }
 
-function LoadingTestimonial({ long = false }: { long?: boolean }) {
-  return (
-    <article className={`loading-testimonial ${long ? 'loading-testimonial--long' : ''}`}>
-      <div className="loading-testimonial__header">
-        <SkeletonBlock className="skeleton-avatar" />
-        <div>
-          <SkeletonBlock className="skeleton-line skeleton-line--name" />
-          <SkeletonBlock className="skeleton-line skeleton-line--role" />
-        </div>
-      </div>
-      <SkeletonBlock className="skeleton-line skeleton-line--wide" />
-      <SkeletonBlock className="skeleton-line skeleton-line--wide" />
-      <SkeletonBlock className="skeleton-line skeleton-line--medium" />
-      <SkeletonBlock className="skeleton-stars" />
-    </article>
-  );
-}
-
 function LoadingSkeleton({ page, compact }: { page: Page; compact: boolean }) {
   if (page === 'home') return null;
 
@@ -551,6 +532,7 @@ function useCountUp(target: number, duration = 3000) {
   const [value, setValue] = useState(0);
   const ref = useRef<HTMLElement>(null);
   const startedRef = useRef(false);
+  const completedRef = useRef(false);
 
   useEffect(() => {
     const node = ref.current;
@@ -571,7 +553,11 @@ function useCountUp(target: number, duration = 3000) {
           ? 4 * progress * progress * progress
           : 1 - Math.pow(-2 * progress + 2, 3) / 2;
         setValue(Math.round(eased * target));
-        if (progress < 1) frame = window.requestAnimationFrame(step);
+        if (progress < 1) {
+          frame = window.requestAnimationFrame(step);
+        } else {
+          completedRef.current = true;
+        }
       };
       frame = window.requestAnimationFrame(step);
     };
@@ -579,12 +565,18 @@ function useCountUp(target: number, duration = 3000) {
     const rect = node.getBoundingClientRect();
     if (rect.top < window.innerHeight && rect.bottom > 0) {
       animate();
-      return () => window.cancelAnimationFrame(frame);
+      return () => {
+        window.cancelAnimationFrame(frame);
+        if (!completedRef.current) startedRef.current = false;
+      };
     }
 
     if (!('IntersectionObserver' in window)) {
       animate();
-      return () => window.cancelAnimationFrame(frame);
+      return () => {
+        window.cancelAnimationFrame(frame);
+        if (!completedRef.current) startedRef.current = false;
+      };
     }
 
     const observer = new IntersectionObserver(
@@ -603,6 +595,7 @@ function useCountUp(target: number, duration = 3000) {
       observer.disconnect();
       window.clearTimeout(fallbackTimer);
       window.cancelAnimationFrame(frame);
+      if (!completedRef.current) startedRef.current = false;
     };
   }, [target, duration]);
 
@@ -644,12 +637,17 @@ function Platform() {
       <div className="page-width">
         <Reveal className="intro-copy">
           <h3>Estudar Nutrição não deveria parecer tão confuso.</h3>
-          <p>Existem muitos conteúdos, muitas opiniões e pouca clareza sobre o que realmente merece sua atenção.<br/><br/>O Nutriwork é uma comunidade de estudantes de Nutrição criada para quem busca:</p>
+          <p className="intro-copy__support">Existem muitos conteúdos, muitas opiniões e pouca clareza sobre o que realmente merece sua atenção.</p>
+          <div className="purpose-callout">
+            <p><strong>O Nutriwork existe para dar direção aos seus estudos em Nutrição.</strong></p>
+            <span>Uma comunidade para quem quer aprender aquilo que importa com clareza e pensamento crítico.</span>
+          </div>
+          <p className="promise-kicker">Na prática, isso significa:</p>
         </Reveal>
         <div className="promise-grid">
-          {promises.map((item) => <Reveal key={item.title} className="glass-card promise-card"><Icon name={item.icon}/><h3>{item.title}</h3></Reveal>)}
+          {promises.map((item) => <Reveal key={item.title} className="glass-card promise-card"><Icon name={item.icon}/><div><h3>{item.title}</h3><p>{item.description}</p></div></Reveal>)}
         </div>
-        <Reveal><p className="mission">Se você já teve a sensação de: <strong>“estou estudando bastante, mas será que estou estudando certo?”</strong>, o Nutriwork é para você.</p></Reveal>
+        <Reveal><p className="mission">Se você já sente que <strong>estuda bastante</strong>, mas ainda não sabe se está <strong>estudando certo</strong>, o Nutriwork foi feito para você.</p></Reveal>
       </div>
     </section>
   );
@@ -856,19 +854,6 @@ function Comparison() {
         ))}
       </div>
     </div>
-  );
-}
-
-function Testimonials() {
-  return (
-    <section className="section testimonials-section">
-      <div className="page-width page-width--narrow">
-        <div className="testimonials-grid">
-          {testimonials.map((item) => <Reveal key={item.name}><article className="testimonial-card"><header><img src={item.image} alt={`Foto de ${item.name}`} width="400" height="400" loading="lazy" decoding="async"/><div><h3>{item.name}</h3><p>{item.role}</p></div></header><blockquote>“{item.quote}”</blockquote><div className="stars" aria-label="5 de 5 estrelas">★★★★★</div></article></Reveal>)}
-        </div>
-        <Reveal className="testimonial-cta"><p>Se você acredita em nutrição com fundamento científico e<br/>troca genuína de conhecimento, <strong>aqui é o seu lugar.</strong></p><Button href="/#planos">Quero evoluir meus estudos!</Button></Reveal>
-      </div>
-    </section>
   );
 }
 

@@ -9,9 +9,9 @@ export const navItems = [
 ];
 
 export const promises = [
-  { icon: 'brain', title: 'Formação de pensamento crítico nos estudos' },
-  { icon: 'structure', title: 'Aprendizado prático sobre aquilo que é importante' },
-  { icon: 'evidence', title: 'Conteúdo baseado em evidências, não em opinião' }
+  { icon: 'brain', title: 'Pensamento crítico', description: 'Aprenda a questionar condutas, conteúdos e evidências com mais segurança.' },
+  { icon: 'structure', title: 'Aprendizado prático', description: 'Entenda o que realmente importa para usar na graduação, no estágio e na prática.' },
+  { icon: 'evidence', title: 'Nutrição baseada em evidências', description: 'Estude com ciência, não com achismo ou opinião pronta.' }
 ];
 
 export const courses = [
@@ -40,33 +40,6 @@ export const comparison = [
   { area: 'Tempo de estudo', with: 'Estuda materiais selecionados e evita perder horas procurando conteúdo.', without: 'Gasta tempo caçando PDF, aulas e referências confiáveis.' },
   { area: 'Confiança profissional', with: 'Consegue justificar melhor suas decisões com base em evidências.', without: 'Repete o que ouviu de professores, influencers ou colegas.' },
   { area: 'Rede de apoio', with: 'Aprende junto com estudantes e profissionais que têm os mesmos objetivos.', without: 'Estuda sozinho e demora mais para tirar dúvidas importantes.' }
-];
-
-export const testimonials = [
-  {
-    image: '/assets/testimonial-juan.jpg',
-    name: 'Juan Cardoso',
-    role: 'Nutricionista Clínico e Esportivo',
-    quote: 'Já sou nutricionista formado, e ainda assim a plataforma do Nutriwork se tornou uma ferramenta fundamental na minha prática clínica. Nela, consigo revisar conceitos básicos de nutrição e aprender como buscar novas evidências científicas para me manter atualizado.'
-  },
-  {
-    image: '/assets/testimonial-natalia.jpg',
-    name: 'Natália Lopes',
-    role: 'Estudante de Nutrição, Redatora e Revisora do Nutriwork',
-    quote: 'Fazer parte do Nutriwork é contribuir com algo que eu gostaria de ter encontrado no início da minha graduação. Aqui, posso ver de perto e acompanhar cada passo de uma equipe que prepara estudantes para a prática clínica baseada em evidências.'
-  },
-  {
-    image: '/assets/testimonial-marcella.jpg',
-    name: 'Marcella Naves',
-    role: 'Estudante de Nutrição, Redatora e Revisora do Nutriwork',
-    quote: 'O Nutriwork nasceu e permanece até hoje com um intuito muito genuíno de ocupar um espaço que encontramos na divulgação de conhecimento acessível para estudantes de Nutrição. Tenho muito orgulho em ser Nutriwork!'
-  },
-  {
-    image: '/assets/testimonial-gabriel.jpg',
-    name: 'Gabriel Costa',
-    role: 'Nutricionista e pesquisador em metaciência',
-    quote: 'Achei a plataforma interessante para estimular o aprendizado conjunto e a troca de experiências entre profissionais e estudantes. Há materiais sendo produzidos por estudantes dedicados e as referências bibliográficas são de qualidade, indicando que os estudantes são promissores e dedicados. Acredito que a plataforma pode continuar sendo utilizada de forma crescente nesse formato. Ela me lembra a época das ligas acadêmicas na graduação, mas em um formato bastante expandido, multicêntrico e facilitado pelo meio online.'
-  }
 ];
 
 export const estudeAudience = [

@@ -152,6 +152,7 @@ html[data-theme='light'] .platform-preview {
 .pp-course { min-width: 0; display: flex; flex-direction: column; border: 1px solid var(--pp-border); border-radius: .9em; overflow: hidden; background: var(--pp-surface); box-shadow: var(--pp-shadow); transition: transform .26s ease, box-shadow .26s ease, border-color .26s ease; }
 .pp-course:hover, .pp-course.is-spotlight, .pp-course.is-active { transform: translateY(-.22em); border-color: var(--pp-accent); box-shadow: 0 1.1em 2.2em rgba(31, 111, 255, .26); }
 .pp-course__cover { position: relative; aspect-ratio: 16 / 8; display: grid; place-items: center; overflow: hidden; background: var(--m, linear-gradient(150deg, #16356c, #0a1730)); background-position: center; background-size: cover; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08); }
+.pp-course__cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; pointer-events: none; }
 .pp-course__cover::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8, 16, 34, .02), rgba(6, 12, 28, .48)); }
 .pp-course__brand { display: none; }
 .pp-course__body { min-width: 0; display: grid; gap: .35em; padding: .7em .8em .8em; }

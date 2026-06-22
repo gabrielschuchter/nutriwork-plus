@@ -197,7 +197,7 @@ export default function PlatformPreview() {
           {view === 'inicio' && (
             <section className="pp-view" aria-label="Início">
               <button type="button" className="pp-banner" aria-label="Retomar estudos no Nutriwork Plus" onClick={() => setView('cursos')}>
-                <img src="/assets/nutriwork-banner-pc.webp" alt="" width="2000" height="590" decoding="async" />
+                <img src="/assets/nutriwork-banner-pc.webp" alt="" width="2000" height="590" loading="eager" fetchPriority="high" decoding="async" />
                 <span className="pp-banner__shade" aria-hidden="true" />
                 <span className="pp-banner__action"><PreviewIcon name="play" /> Retomar estudos</span>
               </button>
@@ -268,7 +268,10 @@ export default function PlatformPreview() {
 function CourseCard({ course, spotlight = false, active = false, onOpen }: { course: typeof courses[number]; spotlight?: boolean; active?: boolean; onOpen: () => void }) {
   return (
     <article className={`pp-course pp-course--${course.id} ${spotlight ? 'is-spotlight' : ''} ${active ? 'is-active' : ''}`}>
-      <span className="pp-course__cover" style={{ backgroundImage: `linear-gradient(180deg, rgba(8, 16, 34, .08), rgba(6, 12, 28, .58)), url(${course.image})` }}><Brand className="pp-course__brand" /></span>
+      <span className="pp-course__cover" style={{ backgroundImage: `linear-gradient(180deg, rgba(8, 16, 34, .08), rgba(6, 12, 28, .58)), url(${course.image})` }}>
+        {spotlight && <img src={course.image} alt="" loading="eager" fetchPriority="high" decoding="async" aria-hidden="true" />}
+        <Brand className="pp-course__brand" />
+      </span>
       <div className="pp-course__body">
         <span className="pp-course__cat">{course.category}</span>
         <strong className="pp-course__title">{course.title}</strong>
