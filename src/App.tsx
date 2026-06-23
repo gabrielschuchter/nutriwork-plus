@@ -517,6 +517,15 @@ function HeroMonitor() {
     >
       <div className="hero-monitor-stage__glow" aria-hidden="true" />
       <div className="hero-monitor" role="group" aria-label="Prévia interativa fictícia do Nutriwork Plus em um monitor 3D">
+        <div className="hero-monitor-cue" aria-hidden="true">
+          <span className="hero-monitor-cue__label">
+            <svg className="hero-monitor-cue__arrow" viewBox="0 0 18 18" fill="none">
+              <path d="M4.5 13.5h9v-9M13.5 13.5 4.5 4.5" />
+            </svg>
+            <span className="hero-monitor-cue__desktop">Clique para explorar</span>
+            <span className="hero-monitor-cue__mobile">Toque para explorar</span>
+          </span>
+        </div>
         <div className="hero-monitor__frame">
           <div className="hero-monitor__screen">
             <PlatformPreview />
