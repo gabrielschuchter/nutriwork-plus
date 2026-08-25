@@ -10,19 +10,11 @@ import {
   faqItems,
   navItems,
   platformBenefits,
-  platformPlans,
   promises
 } from './data';
+import { checkoutLinks, estudeProduct, platformPlanIds, pricingPlans, type PricingPlan } from './data/pricing';
 import ReferencesSection from './components/ReferencesSection';
 import PlatformPreview from './components/PlatformPreview';
-
-const checkout = {
-  complete: 'https://pay.kiwify.com.br/nyBH9vq',
-  guide: 'https://pay.kiwify.com.br/fPEAkDX',
-  monthly: 'https://pay.kiwify.com.br/pO6p0QM',
-  quarterly: 'https://pay.kiwify.com.br/bfYt1Pt',
-  semiannual: 'https://pay.kiwify.com.br/TbFu6TD'
-};
 
 const contactEmail = 'equipenutriwork@gmail.com';
 const partnerForm = 'https://forms.gle/avn9yrBdbEHkaGg8A';
@@ -892,7 +884,7 @@ function EstudeLandingHero() {
             <h1>Pare de estudar no improviso. Construa sua rotina de estudos baseada em evidências.</h1>
             <p>O ESTUDE ajuda você a decidir prioridades, organizar o tempo disponível e transformar esforço em progresso, com estratégias fundamentadas na ciência.</p>
             <div className="estude-page-hero__actions">
-              <Button href={checkout.guide} external>Quero organizar meus estudos</Button>
+              <Button href={checkoutLinks.estude} external>Quero organizar meus estudos</Button>
             </div>
           </div>
           <div className="estude-page-hero__visual" aria-hidden="true">
@@ -932,7 +924,7 @@ function StudyBenefits() {
   return (
     <section className="section study-benefits">
       <div className="page-width page-width--narrow">
-        <Reveal><h2 className="blue-title">Para transformar clareza em prática:</h2><div className="benefits-panel">{estudeBenefits.map((benefit, index) => <article key={benefit.title}><Icon name={['light','evidence','book'][index]}/><div><h3>{benefit.title}</h3><p>{benefit.text}</p></div></article>)}<Button href={checkout.guide} external>Quero organizar meus estudos</Button></div></Reveal>
+        <Reveal><h2 className="blue-title">Para transformar clareza em prática:</h2><div className="benefits-panel">{estudeBenefits.map((benefit, index) => <article key={benefit.title}><Icon name={['light','evidence','book'][index]}/><div><h3>{benefit.title}</h3><p>{benefit.text}</p></div></article>)}<Button href={checkoutLinks.estude} external>Quero organizar meus estudos</Button></div></Reveal>
       </div>
     </section>
   );
@@ -946,9 +938,9 @@ function EstudePlan() {
           <span className="corner-badge">À vista</span>
           <h2>Livro Digital ESTUDE!</h2>
           <h3>Um método prático para organizar sua rotina<br/>e estudar com mais direção.</h3>
-          <Price value="77,90"/>
+          <Price value={estudeProduct.cashPrice}/>
           <ul>{['Conteúdo completo sobre fatores que influenciam o rendimento nos estudos;','Critérios para definir prioridades, invés de tentar estudar tudo;','Estratégias para construir uma rotina de estudos possível de ser mantida;','Tudo isso de forma prática, direta e baseada em evidências.'].map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul>
-          <Button href={checkout.guide} external>Quero o livro ESTUDE</Button>
+          <Button href={estudeProduct.checkoutUrl} external>Quero o livro ESTUDE</Button>
         </Reveal>
       </div>
     </section>
@@ -987,14 +979,46 @@ function Price({ value, monthly = false }: { value: string; monthly?: boolean })
   return <div className="price"><span>R$</span>{whole}<small>,{cents}{monthly ? '/mês' : ''}</small></div>;
 }
 
+function PlanPaymentSummary({ plan, compact = false }: { plan: PricingPlan; compact?: boolean }) {
+  if (plan.billing === 'monthly') {
+    return (
+      <div className={`plan-payment-summary ${compact ? 'plan-payment-summary--compact' : ''}`}>
+        <Price value={plan.cashPrice} />
+        <p className="plan-payment-summary__period">por mês.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`plan-payment-summary ${compact ? 'plan-payment-summary--compact' : ''}`}>
+      <p className="installment-price"><strong>{plan.installments.count}x</strong> de R$ {plan.installments.value}</p>
+      <p className="plan-payment-summary__payment-method">no cartão</p>
+      <p className="plan-payment-summary__cash">ou <strong>R$ {plan.cashPrice} à vista</strong></p>
+      <p className="plan-payment-summary__equivalent">equivalente a <strong>R$ {plan.cashMonthlyEquivalent}/mês de acesso</strong></p>
+    </div>
+  );
+}
+
 function Pricing() {
-  const planLinks = [checkout.monthly, checkout.quarterly, checkout.semiannual];
+  const annualPlan = pricingPlans.annual;
   return (
     <section id="planos" className="section pricing-section">
       <div className="page-width page-width--narrow">
         <Reveal><SectionHeading>Planos pensados para se adaptar à sua<br/>rotina de estudos</SectionHeading></Reveal>
-        <Reveal className="pricing-card pricing-card--featured"><img className="featured-badge" src="/assets/featured-badge-labeled.webp" alt="Plano destaque" width="790" height="1000" loading="lazy" decoding="async"/><h2>Nutriwork Plus Anual +<br/><span>livro ESTUDE!</span></h2><h3>Acesso completo à formação que você sempre quis.</h3><Price value="24,90" monthly/><ul>{['Cursos de todas as áreas da Nutrição.','E-book ESTUDE para resolver sua rotina de estudos.','Aulas ao vivo com especialistas.','Comunidade ativa para trocar dúvidas e obter oportunidades de trabalho.','Análises de artigo, podcasts, Espaço de Conforto e outros recursos.'].map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul><div className="pricing-actions"><Button href={checkout.complete} external>QUERO A EXPERIÊNCIA COMPLETA</Button><Button href="/#/estude" variant="outline" className="pricing-card__secondary">CONHECER O ESTUDE</Button></div><div className="scarcity">🔥 últimas vagas restantes!</div></Reveal>
-        <Reveal className="platform-pricing"><header><div><h2>Planos Nutriwork Plus</h2><p>Opções flexíveis para acessar a plataforma no seu ritmo.</p></div><span>À vista</span></header><div className="mini-plans">{platformPlans.map((plan, index) => <article key={plan.title}><h3>{plan.title}</h3><Price value={plan.price}/><p>por mês.</p><Button href={planLinks[index]} external>Quero assinar</Button></article>)}</div><ul>{platformBenefits.map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul></Reveal>
+        <Reveal className="pricing-card pricing-card--featured">
+          <img className="featured-badge" src="/assets/featured-badge-labeled.webp" alt="Plano destaque" width="790" height="1000" loading="lazy" decoding="async"/>
+          <h2>{annualPlan.title}<br/><span>{annualPlan.subtitle}</span></h2>
+          <h3>{annualPlan.description}</h3>
+          <PlanPaymentSummary plan={annualPlan} />
+          <ul>{annualPlan.benefits?.map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul>
+          <div className="pricing-actions"><Button href={annualPlan.checkoutUrl} external>QUERO A EXPERIÊNCIA COMPLETA</Button><Button href="/#/estude" variant="outline" className="pricing-card__secondary">CONHECER O ESTUDE</Button></div>
+          <div className="scarcity">🔥 últimas vagas restantes!</div>
+        </Reveal>
+        <Reveal className="platform-pricing">
+          <header><div><h2>Planos Nutriwork Plus</h2><p>Escolha o período e veja primeiro a condição real do cartão.</p></div><span>Condições reais</span></header>
+          <div className="mini-plans">{platformPlanIds.map((planId) => { const plan = pricingPlans[planId]; return <article key={plan.id}><h3>{plan.title}</h3><PlanPaymentSummary plan={plan} compact/><Button href={plan.checkoutUrl} external>Quero assinar</Button></article>; })}</div>
+          <ul>{platformBenefits.map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul>
+        </Reveal>
       </div>
     </section>
   );

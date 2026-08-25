@@ -69,12 +69,6 @@ export const evidenceLearning = [
   'Transformar resultados de estudos em decisões para a prática clínica.'
 ];
 
-export const platformPlans = [
-  { title: 'Mensal', price: '39,90' },
-  { title: 'Trimestral', price: '30,90' },
-  { title: 'Semestral', price: '24,90' }
-];
-
 export const platformBenefits = [
   'Acesso ao Nutriwork Plus pelo período escolhido',
   'Cursos, aulas e recursos da plataforma em um só lugar',
