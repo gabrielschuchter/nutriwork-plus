@@ -42,7 +42,6 @@ npm run build
 - [ ] Teste claro e escuro em `/noticias` e em um artigo.
 - [ ] Use Tab para alcançar skip link, menu, busca, filtros, cards e share; foco deve ficar visível.
 - [ ] Teste em 320px, 768px, 1024px e 1440px sem rolagem horizontal.
-- [ ] Ative `prefers-reduced-motion` e confirme ausência de transições não essenciais.
 
 ## Regressão
 

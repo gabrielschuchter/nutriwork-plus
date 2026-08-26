@@ -9,7 +9,7 @@ tags:
   - "síntese de evidências"
 author: "Equipe Nutriwork"
 publishedAt: "2026-08-18"
-coverImage: "/assets/course-clinical.jpg"
+coverImage: "/assets/noticias/certeza-evidencia.jpg"
 coverAlt: "Capa do curso Nutrição Clínica do Nutriwork com elementos visuais em azul e texto em branco"
 featured: false
 draft: false

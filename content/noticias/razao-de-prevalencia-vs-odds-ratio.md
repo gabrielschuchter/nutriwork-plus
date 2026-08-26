@@ -9,7 +9,7 @@ tags:
   - "odds ratio"
 author: "Equipe Nutriwork"
 publishedAt: "2026-08-24"
-coverImage: "/assets/course-biochemistry.jpg"
+coverImage: "/assets/noticias/razao-prevalencia-odds-ratio.jpg"
 coverAlt: "Capa do curso Bioquímica da Nutrição do Nutriwork com imagem de moléculas em tons de azul"
 featured: false
 draft: false

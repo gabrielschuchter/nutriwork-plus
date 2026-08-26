@@ -9,7 +9,7 @@ tags:
   - "viés"
 author: "Equipe Nutriwork"
 publishedAt: "2026-08-22"
-coverImage: "/assets/course-intro.jpg"
+coverImage: "/assets/noticias/associacao-causalidade.jpg"
 coverAlt: "Capa do curso Introdução à Nutrição do Nutriwork com mãos escrevendo e alimentos em primeiro plano"
 featured: false
 draft: false

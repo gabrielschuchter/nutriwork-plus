@@ -10,7 +10,7 @@ tags:
   - "cognição"
 author: "Equipe Nutriwork"
 publishedAt: "2026-08-16"
-coverImage: "/assets/course-intro.jpg"
+coverImage: "/assets/noticias/pergunta-clinica.jpg"
 coverAlt: "Capa do curso Introdução à Nutrição do Nutriwork com mãos escrevendo e alimentos em primeiro plano"
 featured: false
 draft: false

@@ -9,7 +9,10 @@ export const publicArticles: NewsArticle[] = articles
   .filter((article) => !article.draft)
   .sort(compareByPublicationDate);
 
-export const featuredArticle = publicArticles.find((article) => article.featured) ?? publicArticles[0];
+export const featuredArticle = publicArticles
+  .filter((article) => article.featured)
+  .sort((left, right) => Number(right.type === 'evento') - Number(left.type === 'evento') || compareByPublicationDate(left, right))[0]
+  ?? publicArticles[0];
 
 export function getArticleBySlug(slug: string | undefined) {
   return publicArticles.find((article) => article.slug === slug);

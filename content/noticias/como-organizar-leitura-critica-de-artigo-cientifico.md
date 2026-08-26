@@ -9,7 +9,7 @@ tags:
   - "estudo"
 author: "Equipe Nutriwork"
 publishedAt: "2026-08-20"
-coverImage: "/assets/course-evidence.jpg"
+coverImage: "/assets/noticias/leitura-artigo-cientifico.jpg"
 coverAlt: "Capa do curso Nutrição Baseada em Evidências do Nutriwork sobre uma página de texto em inglês"
 featured: false
 draft: false

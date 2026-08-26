@@ -10,9 +10,9 @@ tags:
 author: "Equipe Nutriwork"
 publishedAt: "2026-08-26"
 updatedAt: "2026-08-26"
-coverImage: "/assets/course-evidence.jpg"
+coverImage: "/assets/noticias/intervalo-confianca.jpg"
 coverAlt: "Capa do curso Nutrição Baseada em Evidências do Nutriwork sobre uma página de texto em inglês"
-featured: true
+featured: false
 draft: false
 references:
   - citation: "Wasserstein RL, Lazar NA. The ASA Statement on p-Values: Context, Process, and Purpose. The American Statistician. 2016."
