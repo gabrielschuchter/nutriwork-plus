@@ -79,18 +79,19 @@ function useMobileCtaVisibility(refreshKey: unknown) {
 }
 
 function getCurrentPage(): Page {
-  if (window.location.hash === '#/estude') return 'estude';
-  if (window.location.hash === '#/parceiros') return 'partners';
+  if (typeof window === 'undefined') return 'home';
+  if (window.location.pathname === '/estude') return 'estude';
+  if (window.location.pathname === '/parceiros') return 'partners';
   return 'home';
 }
 
-function useCurrentPage() {
-  const [page, setPage] = useState<Page>(() => getCurrentPage());
+function useCurrentPage(initialPage?: Page) {
+  const [page, setPage] = useState<Page>(() => initialPage ?? getCurrentPage());
 
   useEffect(() => {
     const updatePage = () => setPage(getCurrentPage());
-    window.addEventListener('hashchange', updatePage);
-    return () => window.removeEventListener('hashchange', updatePage);
+    window.addEventListener('popstate', updatePage);
+    return () => window.removeEventListener('popstate', updatePage);
   }, []);
 
   return page;
@@ -104,7 +105,7 @@ function useHashScroll(page: Page) {
     }
 
     const hash = window.location.hash;
-    if (!hash || hash.startsWith('#/')) return;
+    if (!hash) return;
 
     window.requestAnimationFrame(() => {
       document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start' });
@@ -409,21 +410,19 @@ function Button({ href, children, variant = 'primary', className = '', external 
 
 function Header() {
   const [open, setOpen] = useState(false);
-  const [theme, setTheme] = useState<Theme>(() => document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
+  const [theme, setTheme] = useState<Theme>(() => typeof document !== 'undefined' && document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
   const [activeNavHref, setActiveNavHref] = useState(() => {
-    const hash = window.location.hash;
-    return hash && hash !== '#' ? `/${hash}` : '/#inicio';
+    return typeof window === 'undefined' ? '/' : window.location.pathname + window.location.hash;
   });
   const nextTheme = theme === 'dark' ? 'light' : 'dark';
 
   useEffect(() => {
     const updateActiveNav = () => {
-      const hash = window.location.hash;
-      setActiveNavHref(hash && hash !== '#' ? `/${hash}` : '/#inicio');
+      setActiveNavHref(window.location.pathname + window.location.hash);
     };
 
-    window.addEventListener('hashchange', updateActiveNav);
-    return () => window.removeEventListener('hashchange', updateActiveNav);
+    window.addEventListener('popstate', updateActiveNav);
+    return () => window.removeEventListener('popstate', updateActiveNav);
   }, []);
 
   const toggleTheme = () => {
@@ -1011,7 +1010,7 @@ function Pricing() {
           <h3>{annualPlan.description}</h3>
           <PlanPaymentSummary plan={annualPlan} />
           <ul>{annualPlan.benefits?.map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul>
-          <div className="pricing-actions"><Button href={annualPlan.checkoutUrl} external>QUERO A EXPERIÊNCIA COMPLETA</Button><Button href="/#/estude" variant="outline" className="pricing-card__secondary">CONHECER O ESTUDE</Button></div>
+          <div className="pricing-actions"><Button href={annualPlan.checkoutUrl} external>QUERO A EXPERIÊNCIA COMPLETA</Button><Button href="/estude" variant="outline" className="pricing-card__secondary">CONHECER O ESTUDE</Button></div>
           <div className="scarcity">🔥 últimas vagas restantes!</div>
         </Reveal>
         <Reveal className="platform-pricing">
@@ -1126,8 +1125,8 @@ function PartnersPage() {
   );
 }
 
-export default function App() {
-  const page = useCurrentPage();
+export default function App({ initialPage }: { initialPage?: Page } = {}) {
+  const page = useCurrentPage(initialPage);
   const { loading, renderedPage } = useLoadingExperience(page);
   useScrollReveal(renderedPage);
   useMobileCtaVisibility(renderedPage);

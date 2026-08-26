@@ -104,19 +104,12 @@ export function NewsArticlePage() {
               <aside className="news-cta news-cta--editorial" aria-label="Próximo passo desta publicação">
                 <div>
                   <p>Próximo passo</p>
-                  <h2>Confira os detalhes desta novidade no Nutriwork.</h2>
+                  <h2>Entre no grupo para acompanhar a aula ao vivo.</h2>
                 </div>
                 <a className="button button--primary" href={article.callToAction.url} target={callToActionIsExternal ? '_blank' : undefined} rel={callToActionIsExternal ? 'noreferrer' : undefined}>{article.callToAction.label}</a>
               </aside>
             )}
 
-            <aside className="news-cta" aria-label="Conheça o Nutriwork Plus">
-              <div>
-                <p>Estude com mais direção</p>
-                <h2>Construa uma base mais segura para interpretar evidências.</h2>
-              </div>
-              <a className="button button--primary" href="/#planos">Conheça o Nutriwork Plus</a>
-            </aside>
           </div>
         </article>
 

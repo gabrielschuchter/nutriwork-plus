@@ -1,8 +1,8 @@
 export const navItems = [
   { label: 'início', href: '/#inicio' },
   { label: 'benefícios', href: '/#beneficios' },
-  { label: 'estude', href: '/#/estude' },
-  { label: 'parceiros', href: '/#/parceiros' },
+  { label: 'estude', href: '/estude' },
+  { label: 'parceiros', href: '/parceiros' },
   { label: 'notícias', href: '/noticias' },
   { label: 'planos', href: '/#planos' },
   { label: 'dúvidas', href: '/#duvidas' },

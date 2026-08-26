@@ -15,8 +15,8 @@ coverAlt: "Rafael Genário no anúncio do 18º Encontro Científico do Grupo Nut
 featured: true
 draft: false
 callToAction:
-  label: "Acompanhar o anúncio no Instagram"
-  url: "https://www.instagram.com/nutrirafaelgenario/"
+  label: "Entrar no grupo do WhatsApp"
+  url: "https://chat.whatsapp.com/FiLA5AH0VY1LGePYCBzv65"
 eventDate: "2026-08-31"
 eventTime: "19:30"
 eventLocation: "Online, ao vivo e gratuito"

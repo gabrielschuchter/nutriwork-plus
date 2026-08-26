@@ -140,7 +140,7 @@ export default function ReferencesSection() {
         <div>
           <h2 id="references-title">Referências que fazem parte da nossa trajetória</h2>
         </div>
-        <a className="references-section__partner-link" href="/#/parceiros">Quero ser parceiro Nutriwork</a>
+        <a className="references-section__partner-link" href="/parceiros">Quero ser parceiro Nutriwork</a>
       </div>
 
       <div className="references-section__controls" aria-label="Controles do carrossel de referências">
