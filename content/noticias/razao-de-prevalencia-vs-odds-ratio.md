@@ -1,59 +1,125 @@
 ---
 title: "Razão de prevalência e odds ratio: qual é a diferença?"
-summary: "As duas medidas podem aparecer no mesmo tema, mas respondem a comparações diferentes e não devem ser lidas como sinônimos."
+summary: "Razão de prevalência e odds ratio não são sinônimos: medem quantidades diferentes, respondem a desenhos diferentes e podem levar a interpretações muito distintas quando o desfecho é frequente."
 type: "explicador"
 category: "ciencia-pbe"
 tags:
   - "epidemiologia"
   - "razão de prevalência"
   - "odds ratio"
+  - "regressão logística"
 author: "Equipe Nutriwork"
 publishedAt: "2026-08-24"
+updatedAt: "2026-08-26"
 coverImage: "/assets/noticias/razao-prevalencia-odds-ratio.jpg"
 coverAlt: "Capa do curso Bioquímica da Nutrição do Nutriwork com imagem de moléculas em tons de azul"
 featured: false
 draft: false
 references:
-  - citation: "Davies HT, Crombie IK, Tavakoli M. When can odds ratios mislead? BMJ. 1998."
-    url: "https://doi.org/10.1136/bmj.316.7136.989"
-  - citation: "Knol MJ, Duijnhoven RG, Grobbee DE, Moons KGM, Groenwold RHH. Potential misinterpretation of treatment effects due to use of odds ratios and logistic regression in randomized controlled trials. PLoS One. 2011."
-    url: "https://doi.org/10.1371/journal.pone.0021237"
+  - citation: "Barros AJD, Hirakata VN. Alternatives for logistic regression in cross-sectional studies: an empirical comparison of models that directly estimate the prevalence ratio. BMC Med Res Methodol. 2003;3:21."
+    url: "https://doi.org/10.1186/1471-2288-3-21"
+  - citation: "Greenland S. Noncollapsibility, confounding, and sparse-data bias. Part 2: What should researchers make of persistent controversies about the odds ratio? J Clin Epidemiol. 2021;139:264-268."
+    url: "https://doi.org/10.1016/j.jclinepi.2021.06.004"
+  - citation: "Deeks JJ, Higgins JPT, Altman DG, et al. Chapter 10: Analysing data and undertaking meta-analyses. Cochrane Handbook for Systematic Reviews of Interventions."
+    url: "https://training.cochrane.org/handbook/current/chapter-10"
 ---
 
-Razão de prevalência (RP) e *odds ratio* (OR) aparecem com frequência em estudos observacionais. As duas comparam grupos, mas a comparação não é idêntica. Entender essa diferença evita traduzir uma medida para a outra sem perceber que o significado mudou.
+Razão de prevalência (RP) e *odds ratio* (OR) são medidas relativas, mas **não medem a mesma quantidade**. O erro mais comum é interpretar um OR como se ele dissesse diretamente quantas vezes a prevalência ou o risco é maior em um grupo.
 
-## Prevalência e odds não são a mesma quantidade
+## Prevalência, odds e suas razões
 
-A prevalência é a proporção de pessoas com o desfecho em um grupo. Se 20 em cada 100 pessoas apresentam determinada característica, a prevalência é 20%.
+Se a prevalência de um desfecho é `p`, as *odds* são:
 
-As *odds* relacionam quem apresenta o desfecho com quem não apresenta. No mesmo exemplo, são 20 para 80, ou 0,25.
+`odds = p / (1 - p)`
 
-| Medida | Pergunta que resume | Referência |
-| --- | --- | --- |
-| Razão de prevalência | A prevalência em um grupo é quantas vezes a prevalência no outro? | 1 |
-| Odds ratio | As *odds* em um grupo são quantas vezes as *odds* no outro? | 1 |
+Assim, se 20 de 100 pessoas apresentam o desfecho:
 
-Quando o desfecho é raro, RP e OR podem ter valores próximos. Quando ele é frequente, o OR tende a se afastar mais da RP e pode parecer maior em magnitude do que uma leitura apressada sugeriria.
+- prevalência = 20/100 = **0,20**;
+- odds = 20/80 = **0,25**.
 
-## Um exemplo apenas numérico
+Para comparar dois grupos:
 
-Imagine dois grupos de 100 pessoas. No grupo A, 40 apresentam o desfecho. No grupo B, 20 apresentam o desfecho.
+- **RP = p₁ / p₀**;
+- **OR = [p₁/(1-p₁)] / [p₀/(1-p₀)]**.
 
-- A RP é 40% dividido por 20%: **2,0**.
-- As *odds* no grupo A são 40/60; no grupo B, 20/80.
-- O OR é (40/60) dividido por (20/80): aproximadamente **2,67**.
+| Medida | Comparação |
+| --- | --- |
+| Razão de prevalência | prevalência em um grupo ÷ prevalência no outro |
+| Odds ratio | odds em um grupo ÷ odds no outro |
 
-As duas medidas apontam uma diferença entre os grupos, mas não dizem a mesma coisa. Por isso, trocar “odds” por “risco” ou “prevalência” em uma manchete metodológica pode exagerar a interpretação.
+## O mesmo conjunto de dados pode produzir números bem diferentes
 
-## Antes de concluir, confira o desenho
+Imagine 100 pessoas em cada grupo:
 
-A medida usada depende do desenho, da forma de amostragem e do modelo estatístico. Não é um exercício de decorar qual medida é “melhor” em qualquer situação.
+- grupo A: 40 com o desfecho;
+- grupo B: 20 com o desfecho.
 
-Para ler com mais cuidado, pergunte:
+A prevalência é 40% versus 20%:
 
-1. O estudo é transversal, coorte, caso-controle ou ensaio?
-2. O desfecho foi medido como prevalência, incidência ou outra forma?
-3. O artigo apresenta valores absolutos além da razão?
-4. O texto da conclusão usa a mesma linguagem da medida calculada?
+- **RP = 0,40 / 0,20 = 2,0**.
 
-Uma razão, isoladamente, não informa quantas pessoas estavam envolvidas nem se a diferença tem importância prática. A interpretação melhora quando a medida relativa é lida junto com os números absolutos e o intervalo de confiança.
+As odds são 40/60 no grupo A e 20/80 no grupo B:
+
+- **OR = (40/60) / (20/80) ≈ 2,67**.
+
+Dizer que o grupo A tem “2,67 vezes a prevalência” seria incorreto. A prevalência é duas vezes maior; as **odds** são 2,67 vezes maiores.
+
+Quando a associação é protetora, o OR também tende a se afastar mais de 1. Por exemplo, prevalências de 10% e 20% geram RP = 0,50 e OR ≈ 0,44. Portanto, é mais preciso dizer que o OR tende a apresentar uma associação **mais distante do valor nulo** do que a RP quando ambos são calculados a partir dos mesmos riscos, e não simplesmente que ele sempre “superestima” numericamente a outra medida.
+
+## E a regra do “desfecho raro”?
+
+Quando as probabilidades são pequenas, `p` e `p/(1-p)` ficam próximas. Nessa situação, OR e medidas baseadas em risco podem ter valores semelhantes.
+
+Mas “raro” não é uma chave binária. A proximidade depende do risco basal e da magnitude da associação. Não existe um ponto universal abaixo do qual seja sempre seguro trocar OR por RP ou risco relativo.
+
+A regra útil é simples: **se o artigo reportou OR, interprete OR como OR**. Se for importante comunicar em risco ou prevalência, faça uma transformação apropriada usando um risco basal explícito, em vez de apenas trocar o nome da medida.
+
+## O desenho do estudo muda o que pode ser estimado
+
+### Estudos transversais
+
+Quando o objetivo é comparar prevalências, a RP costuma ser mais diretamente interpretável. Modelos log-binomial ou Poisson com variância robusta são alternativas usadas para estimar RP ajustada.
+
+A regressão logística, por outro lado, estima OR. Usar regressão logística não autoriza chamar o resultado de RP.
+
+### Coortes e ensaios
+
+Quando o desfecho é observado ao longo de um período, pode-se estimar risco relativo, diferença de riscos, razão de taxas ou outras medidas, dependendo de como tempo e eventos foram definidos.
+
+O OR continua sendo matematicamente válido como medida de efeito, inclusive em ensaios, mas costuma ser menos intuitivo para comunicação clínica quando riscos absolutos podem ser apresentados diretamente.
+
+### Estudos de caso-controle
+
+Em um estudo de caso-controle convencional, o número de casos e controles é definido pelo esquema de amostragem. Por isso, não se pode recuperar diretamente a prevalência ou o risco do desfecho apenas a partir da proporção de casos da amostra.
+
+O OR é natural nesse desenho. Dependendo do esquema de amostragem, ele pode ter interpretações epidemiológicas específicas. Em amostragem por densidade de incidência, por exemplo, o OR pode estimar uma razão de taxas sem depender da chamada “suposição de doença rara”. Isso mostra por que a relação entre OR e risco relativo não deve ser ensinada apenas como uma regra de aproximação para eventos raros.
+
+## Ajustar por covariáveis não torna OR e RP equivalentes
+
+Há ainda uma diferença estatística importante: o OR é **não colapsável**.
+
+Isso significa que um OR ajustado pode diferir de um OR não ajustado mesmo quando a covariável adicionada não é um fator de confusão. Portanto, a diferença entre OR bruto e ajustado não deve ser automaticamente interpretada como “quantidade de confundimento removida”.
+
+Essa propriedade é uma das razões pelas quais comparações diretas entre ORs de modelos com diferentes conjuntos de covariáveis exigem cautela.
+
+## Não pare na medida relativa
+
+Mesmo uma RP ou OR perfeitamente calculada não informa o impacto absoluto.
+
+Considere dois cenários com RP = 2,0:
+
+- risco basal de 1% → 2%; diferença absoluta = 1 ponto percentual;
+- risco basal de 30% → 60%; diferença absoluta = 30 pontos percentuais.
+
+A mesma medida relativa pode corresponder a consequências muito diferentes.
+
+Por isso, uma leitura clínica mais completa procura:
+
+1. medida relativa correta;
+2. intervalo de confiança;
+3. risco ou prevalência basal;
+4. efeito absoluto;
+5. período de seguimento, quando houver;
+6. risco de viés e aplicabilidade.
+
+A pergunta não é “RP ou OR: qual é melhor?”. A pergunta é **qual medida corresponde ao desenho, ao estimando de interesse e à forma mais transparente de comunicar o efeito**.
