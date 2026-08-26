@@ -1,4 +1,5 @@
 import { formatNewsDate, getEventDetailsLabel, getReadingTimeLabel } from '../../lib/news/format';
+import type { CSSProperties } from 'react';
 import type { NewsArticle } from '../../lib/news/types';
 
 type NewsCardProps = {
@@ -13,7 +14,7 @@ export function NewsCard({ article, featured = false }: NewsCardProps) {
   return (
     <article className={`news-card ${featured ? 'news-card--featured' : ''}`}>
       <a className="news-card__link" href={`/noticias/${article.slug}`} aria-label={`Ler: ${article.title}`}>
-        <div className="news-card__cover">
+        <div className="news-card__cover" style={{ '--cover-image': `url("${article.coverImage}")` } as CSSProperties}>
           <img src={article.coverImage} alt={article.coverAlt} loading={featured ? 'eager' : 'lazy'} width="760" height="500" />
         </div>
         <div className="news-card__content">
