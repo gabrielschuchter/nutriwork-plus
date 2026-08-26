@@ -72,8 +72,9 @@
 .news-event-details span { color: var(--muted); font-size: 10px; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
 .news-article-hero__summary { max-width: 780px; margin: clamp(20px, 3vw, 31px) 0 0; color: var(--body-copy); font-size: clamp(17px, 1.85vw, 22px); line-height: 1.62; }
 .news-article-hero__meta { max-width: 850px; margin-top: 23px; display: flex; flex-wrap: wrap; gap: 7px; color: var(--muted); font-size: 12px; line-height: 1.5; }
-.news-article-cover { margin: 0; border: 1px solid var(--border); border-radius: 27px; overflow: hidden; background: var(--surface); box-shadow: var(--depth-1); }
-.news-article-cover img { width: 100%; min-height: clamp(260px, 46vw, 490px); object-fit: cover; }
+.news-article-cover { position: relative; margin: 0; border: 1px solid var(--border); border-radius: 27px; overflow: hidden; background: var(--surface); box-shadow: var(--depth-1); isolation: isolate; }
+.news-article-cover::before { content: ''; position: absolute; inset: -24px; z-index: -1; background-image: var(--cover-image); background-position: center; background-size: cover; filter: blur(22px); opacity: .3; transform: scale(1.08); }
+.news-article-cover img { position: relative; z-index: 1; display: block; width: 100%; height: auto; min-height: 0; object-fit: contain; }
 .news-article-layout { display: grid; grid-template-columns: 154px minmax(0, 1fr); gap: clamp(26px, 4vw, 60px); margin-top: clamp(38px, 6vw, 72px); }
 .news-share { align-self: start; position: sticky; top: 90px; display: grid; gap: 10px; color: var(--muted); font-size: 11px; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; }
 .news-share__actions { display: grid; gap: 8px; }
@@ -162,7 +163,6 @@ html.theme-transition .news-markdown blockquote {
   .news-card__cover { min-height: 206px; }
   .news-article-hero { padding-top: 118px; }
   .news-article-cover { border-radius: 21px; }
-  .news-article-cover img { min-height: 225px; }
   .news-article-hero__meta { font-size: 11px; }
   .news-markdown { font-size: 16px; line-height: 1.75; }
   .news-markdown table { display: block; overflow-x: auto; white-space: normal; }

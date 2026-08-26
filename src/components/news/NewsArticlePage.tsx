@@ -1,4 +1,5 @@
 import { usePageContext } from 'vike-react/usePageContext';
+import type { CSSProperties } from 'react';
 import { Head } from 'vike-react/Head';
 import { NEWS_CATEGORY_LABELS } from '../../lib/news/constants';
 import { getArticleBySlug, getRelatedArticles } from '../../lib/news/articles';
@@ -82,7 +83,7 @@ export function NewsArticlePage() {
           </header>
 
           <div className="page-width page-width--narrow">
-            <figure className="news-article-cover">
+              <figure className="news-article-cover" style={{ '--cover-image': `url("${article.coverImage}")` } as CSSProperties}>
               <img src={article.coverImage} alt={article.coverAlt} width="1440" height="810" />
             </figure>
             <div className="news-article-layout">
