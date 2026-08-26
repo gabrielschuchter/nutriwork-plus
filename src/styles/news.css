@@ -155,9 +155,8 @@ html.theme-transition .news-markdown blockquote {
   .news-toolbar { padding: 20px; border-radius: 22px; }
   .news-card, .news-card--featured { border-radius: 21px; }
   .news-card--featured .news-card__link { min-height: 0; display: flex; }
-  .news-card--featured .news-card__cover { min-height: 236px; }
-  .news-card--featured .news-card__cover { background: #030711; }
-  .news-card--featured .news-card__cover img { object-fit: contain; }
+  .news-card--featured .news-card__cover { min-height: 0; height: auto; background: #030711; }
+  .news-card--featured .news-card__cover img { display: block; height: auto; min-height: 0; object-fit: contain; }
   .news-card--featured .news-card__content { padding: 24px; }
   .news-grid { grid-template-columns: 1fr; }
   .news-card__cover { min-height: 206px; }
