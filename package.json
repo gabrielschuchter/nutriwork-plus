@@ -5,18 +5,27 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit -p tsconfig.app.json && vite build",
-    "preview": "vite preview"
+    "build": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json && vike build",
+    "preview": "vike preview"
   },
   "dependencies": {
+    "minisearch": "^7.2.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@types/node": "^24.10.13",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "gray-matter": "^4.0.3",
+    "react-streaming": "^0.3.42",
     "typescript": "^5.6.3",
-    "vite": "^5.4.11"
+    "vike": "^0.4.220",
+    "vike-react": "^0.5.10",
+    "vite": "^5.4.11",
+    "zod": "^4.4.3"
   }
 }
