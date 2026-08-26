@@ -1,0 +1,194 @@
+settings:
+  content:
+    merge: true
+  commit:
+    identity: app
+    templates:
+      create: "content(news): create {path}"
+      update: "content(news): update {path}"
+      delete: "content(news): delete {path}"
+      rename: "content(news): rename {oldPath} -> {newPath}"
+
+media:
+  - name: news_images
+    label: Imagens das notícias
+    input: public/noticias
+    output: /noticias
+    categories: [image]
+    extensions: [jpg, jpeg, png, webp]
+    rename: safe
+
+content:
+  - name: noticias
+    label: Nutriwork Notícias
+    type: collection
+    path: content/noticias
+    format: yaml-frontmatter
+    filename:
+      template: "{primary}.md"
+      field: create
+    view:
+      fields: [title, publishedAt, category, draft, featured]
+      primary: title
+      sort: [publishedAt, title]
+      search: [title, summary, author, tags]
+      default:
+        sort: publishedAt
+        order: desc
+    fields:
+      - name: title
+        label: Título
+        type: string
+        required: true
+        options:
+          minlength: 8
+          maxlength: 140
+      - name: summary
+        label: Resumo
+        type: text
+        required: true
+        options:
+          minlength: 24
+          maxlength: 320
+      - name: type
+        label: Tipo
+        type: select
+        required: true
+        options:
+          values:
+            - name: noticia
+              label: Notícia
+            - name: analise
+              label: Análise
+            - name: explicador
+              label: Explicador
+            - name: nutriwork
+              label: Nutriwork
+            - name: lancamento
+              label: Lançamento
+            - name: campanha
+              label: Campanha
+            - name: evento
+              label: Evento
+      - name: category
+        label: Categoria
+        type: select
+        required: true
+        options:
+          values:
+            - name: ciencia-pbe
+              label: Ciência e PBE
+            - name: clinica
+              label: Clínica
+            - name: esportiva
+              label: Esportiva
+            - name: comportamento
+              label: Comportamento
+            - name: carreira
+              label: Carreira
+            - name: nutriwork
+              label: Nutriwork
+      - name: tags
+        label: Tags
+        type: string
+        required: true
+        list: true
+        description: Use termos específicos; cada tag participa da busca e dos relacionados.
+      - name: author
+        label: Autor
+        type: string
+        required: true
+      - name: publishedAt
+        label: Data de publicação
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: updatedAt
+        label: Data de atualização
+        type: date
+        default: ""
+        description: Preencha apenas quando houver uma atualização editorial relevante.
+        options:
+          format: yyyy-MM-dd
+      - name: coverImage
+        label: Imagem de capa
+        type: image
+        required: true
+        options:
+          media: news_images
+          path: public/noticias
+          categories: [image]
+          extensions: [jpg, jpeg, png, webp]
+          rename: safe
+      - name: coverAlt
+        label: Texto alternativo da capa
+        type: text
+        required: true
+        description: Descreva objetivamente a informação visual relevante da imagem.
+      - name: featured
+        label: Exibir em destaque
+        type: boolean
+        default: false
+        description: Se houver mais de um destaque, a publicação mais recente vence.
+      - name: draft
+        label: Manter como rascunho
+        type: boolean
+        default: true
+        description: Rascunhos não aparecem no portal, busca, relacionados nem sitemap.
+      - name: callToAction
+        label: CTA editorial
+        type: object
+        description: Opcional para direcionar um lançamento, campanha ou evento para uma página interna ou externa.
+        fields:
+          - name: label
+            label: Texto do botão
+            type: string
+            required: true
+          - name: url
+            label: URL do botão
+            type: string
+            required: true
+            description: Use uma URL https:// completa ou caminho interno iniciado por /.
+      - name: eventDate
+        label: Data do evento
+        type: date
+        description: Obrigatória para o tipo Evento; opcional para uma agenda de lançamento ou campanha.
+        options:
+          format: yyyy-MM-dd
+      - name: eventTime
+        label: Horário do evento
+        type: string
+        description: Opcional. Use o formato 24h, por exemplo 19:30.
+      - name: eventLocation
+        label: Local ou formato do evento
+        type: string
+        description: "Opcional. Ex.: Online, São Paulo ou Comunidade Nutriwork."
+      - name: references
+        label: Referências
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{citation}"
+        fields:
+          - name: citation
+            label: Citação
+            type: text
+            required: true
+          - name: url
+            label: URL
+            type: string
+            required: true
+      - name: body
+        label: Conteúdo
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          media: news_images
+          path: public/noticias
+          extensions: [jpg, jpeg, png, webp]
+          categories: [image]
+          rename: safe
+          switcher: true
