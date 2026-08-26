@@ -14,7 +14,7 @@ updatedAt: "2026-08-26"
 coverImage: "/assets/noticias/intervalo-confianca.jpg"
 coverAlt: "Capa do curso Nutrição Baseada em Evidências do Nutriwork sobre uma página de texto em inglês"
 featured: false
-draft: false
+draft: true
 references:
   - citation: "Greenland S, Senn SJ, Rothman KJ, et al. Statistical tests, P values, confidence intervals, and power: a guide to misinterpretations. Eur J Epidemiol. 2016;31:337-350."
     url: "https://doi.org/10.1007/s10654-016-0149-3"

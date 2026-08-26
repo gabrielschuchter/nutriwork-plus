@@ -14,7 +14,7 @@ updatedAt: "2026-08-26"
 coverImage: "/assets/noticias/razao-prevalencia-odds-ratio.jpg"
 coverAlt: "Capa do curso Bioquímica da Nutrição do Nutriwork com imagem de moléculas em tons de azul"
 featured: false
-draft: false
+draft: true
 references:
   - citation: "Barros AJD, Hirakata VN. Alternatives for logistic regression in cross-sectional studies: an empirical comparison of models that directly estimate the prevalence ratio. BMC Med Res Methodol. 2003;3:21."
     url: "https://doi.org/10.1186/1471-2288-3-21"

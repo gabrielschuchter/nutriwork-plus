@@ -14,7 +14,7 @@ updatedAt: "2026-08-26"
 coverImage: "/assets/noticias/associacao-causalidade.jpg"
 coverAlt: "Capa do curso Introdução à Nutrição do Nutriwork com mãos escrevendo e alimentos em primeiro plano"
 featured: false
-draft: false
+draft: true
 references:
   - citation: "Hernán MA. The C-Word: Scientific Euphemisms Do Not Improve Causal Inference From Observational Data. Am J Public Health. 2018;108:616-619."
     url: "https://doi.org/10.2105/AJPH.2018.304337"

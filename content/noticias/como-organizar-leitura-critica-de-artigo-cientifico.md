@@ -14,7 +14,7 @@ updatedAt: "2026-08-26"
 coverImage: "/assets/noticias/leitura-artigo-cientifico.jpg"
 coverAlt: "Capa do curso Nutrição Baseada em Evidências do Nutriwork sobre uma página de texto em inglês"
 featured: false
-draft: false
+draft: true
 references:
   - citation: "Higgins JPT, Savović J, Page MJ, Elbers RG, Sterne JAC. Chapter 8: Assessing risk of bias in a randomized trial. Cochrane Handbook for Systematic Reviews of Interventions."
     url: "https://training.cochrane.org/handbook/current/chapter-08"

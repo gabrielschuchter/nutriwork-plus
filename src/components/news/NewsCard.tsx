@@ -1,4 +1,3 @@
-import { NEWS_CATEGORY_LABELS, NEWS_TYPE_LABELS } from '../../lib/news/constants';
 import { formatNewsDate, getEventDetailsLabel, getReadingTimeLabel } from '../../lib/news/format';
 import type { NewsArticle } from '../../lib/news/types';
 
@@ -18,10 +17,6 @@ export function NewsCard({ article, featured = false }: NewsCardProps) {
           <img src={article.coverImage} alt={article.coverAlt} loading={featured ? 'eager' : 'lazy'} width="760" height="500" />
         </div>
         <div className="news-card__content">
-          <div className="news-card__labels">
-            <span>{NEWS_TYPE_LABELS[article.type]}</span>
-            <span>{NEWS_CATEGORY_LABELS[article.category]}</span>
-          </div>
           <Heading>{article.title}</Heading>
           <p>{article.summary}</p>
           {eventDetails && <p className="news-card__event"><span>{article.type === 'evento' ? 'Ao vivo' : 'Agenda'}</span>{eventDetails}</p>}

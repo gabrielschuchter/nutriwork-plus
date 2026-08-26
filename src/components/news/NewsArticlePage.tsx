@@ -1,6 +1,6 @@
 import { usePageContext } from 'vike-react/usePageContext';
 import { Head } from 'vike-react/Head';
-import { NEWS_CATEGORY_LABELS, NEWS_TYPE_LABELS } from '../../lib/news/constants';
+import { NEWS_CATEGORY_LABELS } from '../../lib/news/constants';
 import { getArticleBySlug, getRelatedArticles } from '../../lib/news/articles';
 import { formatNewsDate, getEventDetailsLabel, getReadingTimeLabel } from '../../lib/news/format';
 import { MarkdownArticle } from './MarkdownArticle';
@@ -67,10 +67,6 @@ export function NewsArticlePage() {
                 <span aria-hidden="true">/</span>
                 <span aria-current="page">{NEWS_CATEGORY_LABELS[article.category]}</span>
               </nav>
-              <div className="news-card__labels">
-                <span>{NEWS_TYPE_LABELS[article.type]}</span>
-                <span>{NEWS_CATEGORY_LABELS[article.category]}</span>
-              </div>
               {eventDetails && <p className="news-event-details"><span>{article.type === 'evento' ? 'Evento ao vivo' : 'Agenda Nutriwork'}</span>{eventDetails}</p>}
               <h1>{article.title}</h1>
               <p className="news-article-hero__summary">{article.summary}</p>

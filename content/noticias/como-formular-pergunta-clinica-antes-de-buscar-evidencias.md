@@ -14,7 +14,7 @@ updatedAt: "2026-08-26"
 coverImage: "/assets/noticias/pergunta-clinica.jpg"
 coverAlt: "Capa do curso Introdução à Nutrição do Nutriwork com mãos escrevendo e alimentos em primeiro plano"
 featured: false
-draft: false
+draft: true
 references:
   - citation: "GRADE Working Group. Developing questions about interventions, diagnostic tests, prognosis and exposures. GRADE Book."
     url: "https://book.gradepro.org/guideline/questions-about-interventions-diagnostic-test-prognosis-and-exposures"

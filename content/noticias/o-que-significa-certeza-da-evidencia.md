@@ -14,7 +14,7 @@ updatedAt: "2026-08-26"
 coverImage: "/assets/noticias/certeza-evidencia.jpg"
 coverAlt: "Capa do curso Nutrição Clínica do Nutriwork com elementos visuais em azul e texto em branco"
 featured: false
-draft: false
+draft: true
 references:
   - citation: "GRADE Working Group. GRADE Book: Overview of the GRADE approach. Updated 2026."
     url: "https://book.gradepro.org/guideline/overview-of-the-grade-approach"
