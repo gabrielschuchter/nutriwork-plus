@@ -62,6 +62,7 @@
 .news-empty button { min-height: 42px; padding: 0 16px; border: 1px solid var(--button-border); border-radius: 999px; color: var(--button-outline-text); background: var(--button-outline-bg); box-shadow: var(--button-outline-shadow); cursor: pointer; font-size: 13px; font-weight: 650; }
 
 .news-article-page { background: linear-gradient(180deg, rgba(18,99,255,.04), transparent 36%); }
+.news-article-page > article { padding-bottom: clamp(88px, 12vw, 156px); }
 .news-article-hero { position: relative; padding: clamp(132px, 14vw, 190px) 0 clamp(38px, 5vw, 68px); }
 .news-article-hero::after { content: ''; position: absolute; right: 0; bottom: 0; left: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--section-divider), transparent); }
 .news-breadcrumb { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: clamp(22px, 3vw, 34px); color: var(--muted); font-size: 12px; }
