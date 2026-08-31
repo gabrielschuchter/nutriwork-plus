@@ -21,7 +21,8 @@ Trabalhe na branch `feature/noticias-mvp`. Não publique, faça merge ou force p
 
 - O nome do arquivo é criado a partir do título e define a URL. Não crie um campo `slug` separado.
 - Use uma categoria principal e tags específicas. Elas alimentam filtros, busca e relacionados.
-- Selecione `Lançamento` para uma nova oferta ou produto, `Campanha` para uma comunicação com período definido e `Evento` para encontro, aula ou live. Os formatos continuam usando a mesma URL de artigo e a mesma revisão editorial.
+- Selecione `Lançamento` para uma nova oferta ou produto, `Campanha` para uma comunicação com período definido, `Evento` para encontro, aula ou live e `Conteúdo do dia` para a série semanal de aulas gravadas. Os formatos continuam usando a mesma URL de artigo e a mesma revisão editorial.
+- Para `Conteúdo do dia`, preencha também os dados estruturados do módulo, professor(a), perfil do Instagram e link do perfil. O bloco padrão é reutilizado no card e na página individual, e a página individual recebe automaticamente um CTA para o Nutriwork+; o corpo Markdown fica reservado ao texto da publicação.
 - A imagem de capa vai para `public/noticias` e o CMS grava a URL pública no frontmatter.
 - O texto alternativo deve descrever objetivamente a imagem.
 - O corpo aceita Markdown pelo editor rich-text, incluindo títulos, listas, links, tabelas e imagens.

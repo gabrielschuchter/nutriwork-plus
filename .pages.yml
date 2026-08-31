@@ -64,6 +64,8 @@ content:
               label: Explicador
             - name: nutriwork
               label: Nutriwork
+            - name: conteudo-do-dia
+              label: Conteúdo do dia
             - name: lancamento
               label: Lançamento
             - name: campanha
@@ -136,6 +138,27 @@ content:
         type: boolean
         default: true
         description: Rascunhos não aparecem no portal, busca, relacionados nem sitemap.
+      - name: contentDay
+        label: Dados do conteúdo do dia
+        type: object
+        description: Preencha quando o tipo for Conteúdo do dia. Esses dados formam o bloco padrão da publicação.
+        fields:
+          - name: module
+            label: Módulo
+            type: string
+            required: true
+          - name: presenter
+            label: Professor(a)
+            type: string
+            required: true
+          - name: presenterHandle
+            label: Perfil do Instagram
+            type: string
+            required: true
+          - name: presenterUrl
+            label: Link do perfil
+            type: string
+            required: true
       - name: callToAction
         label: CTA editorial
         type: object

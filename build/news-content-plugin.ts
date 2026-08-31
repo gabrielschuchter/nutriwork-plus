@@ -53,6 +53,13 @@ const callToActionSchema = z.preprocess(
   }).optional()
 );
 
+const contentDaySchema = z.object({
+  module: z.string().trim().min(3).max(160),
+  presenter: z.string().trim().min(3).max(120),
+  presenterHandle: z.string().trim().regex(/^@[a-z0-9._]+$/i, 'Use um perfil iniciado por @.'),
+  presenterUrl: callToActionUrlSchema
+});
+
 const articleSchema = z.object({
   title: z.string().trim().min(8),
   summary: z.string().trim().min(24),
@@ -66,6 +73,7 @@ const articleSchema = z.object({
   coverAlt: z.string().trim().min(8),
   featured: z.boolean().default(false),
   draft: z.boolean().default(false),
+  contentDay: contentDaySchema.optional(),
   callToAction: callToActionSchema,
   eventDate: optionalDateSchema,
   eventTime: optionalTimeSchema,
@@ -80,6 +88,9 @@ const articleSchema = z.object({
   }
   if ((article.eventTime || article.eventLocation) && !article.eventDate) {
     context.addIssue({ code: 'custom', path: ['eventDate'], message: 'eventDate is required when eventTime or eventLocation is filled.' });
+  }
+  if (article.type === 'conteudo-do-dia' && !article.contentDay) {
+    context.addIssue({ code: 'custom', path: ['contentDay'], message: 'Conteúdo do dia requires module and presenter details.' });
   }
 });
 

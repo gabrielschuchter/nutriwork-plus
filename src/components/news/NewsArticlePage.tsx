@@ -2,9 +2,10 @@ import { usePageContext } from 'vike-react/usePageContext';
 import type { CSSProperties } from 'react';
 import { Head } from 'vike-react/Head';
 import { NEWS_CATEGORY_LABELS } from '../../lib/news/constants';
-import { getArticleBySlug, getRelatedArticles } from '../../lib/news/articles';
+import { getArticleBySlug, getArticleCallToAction, getRelatedArticles } from '../../lib/news/articles';
 import { formatNewsDate, getEventDetailsLabel, getReadingTimeLabel } from '../../lib/news/format';
 import { MarkdownArticle } from './MarkdownArticle';
+import { NewsContentDayDetails } from './NewsContentDayDetails';
 import { NewsCard } from './NewsCard';
 import { NewsFooter } from './NewsFooter';
 import { NewsHeader } from './NewsHeader';
@@ -52,7 +53,11 @@ export function NewsArticlePage() {
 
   const relatedArticles = getRelatedArticles(article);
   const eventDetails = getEventDetailsLabel(article);
-  const callToActionIsExternal = article.callToAction?.url.startsWith('http');
+  const callToAction = getArticleCallToAction(article);
+  const callToActionIsExternal = callToAction?.url.startsWith('http');
+  const callToActionHeading = article.type === 'conteudo-do-dia'
+    ? 'Continue sua formação com o Nutriwork+.'
+    : 'Entre no grupo para acompanhar a aula ao vivo.';
 
   return (
     <div className="news-page">
@@ -71,6 +76,7 @@ export function NewsArticlePage() {
               {eventDetails && <p className="news-event-details"><span>{article.type === 'evento' ? 'Evento ao vivo' : 'Agenda Nutriwork'}</span>{eventDetails}</p>}
               <h1>{article.title}</h1>
               <p className="news-article-hero__summary">{article.summary}</p>
+              {article.contentDay && <NewsContentDayDetails details={article.contentDay} />}
               <div className="news-article-hero__meta">
                 <span>Por {article.author}</span>
                 <span aria-hidden="true">•</span>
@@ -101,13 +107,13 @@ export function NewsArticlePage() {
               </section>
             )}
 
-            {article.callToAction && (
+            {callToAction && (
               <aside className="news-cta news-cta--editorial" aria-label="Próximo passo desta publicação">
                 <div>
                   <p>Próximo passo</p>
-                  <h2>Entre no grupo para acompanhar a aula ao vivo.</h2>
+                  <h2>{callToActionHeading}</h2>
                 </div>
-                <a className="button button--primary" href={article.callToAction.url} target={callToActionIsExternal ? '_blank' : undefined} rel={callToActionIsExternal ? 'noreferrer' : undefined}>{article.callToAction.label}</a>
+                <a className="button button--primary" href={callToAction.url} target={callToActionIsExternal ? '_blank' : undefined} rel={callToActionIsExternal ? 'noreferrer' : undefined}>{callToAction.label}</a>
               </aside>
             )}
 

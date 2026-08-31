@@ -1,5 +1,10 @@
 import { articles } from 'virtual:nutriwork-news';
-import type { NewsArticle } from './types';
+import type { NewsArticle, NewsCallToAction } from './types';
+
+const contentDayCallToAction: NewsCallToAction = {
+  label: 'Conhecer o Nutriwork+',
+  url: '/#planos'
+};
 
 function compareByPublicationDate(left: NewsArticle, right: NewsArticle) {
   return right.publishedAt.localeCompare(left.publishedAt) || right.slug.localeCompare(left.slug);
@@ -16,6 +21,10 @@ export const featuredArticle = publicArticles
 
 export function getArticleBySlug(slug: string | undefined) {
   return publicArticles.find((article) => article.slug === slug);
+}
+
+export function getArticleCallToAction(article: NewsArticle) {
+  return article.callToAction ?? (article.type === 'conteudo-do-dia' ? contentDayCallToAction : undefined);
 }
 
 export function getRelatedArticles(article: NewsArticle, limit = 3) {

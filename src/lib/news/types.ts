@@ -10,6 +10,13 @@ export type NewsCallToAction = {
   url: string;
 };
 
+export type NewsContentDay = {
+  module: string;
+  presenter: string;
+  presenterHandle: string;
+  presenterUrl: string;
+};
+
 export type NewsArticle = {
   slug: string;
   title: string;
@@ -32,4 +39,5 @@ export type NewsArticle = {
   content: string;
   plainText: string;
   readingTimeMinutes: number;
+  contentDay?: NewsContentDay;
 };

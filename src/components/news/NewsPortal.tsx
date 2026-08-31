@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { featuredArticle } from '../../lib/news/articles';
+import { featuredArticle, publicArticles } from '../../lib/news/articles';
 import { NewsCard } from './NewsCard';
 import { NewsFooter } from './NewsFooter';
 import { NewsHeader } from './NewsHeader';
@@ -24,6 +24,7 @@ function NewsLoader({ active }: { active: boolean }) {
 
 export function NewsPortal() {
   const [loading, setLoading] = useState(true);
+  const regularArticles = publicArticles.filter((article) => article.slug !== featuredArticle?.slug);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setLoading(false), 900);
@@ -53,6 +54,18 @@ export function NewsPortal() {
                   <h2 id="news-featured-title">O que está acontecendo agora</h2>
                 </div>
                 <NewsCard article={featuredArticle} featured />
+              </section>
+            )}
+
+            {regularArticles.length > 0 && (
+              <section className="news-listing" aria-labelledby="news-listing-title">
+                <div className="news-section-heading">
+                  <p>Mais para você</p>
+                  <h2 id="news-listing-title">Todas as publicações</h2>
+                </div>
+                <div className="news-grid">
+                  {regularArticles.map((article) => <NewsCard key={article.slug} article={article} />)}
+                </div>
               </section>
             )}
 

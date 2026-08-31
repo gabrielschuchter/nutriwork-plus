@@ -1,4 +1,4 @@
-export const NEWS_TYPES = ['noticia', 'analise', 'explicador', 'nutriwork', 'lancamento', 'campanha', 'evento'] as const;
+export const NEWS_TYPES = ['noticia', 'analise', 'explicador', 'nutriwork', 'conteudo-do-dia', 'lancamento', 'campanha', 'evento'] as const;
 export const NEWS_CATEGORIES = ['ciencia-pbe', 'clinica', 'esportiva', 'comportamento', 'carreira', 'nutriwork'] as const;
 
 export type NewsType = typeof NEWS_TYPES[number];
@@ -9,6 +9,7 @@ export const NEWS_TYPE_LABELS: Record<NewsType, string> = {
   analise: 'Análise',
   explicador: 'Explicador',
   nutriwork: 'Nutriwork',
+  'conteudo-do-dia': 'Conteúdo do dia',
   lancamento: 'Lançamento',
   campanha: 'Campanha',
   evento: 'Evento'
