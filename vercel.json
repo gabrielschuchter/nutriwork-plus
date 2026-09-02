@@ -1,0 +1,10 @@
+{
+  "outputDirectory": "dist/client",
+  "redirects": [
+    {
+      "source": "/estude",
+      "destination": "/",
+      "permanent": true
+    }
+  ]
+}
