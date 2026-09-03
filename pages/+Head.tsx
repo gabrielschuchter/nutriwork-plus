@@ -13,6 +13,14 @@ const themeBootScript = `(() => {
   if (themeColor) themeColor.setAttribute('content', theme === 'light' ? '#f4f7fc' : '#02040a');
 })();`;
 
+const clarityScript = `
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "yci5qs3mr9");
+`;
+
 export function Head() {
   return <>
     <meta name="theme-color" content="#f4f7fc" />
@@ -22,5 +30,6 @@ export function Head() {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet" />
     <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+    <script dangerouslySetInnerHTML={{ __html: clarityScript }} />
   </>;
 }
