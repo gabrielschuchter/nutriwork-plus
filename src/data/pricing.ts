@@ -1,4 +1,4 @@
-export type PricingPlanId = 'monthly' | 'quarterly' | 'semiannual' | 'annual';
+export type PricingPlanId = 'monthly' | 'quarterly' | 'annual';
 
 export type InstallmentCondition = {
   count: number;
@@ -26,7 +26,6 @@ export type PricingPlan =
   | (PricingPlanBase & {
       billing: 'term';
       installments: InstallmentCondition;
-      cashMonthlyEquivalent: string;
     });
 
 type PricingPlanCatalog = {
@@ -48,7 +47,7 @@ export const pricingPlans = {
     title: 'Mensal',
     accessMonths: 1,
     billing: 'monthly',
-    cashPrice: '39,90',
+    cashPrice: '49,90',
     checkoutUrl: 'https://pay.kiwify.com.br/pO6p0QM'
   },
   quarterly: {
@@ -56,31 +55,18 @@ export const pricingPlans = {
     title: 'Trimestral',
     accessMonths: 3,
     billing: 'term',
-    cashPrice: '92,70',
-    installments: { count: 3, value: '33,08' },
-    cashMonthlyEquivalent: '30,90',
+    cashPrice: '129,90',
+    installments: { count: 3, value: '46,36' },
     checkoutUrl: 'https://pay.kiwify.com.br/TbFu6TD?split=3'
-  },
-  semiannual: {
-    id: 'semiannual',
-    title: 'Semestral',
-    accessMonths: 6,
-    billing: 'term',
-    cashPrice: '149,40',
-    installments: { count: 6, value: '28,03' },
-    cashMonthlyEquivalent: '24,90',
-    checkoutUrl: 'https://pay.kiwify.com.br/bfYt1Pt?split=6'
   },
   annual: {
     id: 'annual',
-    title: 'Nutriwork Plus Anual +',
-    subtitle: 'livro ESTUDE!',
+    title: 'Nutriwork Plus Anual',
     description: 'Acesso completo à formação que você sempre quis.',
     accessMonths: 12,
     billing: 'term',
-    cashPrice: '298,80',
-    installments: { count: 12, value: '30,90' },
-    cashMonthlyEquivalent: '24,90',
+    cashPrice: '398,00',
+    installments: { count: 12, value: '41,16' },
     checkoutUrl: 'https://pay.kiwify.com.br/nyBH9vq?split=12',
     featured: true,
     benefits: [
@@ -93,4 +79,4 @@ export const pricingPlans = {
   }
 } satisfies PricingPlanCatalog;
 
-export const platformPlanIds = ['monthly', 'quarterly', 'semiannual'] as const satisfies readonly PricingPlanId[];
+export const platformPlanIds = ['annual', 'quarterly', 'monthly'] as const satisfies readonly PricingPlanId[];

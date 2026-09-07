@@ -5,10 +5,8 @@ import {
   estudeAudience,
   estudeBenefits,
   estudeObjections,
-  evidenceLearning,
   extras,
   faqItems,
-  navItems,
   platformBenefits,
   promises
 } from './data';
@@ -19,7 +17,6 @@ import PlatformPreview from './components/PlatformPreview';
 const contactEmail = 'equipenutriwork@gmail.com';
 const partnerForm = 'https://forms.gle/avn9yrBdbEHkaGg8A';
 const whatsappContact = `https://wa.me/5512997505188?text=${encodeURIComponent('Olá, equipe Nutriwork! Vim pelo site e gostaria de tirar uma dúvida sobre o Nutriwork Plus.')}`;
-type Theme = 'light' | 'dark';
 type Page = 'home' | 'estude' | 'partners';
 type LoadingVariant = 'intro' | 'return' | 'route';
 type LoadingExperienceState = { active: boolean; variant: LoadingVariant; page: Page };
@@ -408,63 +405,6 @@ function Button({ href, children, variant = 'primary', className = '', external 
   return <a className={`button button--${variant} ${className}`} href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>{children}</a>;
 }
 
-function Header() {
-  const [open, setOpen] = useState(false);
-  const [theme, setTheme] = useState<Theme>(() => typeof document !== 'undefined' && document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
-  const [activeNavHref, setActiveNavHref] = useState(() => {
-    return typeof window === 'undefined' ? '/' : window.location.pathname + window.location.hash;
-  });
-  const nextTheme = theme === 'dark' ? 'light' : 'dark';
-
-  useEffect(() => {
-    const updateActiveNav = () => {
-      setActiveNavHref(window.location.pathname + window.location.hash);
-    };
-
-    window.addEventListener('popstate', updateActiveNav);
-    return () => window.removeEventListener('popstate', updateActiveNav);
-  }, []);
-
-  const toggleTheme = () => {
-    const root = document.documentElement;
-    root.classList.add('theme-transition');
-    root.dataset.theme = nextTheme;
-    root.style.colorScheme = nextTheme;
-    document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', nextTheme === 'light' ? '#f4f7fc' : '#02040a');
-    try {
-      localStorage.setItem('nutriwork-theme', nextTheme);
-    } catch {
-      // The selected theme still applies when storage is unavailable.
-    }
-    setTheme(nextTheme);
-    window.setTimeout(() => root.classList.remove('theme-transition'), 350);
-  };
-
-  return (
-    <header className="site-header">
-      <a className="brand" href="/#inicio" aria-label="Nutriwork Plus, voltar ao início">NUTRIWORK<span>+</span></a>
-      <nav className={`nav ${open ? 'nav--open' : ''}`} aria-label="Navegação principal">
-        {navItems.map((item) => {
-          const active = activeNavHref === item.href;
-          return <a key={item.href} className={active ? 'is-active' : undefined} href={item.href} aria-current={active ? 'page' : undefined} onClick={() => setOpen(false)}>{item.label}</a>;
-        })}
-      </nav>
-      <div className="header-actions">
-        <button className="theme-toggle" type="button" aria-label={`Tema atual: ${theme === 'dark' ? 'escuro' : 'claro'}. Alternar para tema ${nextTheme === 'dark' ? 'escuro' : 'claro'}.`} title={`Alternar para tema ${nextTheme === 'dark' ? 'escuro' : 'claro'}`} onClick={toggleTheme}>
-          <span className="theme-toggle__track" aria-hidden="true">
-            <span className="theme-toggle__icon theme-toggle__icon--sun"><Icon name="sun"/></span>
-            <span className="theme-toggle__icon theme-toggle__icon--moon"><Icon name="moon"/></span>
-            <span className="theme-toggle__thumb"><Icon name={theme === 'dark' ? 'moon' : 'sun'}/></span>
-          </span>
-        </button>
-        <button className="menu-button" type="button" aria-label={open ? 'Fechar menu' : 'Abrir menu'} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
-          <span/><span/><span/>
-        </button>
-      </div>
-    </header>
-  );
-}
-
 function SectionHeading({ children, accent = false }: { children: ReactNode; accent?: boolean }) {
   return <h2 className={`section-heading ${accent ? 'section-heading--accent' : ''}`}>{children}</h2>;
 }
@@ -815,6 +755,7 @@ function Courses() {
             </div>
           </div>
         </Reveal>
+        <Reveal className="section-plan-cta"><Button href="#planos">Ver planos do Nutriwork+</Button></Reveal>
       </div>
     </section>
   );
@@ -831,6 +772,7 @@ function Extras() {
         </div>
         <Reveal className="path-intro"><p>O que muda quando você estuda com o Nutriwork?</p><h2>Dois caminhos.</h2><span>resultados diferentes.</span></Reveal>
         <Reveal><Comparison /></Reveal>
+        <Reveal className="section-plan-cta"><Button href="#planos">Escolher meu plano</Button></Reveal>
       </div>
     </section>
   );
@@ -946,19 +888,6 @@ function EstudePlan() {
   );
 }
 
-function Evidence() {
-  return (
-    <section className="section evidence-section">
-      <div className="evidence-glow" aria-hidden="true" />
-      <img className="evidence-shape" src="/assets/evidence-shape.webp" alt="" aria-hidden="true" width="1185" height="1248" loading="lazy" decoding="async" />
-      <div className="page-width page-width--narrow">
-        <Reveal className="evidence-heading"><h2>Aprenda a usar evidências sem se perder em termos difíceis.</h2><p>No módulo de Nutrição Baseada em Evidências, você aprende a:</p></Reveal>
-        <div className="evidence-list">{evidenceLearning.map((item) => <Reveal key={item}><p>{item}</p></Reveal>)}</div>
-      </div>
-    </section>
-  );
-}
-
 function Mentor() {
   return (
     <section className="section mentor-section">
@@ -990,32 +919,41 @@ function PlanPaymentSummary({ plan, compact = false }: { plan: PricingPlan; comp
 
   return (
     <div className={`plan-payment-summary ${compact ? 'plan-payment-summary--compact' : ''}`}>
-      <p className="installment-price"><strong>{plan.installments.count}x</strong> de R$ {plan.installments.value}</p>
-      <p className="plan-payment-summary__payment-method">no cartão</p>
-      <p className="plan-payment-summary__cash">ou <strong>R$ {plan.cashPrice} à vista</strong></p>
-      <p className="plan-payment-summary__equivalent">equivalente a <strong>R$ {plan.cashMonthlyEquivalent}/mês de acesso</strong></p>
+      <p className="plan-payment-summary__cash"><strong>R$ {plan.cashPrice}</strong> à vista</p>
+      <p className="plan-payment-summary__installment">ou <strong>{plan.installments.count}x de R$ {plan.installments.value}</strong> no cartão</p>
     </div>
   );
 }
 
+function PricingPlanCard({ plan, featured = false }: { plan: PricingPlan; featured?: boolean }) {
+  return (
+    <article className={`pricing-card pricing-plan-card pricing-plan-card--${plan.id} ${featured ? 'pricing-card--featured' : ''}`}>
+      {featured ? <span className="featured-badge">Plano destaque</span> : null}
+      <h2>{plan.title}{featured && plan.subtitle ? <><br/><span>{plan.subtitle}</span></> : null}</h2>
+      {featured && plan.description ? <h3>{plan.description}</h3> : null}
+      <PlanPaymentSummary plan={plan} compact/>
+      {featured ? <p className="pricing-plan-card__exclusive">✓ Livro ESTUDE incluído neste plano</p> : null}
+      <div className="pricing-actions">
+        <Button href={plan.checkoutUrl} className={featured ? 'pricing-plan-card__featured-button' : ''} external>{featured ? 'QUERO ENTRAR AGORA' : 'Quero assinar'}</Button>
+      </div>
+      {featured ? <div className="scarcity">🔥 últimas vagas restantes!</div> : null}
+    </article>
+  );
+}
+
 function Pricing() {
-  const annualPlan = pricingPlans.annual;
   return (
     <section id="planos" className="section pricing-section">
       <div className="page-width page-width--narrow">
         <Reveal><SectionHeading>Planos pensados para se adaptar à sua<br/>rotina de estudos</SectionHeading></Reveal>
-        <Reveal className="pricing-card pricing-card--featured">
-          <img className="featured-badge" src="/assets/featured-badge-labeled.webp" alt="Plano destaque" width="790" height="1000" loading="lazy" decoding="async"/>
-          <h2>{annualPlan.title}<br/><span>{annualPlan.subtitle}</span></h2>
-          <h3>{annualPlan.description}</h3>
-          <PlanPaymentSummary plan={annualPlan} />
-          <ul>{annualPlan.benefits?.map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul>
-          <div className="pricing-actions"><Button href={annualPlan.checkoutUrl} external>QUERO A EXPERIÊNCIA COMPLETA</Button><Button href="/estude" variant="outline" className="pricing-card__secondary">CONHECER O ESTUDE</Button></div>
-          <div className="scarcity">🔥 últimas vagas restantes!</div>
-        </Reveal>
-        <Reveal className="platform-pricing">
+        <Reveal className="platform-pricing pricing-plans-shell">
           <header><div><h2>Planos Nutriwork Plus</h2><p>Escolha o período e veja primeiro a condição real do cartão.</p></div><span>Condições reais</span></header>
-          <div className="mini-plans">{platformPlanIds.map((planId) => { const plan = pricingPlans[planId]; return <article key={plan.id}><h3>{plan.title}</h3><PlanPaymentSummary plan={plan} compact/><Button href={plan.checkoutUrl} external>Quero assinar</Button></article>; })}</div>
+          <div className="mini-plans">
+            {platformPlanIds.map((planId) => <PricingPlanCard key={planId} plan={pricingPlans[planId]} featured={planId === 'annual'}/>)}
+            <aside className="pricing-bonus">BÔNUS: ASSINOU AGORA? ACESSO ANTECIPADO AO NOVO APLICATIVO ATLAS: O BANCO DE TERMOS DO NUTRIWORK.</aside>
+          </div>
+          <div className="platform-benefits-scarcity">🔥 últimas vagas restantes!</div>
+          <h3 className="platform-benefits-title">Todos os planos incluem:</h3>
           <ul>{platformBenefits.map((item) => <li key={item}><PricingCheck />{item}</li>)}</ul>
         </Reveal>
       </div>
@@ -1091,7 +1029,7 @@ function Footer({ showStatement = true }: { showStatement?: boolean }) {
 }
 
 function HomePage() {
-  return <main><Hero/><ReferencesSection/><Platform/><JoinCta/><Courses/><Extras/><Evidence/><Mentor/><Pricing/><FAQ/></main>;
+  return <main><Hero/><ReferencesSection/><Platform/><JoinCta/><Courses/><Extras/><Mentor/><Pricing/><FAQ/></main>;
 }
 
 function EstudePage() {
@@ -1136,7 +1074,6 @@ export default function App({ initialPage }: { initialPage?: Page } = {}) {
     <>
       <LoadingExperience state={loading} />
       <div className={`app-shell ${loading.active ? 'app-shell--loading' : ''}`}>
-        <Header/>
         {renderedPage === 'estude' ? <EstudePage/> : renderedPage === 'partners' ? <PartnersPage/> : <HomePage/>}
         <Footer showStatement={renderedPage !== 'partners'} />
         {renderedPage === 'home' && <Button href="/#planos" className="mobile-cta">Ver planos</Button>}

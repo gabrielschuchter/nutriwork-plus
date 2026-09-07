@@ -62,14 +62,6 @@ export const estudeBenefits = [
   { title: 'Um método que cabe na vida real', text: 'Adapte os seus estudos à sua carga horária, tornando possível aprender mesmo nos dias difíceis.' }
 ];
 
-export const evidenceLearning = [
-  'Construir perguntas clínicas antes de procurar respostas.',
-  'Encontrar evidências científicas de forma mais rápida e organizada.',
-  'Entender resultados sem travar nos termos técnicos.',
-  'Analisar um estudo criticamente, avaliando se ele é forte ou fraco.',
-  'Transformar resultados de estudos em decisões para a prática clínica.'
-];
-
 export const platformBenefits = [
   'Acesso ao Nutriwork Plus pelo período escolhido',
   'Cursos, aulas e recursos da plataforma em um só lugar',
@@ -92,7 +84,7 @@ export const faqItems = [
   },
   {
     question: 'Qual é o período de acesso?',
-    answer: 'O acesso acompanha o plano escolhido: mensal, trimestral, semestral ou anual. No plano anual em destaque, você permanece com acesso à plataforma por 12 meses.'
+    answer: 'O acesso acompanha o plano escolhido: mensal, trimestral ou anual. No plano anual em destaque, você permanece com acesso à plataforma por 12 meses.'
   },
   {
     question: 'O livro ESTUDE está incluído em todos os planos?',

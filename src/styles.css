@@ -101,11 +101,6 @@
   --audience-text: #9eb6eb;
   --benefits-bg: linear-gradient(175deg, rgba(2,7,25,.96), rgba(1,2,7,.97) 55%, rgba(3,27,108,.95));
   --benefits-shadow: 0 35px 95px rgba(0,0,0,.55);
-  --evidence-glow-bg: radial-gradient(ellipse at center, rgba(32,31,255,.24), transparent 55%);
-  --evidence-shape-opacity: .42;
-  --evidence-shape-blend: screen;
-  --evidence-shape-filter: saturate(1.35) contrast(1.08) drop-shadow(0 0 60px rgba(28,49,255,.3));
-  --evidence-card-bg: linear-gradient(110deg, rgba(16,18,21,.94), rgba(20,20,21,.84));
   --mentor-bg: radial-gradient(circle at 82% 40%, rgba(26,81,255,.14), transparent 34%), rgba(3,5,12,.9);
   --mentor-copy: #c7cbd6;
   --price-shadow: 0 0 24px rgba(115,187,255,.82);
@@ -228,11 +223,6 @@ html[data-theme='light'] {
   --audience-text: #385a91;
   --benefits-bg: linear-gradient(175deg, rgba(255,255,255,.98), rgba(238,244,255,.96) 55%, rgba(219,232,255,.9));
   --benefits-shadow: 0 32px 80px rgba(32, 66, 121, .14);
-  --evidence-glow-bg: radial-gradient(ellipse at center, rgba(18,99,255,.13), transparent 55%);
-  --evidence-shape-opacity: .22;
-  --evidence-shape-blend: multiply;
-  --evidence-shape-filter: saturate(1.08) contrast(1.02) drop-shadow(0 0 42px rgba(18,99,255,.16));
-  --evidence-card-bg: linear-gradient(110deg, rgba(255,255,255,.98), rgba(234,242,255,.88));
   --mentor-bg: radial-gradient(circle at 82% 40%, rgba(18,99,255,.1), transparent 34%), rgba(255,255,255,.88);
   --mentor-copy: #3b4a5d;
   --price-shadow: 0 8px 26px rgba(18, 99, 255, .18);
@@ -290,7 +280,6 @@ html.theme-transition .comparison-cell,
 html.theme-transition .estude-hero,
 html.theme-transition .estude-page-hero,
 html.theme-transition .benefits-panel,
-html.theme-transition .evidence-list p,
 html.theme-transition .mentor-card,
 html.theme-transition .pricing-card,
 html.theme-transition .platform-pricing,
@@ -1044,6 +1033,17 @@ html[data-theme='light'] .hero-monitor__screen::after { opacity: .4; }
 .promise-card p { margin: 0; color: var(--card-copy); font-size: 14px; line-height: 1.48; }
 .mission { max-width: 850px; margin: clamp(56px, 6vw, 82px) auto 0; text-align: center; color: var(--body-copy); font-size: clamp(19px, 1.6vw, 25px); line-height: 1.35; text-wrap: balance; }
 .mission strong { color: var(--heading); font-weight: 850; }
+.section-plan-cta { margin-top: clamp(72px, 8vw, 118px); display: flex; justify-content: center; }
+.section-plan-cta .button { min-width: min(100%, 320px); }
+
+@media (min-width: 901px) {
+  .section-plan-cta .button {
+    min-width: 440px;
+    min-height: 70px;
+    padding-inline: 42px;
+    font-size: 20px;
+  }
+}
 
 .join-cta-section { position: relative; padding: 12px 0 34px; }
 .join-cta { position: relative; padding: 34px 38px; border: 1px solid rgba(126,184,255,.5); border-radius: 30px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 34px; align-items: center; overflow: hidden; background: radial-gradient(circle at 12% 0%, rgba(74,160,255,.38), transparent 34%), radial-gradient(circle at 92% 100%, rgba(17,73,196,.42), transparent 38%), linear-gradient(135deg, #0d4ac4 0%, #092d79 48%, #061a45 100%); box-shadow: inset 0 1px rgba(255,255,255,.2), 0 22px 54px rgba(4,33,93,.28), 0 0 38px rgba(18,99,255,.13); }
@@ -1221,18 +1221,6 @@ html[data-theme='light'] .estude-section .objections article h3 { color: #14233c
 .benefits-panel p { margin: 0; color: var(--body-copy); font-size: clamp(17px, 1.55vw, 23px); line-height: 1.45; }
 .benefits-panel .button { min-width: 380px; margin: 42px auto 0; display: flex; width: max-content; font-size: 22px; }
 
-.evidence-section { overflow-x: clip; overflow-y: visible; padding-bottom: clamp(150px, 14vw, 230px); isolation: isolate; }
-.evidence-section .page-width { position: relative; z-index: 1; }
-.evidence-glow { position: absolute; z-index: 0; inset: 13% 0 auto; height: 920px; background: var(--evidence-glow-bg); filter: blur(18px); pointer-events: none; }
-.evidence-shape { position: absolute; z-index: 0; top: 190px; left: 50%; width: min(900px, 82vw); height: 1040px; transform: translateX(-50%) rotate(-6deg); object-fit: contain; opacity: var(--evidence-shape-opacity); mix-blend-mode: var(--evidence-shape-blend); filter: var(--evidence-shape-filter); pointer-events: none; }
-.evidence-heading { max-width: 760px; margin: 0 auto 64px; text-align: center; }
-.evidence-heading h2 { margin: 0; font-size: clamp(27px, 3vw, 44px); font-weight: 400; line-height: 1.12; letter-spacing: -.03em; text-wrap: balance; }
-.evidence-heading p { max-width: 650px; margin: 20px auto 0; color: var(--body-copy); font-size: clamp(15px, 1.35vw, 20px); font-weight: 400; line-height: 1.45; text-wrap: balance; }
-.evidence-list { position: relative; }
-.evidence-list .reveal { width: 78%; margin: 30px auto; }
-.evidence-list .reveal:nth-child(even) { transform: translate(9%, 24px); }
-.evidence-list .reveal:nth-child(even).is-visible { transform: translateX(9%); }
-.evidence-list p { margin: 0; min-height: 84px; padding: 20px 30px; border: 1px solid var(--border); border-radius: 28px; display: grid; place-items: center; background: var(--evidence-card-bg); font-size: 15px; text-align: center; box-shadow: var(--glass-shadow); backdrop-filter: blur(5px); }
 
 .mentor-section { padding-top: 55px; }
 .mentor-kicker { margin: 0 0 54px; text-align: center; font-size: clamp(20px, 1.8vw, 28px); }
@@ -1258,7 +1246,7 @@ html[data-theme='light'] .estude-section .objections article h3 { color: #14233c
 .pricing-card h2 { margin: 0; font-size: clamp(26px, 3vw, 42px); }
 .pricing-card h2 span { white-space: nowrap; }
 .pricing-card h3 { margin: 7px 0 24px; font-size: clamp(20px, 2vw, 29px); font-weight: 400; }
-.featured-badge { position: absolute; z-index: 3; top: -58px; right: 20px; width: 172px; height: auto; filter: drop-shadow(0 16px 22px rgba(255,187,21,.38)); pointer-events: none; }
+.featured-badge { position: absolute; z-index: 3; top: -58px; right: 20px; min-width: 172px; height: 48px; padding: 0 20px; border: 1px solid rgba(126,255,177,.88); border-radius: 14px; display: grid; place-items: center; color: #06452e; background: linear-gradient(135deg, #e7ff9b, #a6ffb8 54%, #70ffa4); box-shadow: 0 0 24px rgba(71,255,143,.52), inset 0 1px rgba(255,255,255,.9), inset 0 -2px rgba(30,149,76,.16); font-size: 13px; font-weight: 800; letter-spacing: .08em; line-height: 1; text-transform: uppercase; white-space: nowrap; pointer-events: none; }
 .corner-badge { position: absolute; top: -20px; right: 50px; padding: 20px 38px; border-radius: 16px; color: var(--button-text); background: linear-gradient(#071732, #0a6fff); box-shadow: 0 0 25px rgba(15,100,255,.6); font-size: 27px; text-transform: uppercase; }
 .price { margin: 18px 0 18px; font-size: clamp(76px, 8vw, 118px); font-weight: 300; line-height: 1; letter-spacing: -.07em; text-shadow: var(--price-shadow); }
 .price > span { margin-right: .13em; font-size: .56em; }
@@ -1266,12 +1254,10 @@ html[data-theme='light'] .estude-section .objections article h3 { color: #14233c
 .plan-payment-summary { margin: 24px 0 28px; }
 .plan-payment-summary > .price { margin: 0; }
 .plan-payment-summary__period { margin: -2px 0 0; font-size: 18px; }
-.installment-price { max-width: 100%; margin: 18px 0 0; font-size: clamp(32px, 5.2vw, 72px); font-weight: 400; line-height: 1.04; letter-spacing: -.055em; text-wrap: balance; }
-.installment-price strong { font-weight: 800; }
-.plan-payment-summary__payment-method { margin: 8px 0 0; font-size: 16px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; opacity: .82; }
-.plan-payment-summary__cash { margin: 20px 0 0; font-size: clamp(17px, 1.8vw, 23px); line-height: 1.25; }
-.plan-payment-summary__equivalent { margin: 5px 0 0; color: var(--body-copy); font-size: clamp(13px, 1.25vw, 17px); line-height: 1.35; }
-.pricing-card--featured .plan-payment-summary__equivalent { color: rgba(255,255,255,.86); }
+.plan-payment-summary__cash { margin: 0; font-size: clamp(22px, 2.1vw, 30px); line-height: 1.15; }
+.plan-payment-summary__cash strong { font-weight: 800; }
+.plan-payment-summary__installment { margin: 8px 0 0; font-size: clamp(14px, 1.25vw, 17px); line-height: 1.25; }
+.plan-payment-summary__installment strong { font-weight: 800; }
 .pricing-card ul { margin: 26px 0; padding: 0; list-style: none; }
 .pricing-card li, .platform-pricing li { margin: 14px 0; display: flex; align-items: center; gap: 16px; font-size: 17px; line-height: 1.35; }
 .pricing-card li .icon, .platform-pricing li .icon { width: 28px; height: 28px; }
@@ -1295,14 +1281,132 @@ html[data-theme='light'] .scarcity { color: #795000; background: linear-gradient
 .mini-plans .price { margin: 0; font-size: 44px; letter-spacing: -.06em; }
 .mini-plans .price span { font-size: .6em; }
 .mini-plans .price small { font-size: .36em; }
-.plan-payment-summary--compact { min-height: 142px; margin: 22px 0 16px; display: flex; flex-direction: column; align-items: center; }
-.plan-payment-summary--compact .installment-price { margin: 4px 0 0; font-size: clamp(24px, 2.6vw, 32px); letter-spacing: -.06em; }
-.plan-payment-summary--compact .plan-payment-summary__payment-method { margin-top: 5px; font-size: 11px; }
-.plan-payment-summary--compact .plan-payment-summary__cash { margin-top: 14px; font-size: 15px; }
-.plan-payment-summary--compact .plan-payment-summary__equivalent { margin-top: 4px; font-size: 12px; }
+.plan-payment-summary--compact { min-height: 108px; margin: 18px 0 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.plan-payment-summary--compact .plan-payment-summary__cash { font-size: clamp(20px, 2.2vw, 28px); text-align: center; }
+.plan-payment-summary--compact .plan-payment-summary__installment { margin-top: 8px; font-size: clamp(13px, 1.15vw, 16px); text-align: center; }
 .mini-plans article > .button { margin-top: auto; }
 .mini-plans .button { width: 100%; min-height: 42px; padding: 0 14px; font-size: 12px; text-transform: uppercase; }
-.platform-pricing > ul { margin: 0; padding: 32px 10px 0; border-top: 1px solid var(--border); list-style: none; }
+.platform-pricing > ul { margin: 0; padding: 32px 10px 0; list-style: none; }
+.pricing-plans-shell { margin-top: 0; }
+.mini-plans { align-items: stretch; }
+.mini-plans .pricing-plan-card { min-width: 0; margin: 0; padding: 28px 18px 20px; }
+.mini-plans .pricing-plan-card > h2 { max-width: 100%; margin: 0; font-size: clamp(21px, 2vw, 28px); line-height: 1.14; text-align: center; }
+.mini-plans .pricing-plan-card > h2 span { white-space: normal; }
+.pricing-plan-card__exclusive { margin: 0 0 18px; font-size: 13px; font-weight: 700; line-height: 1.35; text-align: center; }
+.platform-benefits-title { margin: 0; padding-top: 26px; font-size: 15px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.mini-plans .pricing-plan-card--annual {
+  border-width: 2px;
+  padding-top: 58px;
+  background: var(--pricing-featured-bg);
+  color: var(--button-text);
+  box-shadow: var(--shadow), var(--depth-blue);
+}
+.mini-plans .pricing-plan-card--annual h2 { max-width: 100%; font-size: clamp(21px, 2.2vw, 28px); }
+.mini-plans .pricing-plan-card--annual h2 span { white-space: normal; }
+.mini-plans .pricing-plan-card--annual .featured-badge { top: -48px; right: 18px; min-width: 156px; width: auto; height: 44px; }
+.mini-plans .pricing-plan-card .pricing-actions { margin-top: auto; }
+.mini-plans .pricing-plan-card--annual .pricing-card__secondary { width: 100%; }
+
+@media (min-width: 901px) {
+  .mini-plans {
+    grid-template-columns: minmax(0, 1.3fr) minmax(260px, 1fr);
+    grid-template-rows: repeat(2, minmax(210px, 1fr));
+    align-items: stretch;
+  }
+
+  .mini-plans .pricing-plan-card--annual {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    padding: 58px 34px 28px;
+  }
+
+  .mini-plans .pricing-plan-card--quarterly {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .mini-plans .pricing-plan-card--monthly {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .mini-plans .pricing-plan-card--annual .plan-payment-summary--compact {
+    min-height: 220px;
+    margin: 16px 0 18px;
+  }
+
+  .mini-plans .pricing-plan-card--annual .plan-payment-summary__cash {
+    font-size: clamp(34px, 3.6vw, 52px);
+    line-height: 1.08;
+  }
+
+  .mini-plans .pricing-plan-card--annual .plan-payment-summary__cash strong {
+    display: block;
+    font-size: clamp(48px, 5.2vw, 72px);
+    letter-spacing: -.04em;
+    line-height: .98;
+  }
+
+  .mini-plans .pricing-plan-card--annual .plan-payment-summary__installment {
+    margin-top: 14px;
+    font-size: 16px;
+  }
+
+  .mini-plans .pricing-plan-card--annual .pricing-plan-card__exclusive {
+    margin-bottom: 24px;
+  }
+
+  .mini-plans .pricing-plan-card--annual .pricing-plan-card__featured-button {
+    width: min(100%, 360px);
+    color: #0f2c5c;
+    border-color: rgba(255,255,255,.88);
+    background: #fff;
+    box-shadow: 0 10px 28px rgba(1,25,88,.24), inset 0 1px rgba(255,255,255,.95);
+  }
+
+  .mini-plans .pricing-plan-card--annual .pricing-plan-card__featured-button:hover,
+  .mini-plans .pricing-plan-card--annual .pricing-plan-card__featured-button:focus-visible {
+    color: #0f2c5c;
+    background: #f5f8ff;
+    filter: none;
+  }
+
+  .mini-plans .pricing-plan-card:not(.pricing-plan-card--annual) {
+    padding: 24px 26px 18px;
+  }
+
+  .mini-plans .pricing-plan-card:not(.pricing-plan-card--annual) .plan-payment-summary--compact {
+    min-height: 96px;
+    margin: 14px 0 12px;
+  }
+
+  .mini-plans .pricing-plan-card--quarterly .plan-payment-summary__cash {
+    font-size: clamp(26px, 2.55vw, 38px);
+  }
+
+  .mini-plans .pricing-plan-card--quarterly .plan-payment-summary__cash strong {
+    display: block;
+    font-size: 1.28em;
+    line-height: .98;
+  }
+
+  .mini-plans .pricing-plan-card--quarterly .plan-payment-summary__installment {
+    font-size: clamp(12px, 1.05vw, 14px);
+  }
+
+  .mini-plans .pricing-plan-card--monthly .price {
+    font-size: clamp(54px, 5vw, 72px);
+    font-weight: 500;
+  }
+
+  .mini-plans .pricing-plan-card--monthly .plan-payment-summary__period {
+    font-size: 16px;
+  }
+
+  .platform-benefits-title {
+    padding-top: 62px;
+  }
+}
 
 .partners-page { background: var(--background); }
 .partners-hero { min-height: 780px; padding: 170px 0 120px; overflow: hidden; background: var(--partners-bg); }
@@ -1592,14 +1696,6 @@ html[data-theme='light'] .partners-network__hub-pulse { stroke: rgba(18, 99, 255
   .benefits-panel article { grid-template-columns: 42px 1fr; gap: 15px; }
   .benefits-panel article .icon { width: 38px; height: 38px; }
   .benefits-panel .button { min-width: 0; width: 100%; font-size: 17px; }
-  .evidence-section { padding-bottom: 118px; }
-  .evidence-shape { top: 210px; width: 130vw; height: 780px; opacity: .2; }
-  .evidence-heading { margin-bottom: 44px; }
-  .evidence-heading h2 { font-size: clamp(25px, 7vw, 34px); }
-  .evidence-heading p { margin-top: 16px; font-size: 14px; line-height: 1.48; }
-  .evidence-list .reveal { width: 100%; margin: 18px 0; }
-  .evidence-list .reveal:nth-child(even), .evidence-list .reveal:nth-child(even).is-visible { transform: none; }
-  .evidence-list p { min-height: 76px; padding: 18px; border-radius: 22px; font-size: 12px; }
   .mentor-card { padding: 24px; grid-template-columns: 1fr; }
   .mentor-copy { padding: 5px 2px 0; }
   .mentor-photo { min-height: 420px; order: -1; }
@@ -1610,7 +1706,7 @@ html[data-theme='light'] .partners-network__hub-pulse { stroke: rgba(18, 99, 255
   .pricing-card--featured h2 { max-width: calc(100% - 92px); }
   .pricing-card--estude { margin-top: 120px; }
   .pricing-card--estude::before { top: -62px; left: 10%; right: 10%; }
-  .featured-badge { top: -28px; right: 8px; width: 112px; }
+  .featured-badge { top: -28px; right: 8px; min-width: 150px; width: auto; height: 40px; padding-inline: 14px; font-size: 11px; }
   .corner-badge { top: -15px; right: 20px; padding: 12px 19px; font-size: 17px; }
   .price { font-size: clamp(68px, 21vw, 100px); }
   .pricing-card .installment-price { font-size: clamp(32px, 9vw, 64px); }
@@ -1683,7 +1779,7 @@ html[data-theme='light'] .partners-network__hub-pulse { stroke: rgba(18, 99, 255
   .course-card__overlay p { font-size: 10px; }
   .hero h1 { font-size: 52px; }
   .hero h1 span { margin: 8px 0 0; }
-  .featured-badge { width: 112px; }
+  .featured-badge { min-width: 142px; width: auto; }
   .footer h2 { font-size: 32px; }
   .footer-grid a { font-size: 16px; }
   .footer-grid .icon { width: 30px; height: 30px; }
@@ -1695,4 +1791,168 @@ html[data-theme='light'] .partners-network__hub-pulse { stroke: rgba(18, 99, 255
   .hero { --hero-glow-top: 500px; min-height: 1020px; }
   .hero-monitor { width: min(100%, 860px); }
   .hero-monitor-stage { min-height: 640px; }
+}
+
+@media (max-width: 720px) {
+  .mini-plans .pricing-plan-card--annual { order: -1; padding-top: 70px; }
+  .mini-plans .pricing-plan-card--annual .featured-badge { top: -44px; right: 10px; min-width: 142px; width: auto; height: 40px; }
+  .mini-plans .pricing-plan-card--monthly { order: 1; }
+  .mini-plans .pricing-plan-card--quarterly { order: 2; }
+}
+
+/* Pricing typography refinement */
+
+.mini-plans .plan-payment-summary__cash strong,
+.mini-plans .price {
+  font-family: inherit;
+  font-weight: 800;
+  letter-spacing: -.045em;
+}
+
+@media (min-width: 901px) {
+  .mini-plans .pricing-plan-card--annual .plan-payment-summary__cash strong,
+  .mini-plans .pricing-plan-card--quarterly .plan-payment-summary__cash strong,
+  .mini-plans .pricing-plan-card--monthly .price {
+    font-family: inherit;
+    font-weight: 800;
+  }
+}
+
+@media (max-width: 900px) {
+  .mini-plans .plan-payment-summary--compact {
+    min-height: 124px;
+    margin: 18px 0 16px;
+  }
+
+  .mini-plans .plan-payment-summary__cash {
+    font-size: clamp(26px, 8.5vw, 42px);
+    line-height: 1.02;
+  }
+
+  .mini-plans .plan-payment-summary__cash strong {
+    display: block;
+    font-size: clamp(34px, 10.5vw, 54px);
+    line-height: .98;
+  }
+
+  .mini-plans .plan-payment-summary__installment {
+    margin-top: 10px;
+    font-size: clamp(13px, 3.8vw, 16px);
+  }
+
+  .mini-plans .pricing-plan-card--monthly .price {
+    font-size: clamp(62px, 17vw, 88px);
+    line-height: .95;
+  }
+
+  .mini-plans .pricing-plan-card--monthly .plan-payment-summary__period {
+    font-size: 16px;
+  }
+}
+
+/* Mobile annual CTA color */
+
+@media (max-width: 900px) {
+  .mini-plans .pricing-plan-card--annual .pricing-plan-card__featured-button {
+    color: #0f2c5c;
+    border-color: rgba(255,255,255,.88);
+    background: #fff;
+    box-shadow: 0 10px 28px rgba(1,25,88,.24), inset 0 1px rgba(255,255,255,.95);
+  }
+
+  .mini-plans .pricing-plan-card--annual .pricing-plan-card__featured-button:hover,
+  .mini-plans .pricing-plan-card--annual .pricing-plan-card__featured-button:focus-visible {
+    color: #0f2c5c;
+    background: #f5f8ff;
+    filter: none;
+  }
+}
+
+/* Mobile placement for scarcity message */
+.platform-benefits-scarcity {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .mini-plans .pricing-plan-card--annual .scarcity {
+    display: none;
+  }
+
+  .platform-benefits-scarcity {
+    min-height: 56px;
+    margin: 12px 10px 0;
+    border: 1px solid rgba(198, 139, 20, .38);
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    color: #795000;
+    background: linear-gradient(180deg, rgba(255,248,222,.72), rgba(255,255,255,.38));
+    box-shadow: 0 18px 38px rgba(142, 94, 7, .08), inset 0 1px rgba(255,255,255,.8);
+    font-size: 17px;
+    text-align: center;
+  }
+
+  .platform-pricing > ul {
+    padding-top: 24px;
+  }
+}
+
+/* Floating annual featured badge */
+
+.mini-plans .pricing-plan-card--annual .featured-badge {
+  top: -22px;
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 720px) {
+  .mini-plans .pricing-plan-card--annual .featured-badge {
+    top: -20px;
+  }
+}
+
+/* Atlas bonus banner */
+@media (min-width: 901px) {
+  .pricing-bonus {
+    margin-top: 64px;
+  }
+}
+.pricing-bonus {
+  grid-column: 1 / -1;
+  min-height: 76px;
+  margin: 0 10px;
+  padding: 18px 24px;
+  border: 1px solid rgba(255, 120, 145, .9);
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  color: #7c1536;
+  background: linear-gradient(135deg, #ffe2e8, #ffbdca 54%, #ff9fb7);
+  box-shadow: 0 0 28px rgba(255, 76, 112, .34), inset 0 1px rgba(255,255,255,.92), inset 0 -2px rgba(187, 35, 76, .12);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: .035em;
+  line-height: 1.3;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .mini-plans .pricing-bonus {
+    order: 0;
+    min-height: 88px;
+    margin: 0;
+    padding: 17px 18px;
+    border-radius: 18px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+}
+
+/* Keep the desktop Atlas bonus below the annual scarcity notice */
+@media (min-width: 901px) {
+  .mini-plans .pricing-bonus {
+    margin-top: 84px;
+  }
 }
