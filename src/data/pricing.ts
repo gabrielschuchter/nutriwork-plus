@@ -48,7 +48,7 @@ export const pricingPlans = {
     accessMonths: 1,
     billing: 'monthly',
     cashPrice: '49,90',
-    checkoutUrl: 'https://pay.kiwify.com.br/pO6p0QM'
+    checkoutUrl: 'https://pay.kiwify.com.br/4vnBI69'
   },
   quarterly: {
     id: 'quarterly',
@@ -57,7 +57,7 @@ export const pricingPlans = {
     billing: 'term',
     cashPrice: '129,90',
     installments: { count: 3, value: '46,36' },
-    checkoutUrl: 'https://pay.kiwify.com.br/TbFu6TD?split=3'
+    checkoutUrl: 'https://pay.kiwify.com.br/pQO0vbv'
   },
   annual: {
     id: 'annual',
@@ -67,7 +67,7 @@ export const pricingPlans = {
     billing: 'term',
     cashPrice: '398,00',
     installments: { count: 12, value: '41,16' },
-    checkoutUrl: 'https://pay.kiwify.com.br/nyBH9vq?split=12',
+    checkoutUrl: 'https://pay.kiwify.com.br/7G7Qdts',
     featured: true,
     benefits: [
       'Cursos de todas as áreas da Nutrição.',
