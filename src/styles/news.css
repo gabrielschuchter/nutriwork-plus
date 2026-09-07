@@ -134,20 +134,6 @@
 .news-not-found h1 { margin: 0; color: var(--heading); font-size: clamp(36px, 5vw, 60px); font-weight: 400; line-height: 1.08; }
 .news-not-found p:not(.news-eyebrow) { margin: 20px auto 28px; color: var(--body-copy); line-height: 1.6; }
 
-html.theme-transition .news-page,
-html.theme-transition .news-toolbar,
-html.theme-transition .news-card,
-html.theme-transition .news-search__control,
-html.theme-transition .news-filters button,
-html.theme-transition .news-article-cover,
-html.theme-transition .news-share button,
-html.theme-transition .news-cta,
-html.theme-transition .news-markdown blockquote {
-  transition-duration: .28s;
-  transition-timing-function: cubic-bezier(.22, 1, .36, 1);
-  transition-property: background, background-color, border-color, color, box-shadow;
-}
-
 .news-page :is(a, button, input):focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
 
 @media (max-width: 960px) {

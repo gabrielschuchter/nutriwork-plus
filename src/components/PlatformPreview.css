@@ -1,7 +1,7 @@
 /* Dashboard da plataforma Nutriwork Plus exibido no monitor da Home.
    Escala proporcionalmente ao container (container queries): a raiz define a
    fonte em unidades de container e o restante usa `em`, sem valores fixos por
-   breakpoint. Acompanha os temas light/dark do site. */
+   breakpoint. O site usa exclusivamente o tema claro. */
 
 .platform-preview {
   --pp-bg: linear-gradient(180deg, #0b0e16, #080a12 60%, #0a0d15);

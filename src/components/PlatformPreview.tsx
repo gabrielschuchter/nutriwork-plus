@@ -10,7 +10,7 @@ import './PlatformPreview.css';
  * hover e transições).
  *
  * Componente isolado e reutilizável: escala proporcionalmente ao container
- * (container queries) e acompanha os temas light/dark do site, sem valores
+ * (container queries) e acompanha o tema claro fixo do site, sem valores
  * fixos dependentes de breakpoint.
  */
 
